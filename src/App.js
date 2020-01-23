@@ -25,6 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    background: "linear-gradient(90deg,#e66465, #9198e5)",
   },
   drawer: {
     width: drawerWidth,
@@ -46,10 +47,10 @@ export default function App() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar} >
         <Toolbar>
           <Typography variant="h6" noWrap>
-            Clipped drawer
+            OFB
           </Typography>
         </Toolbar>
       </AppBar>
