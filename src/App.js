@@ -25,8 +25,16 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    background: "linear-gradient(90deg,#e66465, #9198e5)",
+    background: "linear-gradient(90deg,#007734, #007734, #0057B2)",
+    //angery background: "linear-gradient(90deg,#B54840, #FBC468)",
   },
+  ExpansionPanelSummary: {
+    background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
+  }, 
+  heading: {
+    color: "#FFFFFF",
+    //font-weight: bold;
+  }, 
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
@@ -63,6 +71,29 @@ export default function App() {
       >
         <div className={classes.toolbar} />
         <List>
+        <ExpansionPanel >
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+          className={classes.ExpansionPanelSummary}
+        >
+          <Typography className={classes.heading}>Expansion Panel 1</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <List>
+            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+        </List>
+        <Divider />
+        <List>
         <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -84,6 +115,30 @@ export default function App() {
       </ExpansionPanel>
         </List>
         <Divider />
+
+        <List>
+        <ExpansionPanel>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography className={classes.heading}>Expansion Panel 1</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <List>
+            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+        </List>
+        <Divider />
+
         <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
             <ListItem button key={text}>
