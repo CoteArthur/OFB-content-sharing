@@ -16,6 +16,13 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
+import Icon from '@material-ui/core/Icon';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngry } from '@fortawesome/free-solid-svg-icons'
+
+
 
 const drawerWidth = 240;
 
@@ -78,9 +85,13 @@ export default function App() {
           id="panel1a-header"
           className={classes.ExpansionPanelSummary}
         >
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
+
+          <FontAwesomeIcon icon={faAngry} size="lg" color="#FFFFFF"/>
+          <SpeakerNotesIcon className={classes.heading} />
+          
+          <Typography className={classes.heading} >Actualité</Typography>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        <ExpansionPanelDetails> 
           <List>
             {['All mail', 'Trash', 'Spam'].map((text, index) => (
               <ListItem button key={text}>
@@ -100,7 +111,7 @@ export default function App() {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
+          <Typography >Expansion Panel 2</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <List>
@@ -123,7 +134,7 @@ export default function App() {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
+          <Typography >Expansion Panel 3</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <List>
