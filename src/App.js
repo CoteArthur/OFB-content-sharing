@@ -37,11 +37,9 @@ const useStyles = makeStyles(theme => ({
   },
   ExpansionPanelSummary: {
     background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
+    color: "#FFFFFF"
   }, 
-  heading: {
-    color: "#FFFFFF",
-    //font-weight: bold;
-  }, 
+  
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
@@ -86,8 +84,8 @@ export default function App() {
           className={classes.ExpansionPanelSummary}
         >
 
-          <FontAwesomeIcon icon={faAngry} size="lg" color="#FFFFFF"/>
-          <SpeakerNotesIcon className={classes.heading} />
+          <FontAwesomeIcon icon={faAngry} size="lg" />
+          <SpeakerNotesIcon  />
           
           <Typography className={classes.heading} >Actualité</Typography>
         </ExpansionPanelSummary>
