@@ -6,7 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -16,11 +16,9 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
-import Icon from '@material-ui/core/Icon';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngry, faCheese } from '@fortawesome/free-solid-svg-icons'
+import { faAngry } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -72,7 +70,8 @@ export default function App() {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar} >
         <Toolbar>
-          <Typography variant="h6" noWrap>
+          <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="3x" style={{marginRight:10}} />
+          <Typography variant="h5" noWrap style={{fontWeight:"bold"}}>
             OFB
           </Typography>
         </Toolbar>
@@ -96,7 +95,7 @@ export default function App() {
               id="panel1bh-header"
               className={expanded === 'panel1' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
             >
-              <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faCheese} size="lg" style={{marginRight:10}} />
+              <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="lg" style={{marginRight:10}} />
               <Typography className={classes.heading}>General settings</Typography>
             </ExpansionPanelSummary>
 
