@@ -20,7 +20,7 @@ import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
 import Icon from '@material-ui/core/Icon';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngry } from '@fortawesome/free-solid-svg-icons'
+import { faAngry, faCheese } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -33,13 +33,18 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     background: "linear-gradient(90deg,#007734, #007734, #0057B2)",
-    //angery background: "linear-gradient(90deg,#B54840, #FBC468)",
+    //background: "linear-gradient(90deg,#F45265, #FCD768)",
   },
   ExpansionPanelSummary: {
-    background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
-    color: "#FFFFFF"
+    //background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
+    background: "linear-gradient(90deg,#FFFFFF, #FFFFFF)",
+    color: "#1D51BB",
   }, 
-  
+  ExpansionPanelSummaryActive: {
+    background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
+    color: "#FFFFFF",
+  }, 
+
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
@@ -57,6 +62,11 @@ const useStyles = makeStyles(theme => ({
 export default function App() {
   const classes = useStyles();
 
+  const [expanded, setExpanded] = React.useState(false);
+  const handleChange = panel => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -67,6 +77,7 @@ export default function App() {
           </Typography>
         </Toolbar>
       </AppBar>
+      
       <Drawer
         className={classes.drawer}
         variant="permanent"
@@ -75,78 +86,87 @@ export default function App() {
         }}
       >
         <div className={classes.toolbar} />
-        <List>
-        <ExpansionPanel >
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-          className={classes.ExpansionPanelSummary}
-        >
-
-          <FontAwesomeIcon icon={faAngry} size="lg" />
-          <SpeakerNotesIcon  />
-          
-          <Typography className={classes.heading} >Actualité</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails> 
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-        </List>
-        <Divider />
-        <List>
-        <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography >Expansion Panel 2</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-        </List>
-        <Divider />
 
         <List>
-        <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography >Expansion Panel 3</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+          <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')} >
+            
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1bh-content"
+              id="panel1bh-header"
+              className={expanded === 'panel1' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+            >
+              <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faCheese} size="lg" style={{marginRight:10}} />
+              <Typography className={classes.heading}>General settings</Typography>
+            </ExpansionPanelSummary>
+
+            <ExpansionPanelDetails>
+              <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                  <ListItem button key={text}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+            </ExpansionPanelDetails>
+
+        </ExpansionPanel>
         </List>
-        <Divider />
+
+        <List>
+          <ExpansionPanel expanded={expanded === 'panel2'} onChange={handleChange('panel2')} >
+            
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel2bh-content"
+              id="panel2bh-header"
+              className={expanded === 'panel2' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+            >
+              <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="lg" style={{marginRight:10}} />
+              <Typography className={classes.heading}>General settings</Typography>
+            </ExpansionPanelSummary>
+
+            <ExpansionPanelDetails>
+              <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                  <ListItem button key={text}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+            </ExpansionPanelDetails>
+
+        </ExpansionPanel>
+        </List>
+
+        <List>
+          <ExpansionPanel expanded={expanded === 'panel3'} onChange={handleChange('panel3')} >
+            
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel3bh-content"
+              id="panel3bh-header"
+              className={expanded === 'panel3' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+            >
+              <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="lg" style={{marginRight:10}} />
+              <Typography className={classes.heading}>General settings</Typography>
+            </ExpansionPanelSummary>
+
+            <ExpansionPanelDetails>
+              <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                  <ListItem button key={text}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+            </ExpansionPanelDetails>
+
+        </ExpansionPanel>
+        </List>
 
         <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
@@ -171,6 +191,7 @@ export default function App() {
           arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
           donec massa sapien faucibus et molestie ac.
         </Typography>
+        <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="10x" />
         <Typography paragraph>
           Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
           facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
