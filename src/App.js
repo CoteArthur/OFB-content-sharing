@@ -15,10 +15,10 @@ import MailIcon from '@material-ui/icons/Mail';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+//import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngry } from '@fortawesome/free-solid-svg-icons'
+import { faAngry, faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -68,11 +68,14 @@ export default function App() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar} >
+      <AppBar position="fixed" className={classes.appBar} size="2x" >
         <Toolbar>
-          <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="3x" style={{marginRight:10}} />
+          <FontAwesomeIcon icon={faAngry} size="2x" style={{marginRight:10}} />
           <Typography variant="h5" noWrap style={{fontWeight:"bold"}}>
             OFB
+          </Typography>
+          <Typography variant="h5" noWrap style={{marginLeft:"auto", marginRight:"auto"}}>
+            Réserves et territoires en gestion
           </Typography>
         </Toolbar>
       </AppBar>
@@ -88,15 +91,15 @@ export default function App() {
 
         <List>
           <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')} >
-            
+           
+            {/*expandIcon={<ExpandMoreIcon />}*/}
             <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1bh-content"
               id="panel1bh-header"
               className={expanded === 'panel1' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
             >
-              <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="lg" style={{marginRight:10}} />
-              <Typography className={classes.heading}>General settings</Typography>
+              <FontAwesomeIcon icon={faEnvelopeOpenText} size="lg" style={{marginRight:10}} />
+              <Typography className={classes.heading}>Actualité</Typography>
             </ExpansionPanelSummary>
 
             <ExpansionPanelDetails>
@@ -117,12 +120,11 @@ export default function App() {
           <ExpansionPanel expanded={expanded === 'panel2'} onChange={handleChange('panel2')} >
             
             <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
               aria-controls="panel2bh-content"
               id="panel2bh-header"
               className={expanded === 'panel2' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
             >
-              <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="lg" style={{marginRight:10}} />
+              <FontAwesomeIcon icon={faAngry} size="lg" style={{marginRight:10}} />
               <Typography className={classes.heading}>General settings</Typography>
             </ExpansionPanelSummary>
 
@@ -144,12 +146,11 @@ export default function App() {
           <ExpansionPanel expanded={expanded === 'panel3'} onChange={handleChange('panel3')} >
             
             <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
               aria-controls="panel3bh-content"
               id="panel3bh-header"
               className={expanded === 'panel3' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
             >
-              <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="lg" style={{marginRight:10}} />
+              <FontAwesomeIcon icon={faAngry} size="lg" style={{marginRight:10}} />
               <Typography className={classes.heading}>General settings</Typography>
             </ExpansionPanelSummary>
 
@@ -168,14 +169,30 @@ export default function App() {
         </List>
 
         <List>
+          <ExpansionPanel expanded={expanded === 'panel4'} onChange={handleChange('panel4')} >
+            
+            <ExpansionPanelSummary
+              aria-controls="panel4bh-content"
+              id="panel4bh-header"
+              className={expanded === 'panel4' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+            >
+              <FontAwesomeIcon icon={faAngry} size="lg" style={{marginRight:10}} />
+              <Typography className={classes.heading}>General settings</Typography>
+            </ExpansionPanelSummary>
+
+          </ExpansionPanel>
+        </List>
+
+        <List>
           {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
+            <ListItem button key={text} className={classes.ExpansionPanelSummary}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}
         </List>
       </Drawer>
+   
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Typography paragraph>
@@ -190,7 +207,6 @@ export default function App() {
           arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
           donec massa sapien faucibus et molestie ac.
         </Typography>
-        <FontAwesomeIcon className={classes.FontAwesomeIcon} icon={faAngry} size="10x" />
         <Typography paragraph>
           Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
           facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
