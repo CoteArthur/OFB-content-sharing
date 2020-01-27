@@ -18,7 +18,8 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 //import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngry, faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelopeOpenText, faInfoCircle, faFileAlt, faLightbulb, faHardHat, faArchive, faUserCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { Button } from '@material-ui/core';
 
 
 
@@ -30,18 +31,20 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    background: "linear-gradient(90deg,#007734, #007734, #0057B2)",
+    background: "linear-gradient(110deg,#007734, #007734, #0057B2)",
     //background: "linear-gradient(90deg,#F45265, #FCD768)",
   },
   ExpansionPanelSummary: {
     //background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
-    background: "linear-gradient(90deg,#FFFFFF, #FFFFFF)",
+    background: "linear-gradient(#FFFFFF, #FFFFFF)",
     color: "#1D51BB",
+    fontWeight:"bold",
   }, 
   ExpansionPanelSummaryActive: {
     background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
     color: "#FFFFFF",
   }, 
+
 
   drawer: {
     width: drawerWidth,
@@ -68,15 +71,26 @@ export default function App() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar} size="2x" >
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <FontAwesomeIcon icon={faAngry} size="2x" style={{marginRight:10}} />
-          <Typography variant="h5" noWrap style={{fontWeight:"bold"}}>
-            OFB
-          </Typography>
-          <Typography variant="h5" noWrap style={{marginLeft:"auto", marginRight:"auto"}}>
+          <Button>
+            <img src={require("./logo.png")} alt="LOGO" width="32" height="32" style={{marginRight:10}}/>
+            <Typography variant="h5" noWrap style={{fontWeight:"bold", color:"#FFFFFF"}}>
+              OFB
+            </Typography>
+          </Button>
+
+          <Typography variant="h5" noWrap style={{margin:"0 auto 0 auto", fontWeight:"bold"}}>
             Réserves et territoires en gestion
           </Typography>
+
+          <Button>
+            <FontAwesomeIcon icon={faPlusCircle} size="2x" style={{color:"#FFFFFF"}} />
+          </Button>
+
+          <Button>
+            <FontAwesomeIcon icon={faUserCircle} size="2x" style={{color:"#FFFFFF"}} />
+          </Button>
         </Toolbar>
       </AppBar>
       
@@ -98,7 +112,7 @@ export default function App() {
               id="panel1bh-header"
               className={expanded === 'panel1' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
             >
-              <FontAwesomeIcon icon={faEnvelopeOpenText} size="lg" style={{marginRight:10}} />
+              <FontAwesomeIcon icon={faEnvelopeOpenText} size="lg" style={{margin:"auto 10 auto 0"}} />
               <Typography className={classes.heading}>Actualité</Typography>
             </ExpansionPanelSummary>
 
@@ -113,7 +127,7 @@ export default function App() {
               </List>
             </ExpansionPanelDetails>
 
-        </ExpansionPanel>
+          </ExpansionPanel>
         </List>
 
         <List>
@@ -124,22 +138,11 @@ export default function App() {
               id="panel2bh-header"
               className={expanded === 'panel2' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
             >
-              <FontAwesomeIcon icon={faAngry} size="lg" style={{marginRight:10}} />
-              <Typography className={classes.heading}>General settings</Typography>
+              <FontAwesomeIcon icon={faInfoCircle} size="lg" style={{margin:"auto 10 auto 0"}} />
+              <Typography className={classes.heading}>Présentation des sites</Typography>
             </ExpansionPanelSummary>
 
-            <ExpansionPanelDetails>
-              <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                  <ListItem button key={text}>
-                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItem>
-                ))}
-              </List>
-            </ExpansionPanelDetails>
-
-        </ExpansionPanel>
+          </ExpansionPanel>
         </List>
 
         <List>
@@ -150,8 +153,8 @@ export default function App() {
               id="panel3bh-header"
               className={expanded === 'panel3' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
             >
-              <FontAwesomeIcon icon={faAngry} size="lg" style={{marginRight:10}} />
-              <Typography className={classes.heading}>General settings</Typography>
+              <FontAwesomeIcon icon={faFileAlt} size="lg" style={{margin:"auto 10 auto 0"}}/>
+              <Typography className={classes.heading}>Comptes-rendus de terrain</Typography>
             </ExpansionPanelSummary>
 
             <ExpansionPanelDetails>
@@ -165,7 +168,7 @@ export default function App() {
               </List>
             </ExpansionPanelDetails>
 
-        </ExpansionPanel>
+          </ExpansionPanel>
         </List>
 
         <List>
@@ -176,21 +179,77 @@ export default function App() {
               id="panel4bh-header"
               className={expanded === 'panel4' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
             >
-              <FontAwesomeIcon icon={faAngry} size="lg" style={{marginRight:10}} />
-              <Typography className={classes.heading}>General settings</Typography>
+              <FontAwesomeIcon icon={faLightbulb} size="lg" style={{margin:"auto 10 auto 0"}}/>
+              <Typography className={classes.heading}>Connaissances produites</Typography>
             </ExpansionPanelSummary>
+
+            <ExpansionPanelDetails>
+              <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                  <ListItem button key={text}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+            </ExpansionPanelDetails>
 
           </ExpansionPanel>
         </List>
 
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text} className={classes.ExpansionPanelSummary}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ExpansionPanel expanded={expanded === 'panel5'} onChange={handleChange('panel5')} >
+            
+            <ExpansionPanelSummary
+              aria-controls="panel5bh-content"
+              id="panel5bh-header"
+              className={expanded === 'panel5' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+            >
+              <FontAwesomeIcon icon={faHardHat} size="lg" style={{margin:"auto 10 auto 0"}}/>
+              <Typography className={classes.heading}>Opérations de gestion</Typography>
+            </ExpansionPanelSummary>
+
+            <ExpansionPanelDetails>
+              <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                  <ListItem button key={text}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+            </ExpansionPanelDetails>
+
+          </ExpansionPanel>
         </List>
+
+        <List>
+          <ExpansionPanel expanded={expanded === 'panel6'} onChange={handleChange('panel6')} >
+            
+            <ExpansionPanelSummary
+              aria-controls="panel6bh-content"
+              id="panel6bh-header"
+              className={expanded === 'panel6' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+            >
+              <FontAwesomeIcon icon={faArchive} size="lg" style={{margin:"auto 10 auto 0"}}/>
+              <Typography className={classes.heading}>Archives</Typography>
+            </ExpansionPanelSummary>
+
+            <ExpansionPanelDetails>
+              <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                  <ListItem button key={text}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+            </ExpansionPanelDetails>
+
+          </ExpansionPanel>
+        </List>
+
+        
       </Drawer>
    
       <main className={classes.content}>
