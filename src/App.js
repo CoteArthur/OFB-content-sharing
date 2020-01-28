@@ -153,8 +153,8 @@ export default function App() {
               id="panel3bh-header"
               className={expanded === 'panel3' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
             >
-              <FontAwesomeIcon icon={faFileAlt} size="lg" style={{margin:"auto 10 auto 0"}}/>
-              <Typography className={classes.heading}>Comptes-rendus de terrain</Typography>
+                <FontAwesomeIcon icon={faFileAlt} size="lg" style={{margin:"auto 10 auto 0"}}/>
+                <Typography className={classes.heading}>Comptes-rendus de terrain</Typography>
             </ExpansionPanelSummary>
 
             <ExpansionPanelDetails>
