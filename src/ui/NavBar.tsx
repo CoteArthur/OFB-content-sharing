@@ -1,9 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { AppBar, Toolbar, Fab } from '@material-ui/core';
+import { AppBar, Toolbar, Fab, Button } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from '..';
+import * as action from '../store/actions';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	appBar: {
@@ -19,6 +22,8 @@ export interface NavBarProps {
 const NavBar: FunctionComponent<NavBarProps> = (props: NavBarProps): JSX.Element =>
 {
 	const classes = useStyles();
+	const dispatch = useDispatch();
+	const isClick = useSelector((state: AppState) => state.app.isClick);
 
 	return (
 		<AppBar position="sticky" className={classes.appBar}>
@@ -32,11 +37,15 @@ const NavBar: FunctionComponent<NavBarProps> = (props: NavBarProps): JSX.Element
 					Réserves et territoires en gestion
 				</Typography>
 				
-				<Fab size='small' color="primary" onClick={() => {props.onClick("Ajout")}} style={{marginRight: "10px"}}>
+				<Button size='small' color="primary" onClick={() => dispatch(action.toggleClick(!isClick))} style={{marginRight: "10px"}}>
+					{isClick.toString()}	
+				</Button>
+
+				<Fab size='small' color="primary" onClick={() => props.onClick("Ajout")} style={{marginRight: "10px"}}>
 					<FontAwesomeIcon icon={faPlus}/>
 				</Fab>
 
-				<Fab size='small' color="primary" onClick={() => {props.onClick("Connexion")}}>
+				<Fab size='small' color="primary" onClick={() => props.onClick("Connexion")}>
 					<FontAwesomeIcon icon={faUser}/>
 				</Fab>
 

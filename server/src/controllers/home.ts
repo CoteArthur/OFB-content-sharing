@@ -47,6 +47,17 @@ export default class HomeController
                         res.json(results);
                 });
         }
+
+        public login(req: Request, res: Response): void
+	{
+                connection.query(`SELECT id FROM users WHERE email = '${req.body.email}' AND password = '${req.body.password}'`,
+                (err, results) => {
+                        if(err) {
+                        res.json(err);
+                        }
+                        res.json(results);
+                });
+        }
 }
 
 export const homeController = new HomeController();

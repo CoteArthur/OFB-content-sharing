@@ -1,3 +1,6 @@
-export function updateObject(a: Object, b:Object){
-    return {...a, ...b};
-}
+export const updateObject = (oldObject: Object, updatedProperties: Object): any => {
+    return {
+        ...oldObject,
+        ...updatedProperties
+    };
+};

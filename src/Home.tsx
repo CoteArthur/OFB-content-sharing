@@ -41,7 +41,8 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			);
 	}, [setState]);
 
-	const handleChange = async (childData: string) => {
+	const handleChange = async (childData: string | undefined, filters?: any) => {
+			//console.log(filters);
 			let boolTable: boolean;
 			childData === 'actualite' ? boolTable = false : boolTable = true;
 			axios.get(`http://localhost:25565/api/${childData}`,
@@ -124,17 +125,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	}
 
 	const onFilterclick = async (filter: string): Promise<void> => {
-		try {
-			let r = await fetch(`http://localhost:25565/api/${state.selectedTable}/date/ASC/${filter}`);
-			let datas = await r.json();
-			setState((prevState)=>({ 
-				...prevState,
-				filter: filter,
-				dataArray: datas,
-			}));
-		} catch (error) {
-			console.log(error);
-		}
+		
 	}
 	
 	return (
@@ -143,7 +134,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			<Grid container spacing={1}>
 				<Grid item xs={2}>
 					<Paper elevation={3}>
-						<Menu onMenuChange={handleChange} onFilterclick={onFilterclick}/>
+						<Menu onMenuChange={handleChange}/>
 					</Paper>
 				</Grid>
 				<Grid item xs={10}>

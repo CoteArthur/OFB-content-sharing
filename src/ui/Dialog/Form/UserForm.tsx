@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react"
 import { Grid, TextField, Button, Link} from "@material-ui/core";
 import SendIcon from '@material-ui/icons/Send';
+import axios from 'axios';
 
 export interface ContactState
 {
@@ -31,6 +32,9 @@ const UserForm: FunctionComponent = (): JSX.Element =>
     
     const sendForm = async () => {
         console.log(state);
+        axios.post('http://localhost:25565/api/login', state,
+        {headers: { 'Content-Type': 'application/json' }})
+        .then(r => console.log(r.data[0]?.id));
     }
     
     return(
@@ -57,7 +61,9 @@ const UserForm: FunctionComponent = (): JSX.Element =>
                         {state.inscription ? "Se connecter" : "S'inscrire"}
                     </Link>
                     
-                    <Button variant="contained" type="submit" /*onClick={sendForm}*/
+                    <Button variant="contained"
+                    // type="submit"
+                    onClick={sendForm}
                     color="primary" style={{marginTop: 8}} endIcon={<SendIcon/>}>
                         {state.inscription ? "S'inscrire" : "Se connecter"}
                     </Button>

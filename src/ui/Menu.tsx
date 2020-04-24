@@ -4,7 +4,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
-import { List, ListItem, ListItemIcon, ListItemText, Grid, Container, Select, MenuItem, /*Button,*/ TextField } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Grid, Container, Select, MenuItem, /*Button,*/ TextField, Button } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -32,8 +32,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 );
 
 export interface MenuProps {
-	onMenuChange: (childData: string) => void,
-	onFilterclick: (filter: string) => void
+	onMenuChange: (childData: string, filter?: any) => void
 }
 
 const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element => 
@@ -45,7 +44,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 		setExpanded('actualite');
 	}, [setExpanded]);
 
-	const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean): void => {
+	const handleChange = (panel: string, filter?: any) => (event: React.ChangeEvent<{}>, isExpanded: boolean): void => {
 		if (!isExpanded)
 		{
 			event.stopPropagation();
@@ -91,10 +90,10 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 							<TextField name="search" id="search" variant="outlined" 
 							margin="normal" required fullWidth label="Search" 
 							onChange={onSearchChange} />
-							{/* <Button fullWidth variant="contained" onClick={()=>props.onFilterclick(state.search)}
+							<Button fullWidth variant="contained" onClick={()=>props.onMenuChange('actualite', {search: state.search})}
 							color="primary" style={{marginTop: 8}}>
 								Envoyer
-							</Button> */}
+							</Button>
 						</Grid>
 					</ExpansionPanelDetails>
 

@@ -8,8 +8,8 @@ export interface ContactState
 {
     type?: string,
 	titre?: string,
-	description: string,
-    image: string,
+	description?: string,
+    file?: string, //File,
     site?: string,
     keywords?: string,
     theme?: string,
@@ -20,8 +20,8 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     const [state, setState] = useState<ContactState>({
         type: 'insertActualite',
 		titre: undefined,
-		description: 'undefined',
-        image: 'undefined',
+		description: undefined,
+        file: undefined,
         site: '',
         keywords: undefined,
         theme: '',
@@ -45,10 +45,18 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         setState(prevState => ({ ...prevState, description: event.target.value }));
     }
     
-    const onImageChange = (event: any): void => 
+    const onFileChange = (event: any): void => 
 	{
-		event.persist();
-		setState(prevState => ({ ...prevState, image: event.target.value}));
+        event.persist();
+        // event.target.files[0].arrayBuffer().then((val: any)=> console.log(val));
+
+        // let reader = new FileReader();
+        // reader.readAsDataURL(event.target.files[0]);
+        // reader.onload = (e) => {
+        //     setState(prevState => ({ ...prevState, file: e.target?.result as ArrayBuffer}));
+        //     console.log(state.file);
+        // }
+
     }
 
     const onSiteChange = (event: any): void => 
@@ -97,7 +105,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
 
                         <TextField name="image" id="image" variant="outlined" 
                         margin="normal" required fullWidth label="Image"
-                        onChange={onImageChange} />
+                        onChange={onFileChange} />
                     </>
                 ) : (
                     <>
@@ -128,7 +136,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                         </FormControl>
 
                         <input accept="application/pdf" hidden 
-                        id="contained-button-file" multiple type="file"/>
+                        id="contained-button-file" multiple type="file" onChange={onFileChange}/>
                         <label htmlFor="contained-button-file">
                             <Button variant="contained" component="span" endIcon={<CloudUploadIcon/>}>
                             Fichier PDF
@@ -141,8 +149,8 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     </>
                 )}
                 <Button fullWidth variant="contained"
-                type="submit"
-                // onClick={sendForm}
+                // type="submit"
+                onClick={sendForm}
                 color="primary" style={{marginTop: 8}} endIcon={<SendIcon/>}>
                     Envoyer
                 </Button>

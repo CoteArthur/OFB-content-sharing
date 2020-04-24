@@ -10,5 +10,7 @@ export default class HomeRoute
 
 		app.route('/api/crterrain').get(homeController.crterrain);
 		app.route('/api/insertCrterrain').post(homeController.insertCrterrain);
+
+		app.route('/api/login').post(homeController.login);
 	}
 }
