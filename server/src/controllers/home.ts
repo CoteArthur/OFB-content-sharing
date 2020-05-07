@@ -38,7 +38,7 @@ export default class HomeController
         }
         
         public insertCrterrain(req: Request, res: Response): void
-	{       
+	{      
                 connection.query(`INSERT INTO crterrain (id, titre, site, theme, keywords, file, date, auteur) VALUES (NULL, '${req.body.titre}', '${req.body.site}', '${req.body.theme}', '${req.body.keywords}', '${req.body.file}', current_timestamp(), 'auteurTest')`,
                 (err, results) => {
                         if(err) {
@@ -51,6 +51,17 @@ export default class HomeController
         public login(req: Request, res: Response): void
 	{
                 connection.query(`SELECT id FROM users WHERE email = '${req.body.email}' AND password = '${req.body.password}'`,
+                (err, results) => {
+                        if(err) {
+                        res.json(err);
+                        }
+                        res.json(results);
+                });
+        }
+
+        public selectUserInfo(req: Request, res: Response): void
+	{
+                connection.query(`SELECT email FROM users WHERE id = '${req.body.id}'`,
                 (err, results) => {
                         if(err) {
                         res.json(err);

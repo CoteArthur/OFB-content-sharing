@@ -9,7 +9,7 @@ export interface ContactState
     type?: string,
 	titre?: string,
 	description?: string,
-    file?: string, //File,
+    file?: string,
     site?: string,
     keywords?: string,
     theme?: string,
@@ -48,7 +48,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     const onFileChange = (event: any): void => 
 	{
         event.persist();
-        // event.target.files[0].arrayBuffer().then((val: any)=> console.log(val));
+        // event.target.files[0].text().then((val: string)=> setState(prevState => ({ ...prevState, file: val})) );
 
         // let reader = new FileReader();
         // reader.readAsDataURL(event.target.files[0]);
@@ -56,6 +56,13 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         //     setState(prevState => ({ ...prevState, file: e.target?.result as ArrayBuffer}));
         //     console.log(state.file);
         // }
+        
+        let reader = new FileReader();
+        reader.readAsDataURL(event.target.files[0]);
+        reader.onload = (e) => {
+            setState(prevState => ({ ...prevState, file: e.target?.result as string}));
+            console.log(state.file);
+        }
 
     }
 
@@ -80,7 +87,9 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     const sendForm = async () => {
         await axios.post(`http://localhost:25565/api/${state.type}`,
             state, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        });
+        })
+        .then(r => console.log(r.data))
+        .catch(err => console.log(err));
     }
     
     return(

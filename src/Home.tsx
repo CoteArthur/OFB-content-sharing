@@ -26,7 +26,8 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		dataArray: [],
 		isTable: false,
 		selectedRow: undefined,
-		formType: "undefined",
+		selectedFile: undefined,
+		dialogType: "undefined",
 	});
 
 	useEffect(() => { 
@@ -84,20 +85,24 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 
 	const [open, setOpen] = React.useState(false);
 
-	const handleOpenCard = (row: any) => {
-		row.image = row.image.split('+').join('/');
+	const handleOpenRow = (row: any, strType: string) => {
+		if(row.image){
+			console.log('yae');
+			row.image = row.image.split('+').join('/');
+		}
 		setState((prevState)=>({
 			...prevState,
 			selectedRow: row,
+			dialogType: strType,
 		}))
 		setOpen(true);
 	};
 
-	const handleOpenForm = (StrType: string) => {
+	const handleOpenForm = (strType: string) => {
 		//check if user is logged in
 		setState((prevState)=>({
 			...prevState,
-			formType: StrType,
+			dialogType: strType,
 		}))
 		setOpen(true);
 	};
@@ -127,6 +132,13 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	const onFilterclick = async (filter: string): Promise<void> => {
 		
 	}
+
+	const readPDF = (data: any): void =>{
+		setState((prevState)=>({ 
+			...prevState,
+			selectedFile: data,
+		}));
+	}
 	
 	return (
 		<>	
@@ -151,7 +163,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 							{state.isTable ? (
 								<TableBody>
 									{state.dataArray.map(row => (
-										<StyledTableRow key={row.id}>
+										<StyledTableRow key={row.id} onClick={()=>handleOpenRow(row, 'pdf')}>
 											<TableCell align="left">{row.titre}</TableCell>
 											<TableCell align="left">{formatDate(row.date)}</TableCell>
 											<TableCell align="left">{row.auteur}</TableCell>
@@ -167,7 +179,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 							<Grid style={{paddingTop: 8}} container spacing={1}>
 								{state.dataArray.map(row => (
 									<Grid item xs={3} key={row.id}>
-										<CustomCard row={row} onClick={handleOpenCard}/>
+										<CustomCard row={row} onClick={handleOpenRow}/>
 									</Grid>
 								))}
 							</Grid>
@@ -175,11 +187,11 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 						) : null}
 					</TableContainer>
 
-					{state.selectedRow ? <DialogActualite open={open} row={state.selectedRow} handleClose={handleClose}/> 
-					: <DialogCustomForm open={open} type={state.formType} handleClose={handleClose} />}
-					
 				</Grid>
 			</Grid>
+
+			{state.selectedRow ? <DialogActualite open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/> 
+			: <DialogCustomForm open={open} type={state.dialogType} handleClose={handleClose} />}
 		</>
 	);
 }
@@ -190,7 +202,8 @@ export interface IHomeState {
 	dataArray: Array<any>;
 	isTable: boolean;
 	selectedRow?: any;
-	formType?: string;
+	selectedFile?: string;
+	dialogType: string;
 }
 
 export default Home;

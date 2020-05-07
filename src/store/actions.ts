@@ -12,3 +12,13 @@ export const toggleClick = (active: boolean) =>
         });
     }
 };
+export const setUserId = (value: number) =>
+{
+    return (dispatch: Dispatch<AppActions>, getState: () => AppState) =>
+    {
+        return dispatch({
+            type: AppActionEnum.SET_USER_ID,
+            value
+        });
+    }
+};

@@ -5,8 +5,9 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 type DialogActualiteProps = {
     row: any,
+    type: string,
     open: boolean,
-    handleClose?: () => void
+    handleClose: () => void
 }
 
 const DialogActualite: FunctionComponent<DialogActualiteProps> = (props: DialogActualiteProps): JSX.Element => 
@@ -27,28 +28,41 @@ const DialogActualite: FunctionComponent<DialogActualiteProps> = (props: DialogA
     }
     
     return(
-        <Dialog open={props.open} onClose={props.handleClose} fullWidth>
-            <div style={{backgroundImage: `url(${props.row.image})`, 
-            backgroundSize: "contain", backgroundPositionX: "center",
-            backgroundPositionY: "center", backgroundRepeat: "no-repeat",
-            backgroundColor: "black", height: "300px"}}>
-                <Fab size='small' style={{position: "absolute",right: 0, margin: "15px"}}
-                color="primary" onClick={props.handleClose}>
-                    <FontAwesomeIcon icon={faTimes}/>
-                </Fab>
-            </div>
-            <DialogTitle>
-                {props.row.titre}
-            </DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    {props.row.description}
-                </DialogContentText>
-                
-                <Typography variant="subtitle2" color="textSecondary">
-                    {formatDate(props.row.date)}
-                </Typography>
-            </DialogContent>
+        <Dialog open={props.open} onClose={props.handleClose} maxWidth='md' fullWidth>
+            {props.type === 'actualite' ? <>
+                <div style={{backgroundImage: `url(${props.row.image})`, 
+                backgroundSize: "contain", backgroundPositionX: "center",
+                backgroundPositionY: "center", backgroundRepeat: "no-repeat",
+                backgroundColor: "black", height: "300px"}}>
+                    <Fab size='small' style={{position: "absolute",right: 0, margin: "15px"}}
+                    color="primary" onClick={props.handleClose}>
+                        <FontAwesomeIcon icon={faTimes}/>
+                    </Fab>
+                </div>
+                <DialogTitle>
+                    {props.row.titre}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {props.row.description}
+                    </DialogContentText>
+                    
+                    <Typography variant="subtitle2" color="textSecondary">
+                        {formatDate(props.row.date)}
+                    </Typography>
+                </DialogContent>
+            </> : <>
+                <DialogTitle>
+                    {props.row.titre}
+                    <Fab size='small' style={{position: "absolute", right: 0, marginRight: "15px"}}
+                    color="primary" onClick={props.handleClose}>
+                        <FontAwesomeIcon icon={faTimes}/>
+                    </Fab>
+                </DialogTitle>
+                <object type="application/pdf"
+                data={props.row.file} height='10000' width=''
+                />
+            </>}
         </Dialog>
     )
 }

@@ -3,7 +3,7 @@ import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@mater
 
 type CardProps = {
     row: any,
-    onClick: (row :any) => void
+    onClick: (row :any, strType: string) => void
 }
 
 const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element => 
@@ -25,7 +25,7 @@ const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element
 	}
 
     return(
-        <Card onClick={()=>{props.onClick(props.row);}}>
+        <Card onClick={()=>{props.onClick(props.row, 'actualite');}}>
             <CardActionArea>
                 <CardMedia
                     component="img"
