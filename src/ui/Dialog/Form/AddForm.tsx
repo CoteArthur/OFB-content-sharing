@@ -48,15 +48,6 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     const onFileChange = (event: any): void => 
 	{
         event.persist();
-        // event.target.files[0].text().then((val: string)=> setState(prevState => ({ ...prevState, file: val})) );
-
-        // let reader = new FileReader();
-        // reader.readAsDataURL(event.target.files[0]);
-        // reader.onload = (e) => {
-        //     setState(prevState => ({ ...prevState, file: e.target?.result as ArrayBuffer}));
-        //     console.log(state.file);
-        // }
-        
         let reader = new FileReader();
         reader.readAsDataURL(event.target.files[0]);
         reader.onload = (e) => {
@@ -108,13 +99,17 @@ const AddForm: FunctionComponent = (): JSX.Element =>
 
                 {state.type === "insertActualite" ? (
                     <>
+                        <input accept="image/*" hidden 
+                        id="contained-button-file" multiple type="file" onChange={onFileChange}/>
+                        <label htmlFor="contained-button-file">
+                            <Button variant="contained" component="span" endIcon={<CloudUploadIcon/>}>
+                            Image
+                            </Button>
+                        </label>
+
                         <TextField name="description" id="description" multiline rows="6"
                         variant="outlined" margin="normal" required fullWidth label="Description"
                         onChange={onDescriptionChange} />
-
-                        <TextField name="image" id="image" variant="outlined" 
-                        margin="normal" required fullWidth label="Image"
-                        onChange={onFileChange} />
                     </>
                 ) : (
                     <>

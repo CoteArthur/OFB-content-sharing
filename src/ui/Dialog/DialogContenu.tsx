@@ -1,17 +1,38 @@
-import React, { FunctionComponent } from "react"
+import React, { FunctionComponent, useEffect, useState } from "react"
 import { Dialog, Fab, DialogTitle, DialogContent, DialogContentText, Typography } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import axios from 'axios';
 
-type DialogActualiteProps = {
+type DialogContenuProps = {
     row: any,
     type: string,
     open: boolean,
-    handleClose: () => void
+    handleClose: () => void,
 }
 
-const DialogActualite: FunctionComponent<DialogActualiteProps> = (props: DialogActualiteProps): JSX.Element => 
+export interface DialogState {
+    fileContent?: string;
+}
+
+const DialogContenu: FunctionComponent<DialogContenuProps> = (props: DialogContenuProps): JSX.Element => 
 {
+
+    const [state, setState] = useState<DialogState> ({
+        fileContent: undefined,
+    });
+    
+    useEffect(() => {
+            axios.post('http://localhost:25565/api/getFile', {file: props.row.file},
+                {headers: { 'Content-Type': 'application/json' }})
+            .then(r => 
+                setState((prevState)=>({ 
+                    ...prevState,
+                    fileContent: r.data.data,
+                }))
+            );
+    }, [setState]);
+    
     const formatDate = (timestamp: any): String => {
 		let date = new Date(timestamp);	
 		let strDate = '';
@@ -30,7 +51,7 @@ const DialogActualite: FunctionComponent<DialogActualiteProps> = (props: DialogA
     return(
         <Dialog open={props.open} onClose={props.handleClose} maxWidth='md' fullWidth>
             {props.type === 'actualite' ? <>
-                <div style={{backgroundImage: `url(${props.row.image})`, 
+                <div style={{backgroundImage: `url(${state.fileContent})`, 
                 backgroundSize: "contain", backgroundPositionX: "center",
                 backgroundPositionY: "center", backgroundRepeat: "no-repeat",
                 backgroundColor: "black", height: "300px"}}>
@@ -60,11 +81,11 @@ const DialogActualite: FunctionComponent<DialogActualiteProps> = (props: DialogA
                     </Fab>
                 </DialogTitle>
                 <object type="application/pdf"
-                data={props.row.file} height='10000' width=''
+                data={state.fileContent} height='10000' width=''
                 />
             </>}
         </Dialog>
     )
-}
+}   
 
-export default DialogActualite;
+export default DialogContenu;

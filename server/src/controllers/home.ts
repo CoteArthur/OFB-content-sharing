@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import * as mysql from 'mysql';
 import config from '../config/config';
+import * as fs from 'fs';
+import * as shortid from 'shortid';
 
 const connection = mysql.createConnection(config.mysql);
 
@@ -18,7 +20,16 @@ export default class HomeController
         
 	public insertActualite(req: Request, res: Response): void
 	{       
-                connection.query(`INSERT INTO actualite (id, titre, description, date, auteur, image) VALUES (NULL, '${req.body.titre}', '${req.body.description}', current_timestamp(), 'auteurtest', '${req.body.image}')`,
+                let fileName = shortid.generate();
+                let fileType = req.body.file.split('/')[1].split(';')[0];
+
+                fs.writeFile(`./files/${fileName}.${fileType}`, req.body.file.split(';base64,').pop(), {encoding: 'base64'}, (err) => {
+                        if(err){
+                                console.log(err);
+                        }
+                });
+
+                connection.query(`INSERT INTO actualite (id, titre, description, date, auteur, file) VALUES (NULL, '${req.body.titre}', '${req.body.description}', current_timestamp(), 'auteurtest', '${fileName}.${fileType}')`,
                 (err, results) => {
                         if(err) {
                         res.json(err);
@@ -39,12 +50,37 @@ export default class HomeController
         
         public insertCrterrain(req: Request, res: Response): void
 	{      
-                connection.query(`INSERT INTO crterrain (id, titre, site, theme, keywords, file, date, auteur) VALUES (NULL, '${req.body.titre}', '${req.body.site}', '${req.body.theme}', '${req.body.keywords}', '${req.body.file}', current_timestamp(), 'auteurTest')`,
+                let fileName = shortid.generate();
+                //TODO check if file name already exists
+                fs.writeFile(`./files/${fileName}.pdf`, req.body.file.split(';base64,').pop(), {encoding: 'base64'}, (err) => {
+                        if(err){
+                                console.log(err);
+                        }
+                });
+
+                connection.query(`INSERT INTO crterrain (id, titre, site, theme, keywords, file, date, auteur) VALUES (NULL, '${req.body.titre}', '${req.body.site}', '${req.body.theme}', '${req.body.keywords}', '${fileName}.pdf', current_timestamp(), 'auteurTest')`,
                 (err, results) => {
                         if(err) {
-                        res.json(err);
+                                res.json(err);
                         }
                         res.json(results);
+                });
+        }
+
+        public getFile(req: Request, res: Response): void
+	{
+                fs.readFile(`./files/${req.body.file}`, {encoding: 'base64'}, (err, data) => {
+                        // if(err) {
+                        //         res.json(err);
+                        // }
+                        if(data){
+                                let fileType = req.body.file.split('.')[1];
+                                if(fileType !== 'pdf'){
+                                        res.json({data: `data:image/${req.body.file.split('.')[1]};base64,`+data});
+                                }else{
+                                        res.json({data: `data:application/${req.body.file.split('.')[1]};base64,`+data});
+                                }
+                        }       
                 });
         }
 

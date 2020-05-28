@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import NavBar from './ui/NavBar';
 import './scss/Home.scss';
 import CustomCard from './ui/CustomCard';
-import DialogActualite from './ui/Dialog/DialogActualite';
+import DialogContenu from './ui/Dialog/DialogContenu';
 import DialogCustomForm from './ui/Dialog/DialogCustomForm';
 import axios from 'axios';
 
@@ -26,7 +26,6 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		dataArray: [],
 		isTable: false,
 		selectedRow: undefined,
-		selectedFile: undefined,
 		dialogType: "undefined",
 	});
 
@@ -86,10 +85,6 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	const [open, setOpen] = React.useState(false);
 
 	const handleOpenRow = (row: any, strType: string) => {
-		if(row.image){
-			console.log('yae');
-			row.image = row.image.split('+').join('/');
-		}
 		setState((prevState)=>({
 			...prevState,
 			selectedRow: row,
@@ -99,7 +94,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	};
 
 	const handleOpenForm = (strType: string) => {
-		//check if user is logged in
+		//TODO check if user is logged in
 		setState((prevState)=>({
 			...prevState,
 			dialogType: strType,
@@ -111,6 +106,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		setState((prevState)=>({
 			...prevState,
 			selectedRow: undefined,
+			dialogType: "undefined",
 		}))
 		setOpen(false);
 	};
@@ -127,17 +123,6 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		} catch (error) {
 			console.log(error);
 		}
-	}
-
-	const onFilterclick = async (filter: string): Promise<void> => {
-		
-	}
-
-	const readPDF = (data: any): void =>{
-		setState((prevState)=>({ 
-			...prevState,
-			selectedFile: data,
-		}));
 	}
 	
 	return (
@@ -190,7 +175,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 				</Grid>
 			</Grid>
 
-			{state.selectedRow ? <DialogActualite open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/> 
+			{state.selectedRow ? <DialogContenu open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/> 
 			: <DialogCustomForm open={open} type={state.dialogType} handleClose={handleClose} />}
 		</>
 	);
@@ -202,7 +187,6 @@ export interface IHomeState {
 	dataArray: Array<any>;
 	isTable: boolean;
 	selectedRow?: any;
-	selectedFile?: string;
 	dialogType: string;
 }
 
