@@ -5,7 +5,7 @@ import NavBar from './ui/NavBar';
 import './scss/Home.scss';
 import CustomCard from './ui/CustomCard';
 import DialogContenu from './ui/Dialog/DialogContenu';
-import DialogCustomForm from './ui/Dialog/DialogCustomForm';
+import DialogForm from './ui/Dialog/DialogForm';
 import axios from 'axios';
 
 const StyledTableRow = withStyles(() =>
@@ -112,17 +112,17 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	};
 
 	const sortBy = async (cell: String): Promise<void> => {
-		try {
-			let r;
-			state.filter ? r = await fetch(`http://localhost:25565/api/${state.selectedTable}/${cell}/ASC/${state.filter}`) : r = await fetch(`http://localhost:25565/api/${state.selectedTable}/${cell}/ASC`);
-			let datas = await r.json();
-			setState((prevState)=>({ 
-				...prevState,
-				dataArray: datas,
-			}));
-		} catch (error) {
-			console.log(error);
-		}
+		// try {
+		// 	let r;
+		// 	state.filter ? r = await fetch(`http://localhost:25565/api/${state.selectedTable}/${cell}/ASC/${state.filter}`) : r = await fetch(`http://localhost:25565/api/${state.selectedTable}/${cell}/ASC`);
+		// 	let datas = await r.json();
+		// 	setState((prevState)=>({ 
+		// 		...prevState,
+		// 		dataArray: datas,
+		// 	}));
+		// } catch (error) {
+		// 	console.log(error);
+		// }
 	}
 	
 	return (
@@ -151,7 +151,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 										<StyledTableRow key={row.id} onClick={()=>handleOpenRow(row, 'pdf')}>
 											<TableCell align="left">{row.titre}</TableCell>
 											<TableCell align="left">{formatDate(row.date)}</TableCell>
-											<TableCell align="left">{row.auteur}</TableCell>
+											<TableCell align="left">{row.userID}</TableCell>
 											<TableCell align="left">{row.site}</TableCell>
 										</StyledTableRow>
 									))}
@@ -176,7 +176,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			</Grid>
 
 			{state.selectedRow ? <DialogContenu open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/> 
-			: <DialogCustomForm open={open} type={state.dialogType} handleClose={handleClose} />}
+			: <DialogForm open={open} type={state.dialogType} handleClose={handleClose} />}
 		</>
 	);
 }

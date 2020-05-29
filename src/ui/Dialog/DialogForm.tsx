@@ -5,13 +5,13 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import UserForm from "./Form/UserForm";
 import AddForm from "./Form/AddForm";
 
-type DialogLoginFormProps = {
+type DialogFormProps = {
     open: boolean,
     type?: string,
-    handleClose?: () => void
+    handleClose: () => void
 }
 
-const DialogLoginForm: FunctionComponent<DialogLoginFormProps> = (props: DialogLoginFormProps): JSX.Element => 
+const DialogForm: FunctionComponent<DialogFormProps> = (props: DialogFormProps): JSX.Element => 
 {
     return(
         <Dialog open={props.open} onClose={props.handleClose} fullWidth>
@@ -23,10 +23,10 @@ const DialogLoginForm: FunctionComponent<DialogLoginFormProps> = (props: DialogL
                 </Fab>
             </DialogTitle>
             <DialogContent>
-                {props.type === "Ajout" ? <AddForm/> : <UserForm/>}
+                {props.type === "Ajout" ? <AddForm/> : <UserForm handleClose={props.handleClose}/>}
             </DialogContent>
         </Dialog>
     )
 }
 
-export default DialogLoginForm;
+export default DialogForm;

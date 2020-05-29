@@ -29,7 +29,7 @@ export default class HomeController
                         }
                 });
 
-                connection.query(`INSERT INTO actualite (id, titre, description, date, auteur, file) VALUES (NULL, '${req.body.titre}', '${req.body.description}', current_timestamp(), 'auteurtest', '${fileName}.${fileType}')`,
+                connection.query(`INSERT INTO actualite (id, titre, description, date, userID, file) VALUES (NULL, '${req.body.titre}', '${req.body.description}', current_timestamp(), '${req.body.userID}', '${fileName}.${fileType}')`,
                 (err, results) => {
                         if(err) {
                         res.json(err);
@@ -58,7 +58,7 @@ export default class HomeController
                         }
                 });
 
-                connection.query(`INSERT INTO crterrain (id, titre, site, theme, keywords, file, date, auteur) VALUES (NULL, '${req.body.titre}', '${req.body.site}', '${req.body.theme}', '${req.body.keywords}', '${fileName}.pdf', current_timestamp(), 'auteurTest')`,
+                connection.query(`INSERT INTO crterrain (id, titre, site, theme, keywords, file, date, userID) VALUES (NULL, '${req.body.titre}', '${req.body.site}', '${req.body.theme}', '${req.body.keywords}', '${fileName}.pdf', current_timestamp(), '${req.body.userID}')`,
                 (err, results) => {
                         if(err) {
                                 res.json(err);

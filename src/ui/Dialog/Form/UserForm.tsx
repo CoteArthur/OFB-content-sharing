@@ -2,9 +2,14 @@ import React, { FunctionComponent, useState, useEffect } from "react"
 import { Grid, TextField, Button, DialogTitle } from "@material-ui/core";
 import SendIcon from '@material-ui/icons/Send';
 import axios from 'axios';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../../';
 import * as action from '../../../store/actions';
+
+type UserFormProps = {
+    handleClose: () => void
+}
 
 export interface ContactState
 {
@@ -17,7 +22,7 @@ export interface ContactState
     userEmail?: string,
 }
 
-const UserForm: FunctionComponent = (): JSX.Element => 
+const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.Element => 
 {
     const dispatch = useDispatch();
 	const userID = useSelector((state: AppState) => state.app.userID);
@@ -71,11 +76,11 @@ const UserForm: FunctionComponent = (): JSX.Element =>
     const logOut = () => 
     {
         dispatch(action.setUserId(0));
+        props.handleClose();
     }
     
     return(
         <>
-
         {userID === 0 ?
         <form onSubmit={sendForm}>
             <Grid container direction="column" justify="space-evenly" alignItems="center">
@@ -96,7 +101,7 @@ const UserForm: FunctionComponent = (): JSX.Element =>
           </Grid>
         </form>
         : <>
-            <DialogTitle> Email : {state.userEmail} </DialogTitle>
+            <DialogTitle> Connecté en tant que: {state.userEmail} </DialogTitle>
             <Button fullWidth variant="contained"
             // type="submit"
             onClick={logOut}

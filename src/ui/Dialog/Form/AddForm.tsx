@@ -4,6 +4,9 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SendIcon from '@material-ui/icons/Send';
 import axios from 'axios';
 
+import { useSelector } from 'react-redux';
+import { AppState } from '../../../';
+
 export interface ContactState
 {
     type?: string,
@@ -13,10 +16,13 @@ export interface ContactState
     site?: string,
     keywords?: string,
     theme?: string,
+    userID?: number,
 }
 
 const AddForm: FunctionComponent = (): JSX.Element => 
 {
+    const userID = useSelector((state: AppState) => state.app.userID);
+
     const [state, setState] = useState<ContactState>({
         type: 'insertActualite',
 		titre: undefined,
@@ -25,12 +31,13 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         site: '',
         keywords: undefined,
         theme: '',
+        userID: undefined,
     });
 
     const onTypeChange = (event: any): void => 
 	{
         event.persist();
-        setState(prevState => ({ ...prevState, type: event.target.value as string}));
+        setState(prevState => ({ ...prevState, type: event.target.value as string, file: undefined}));
     }
     
     const onTitreChange = (event: any): void => 
@@ -52,9 +59,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         reader.readAsDataURL(event.target.files[0]);
         reader.onload = (e) => {
             setState(prevState => ({ ...prevState, file: e.target?.result as string}));
-            console.log(state.file);
         }
-
     }
 
     const onSiteChange = (event: any): void => 
@@ -76,6 +81,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     }
     
     const sendForm = async () => {
+        state.userID = userID;
         await axios.post(`http://localhost:25565/api/${state.type}`,
             state, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
         })
