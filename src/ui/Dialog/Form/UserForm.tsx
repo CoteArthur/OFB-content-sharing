@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { Grid, TextField, Button, DialogTitle } from "@material-ui/core";
+import { Grid, TextField, Button, Typography } from "@material-ui/core";
 import SendIcon from '@material-ui/icons/Send';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 import axios from 'axios';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -62,7 +63,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
         axios.post('http://localhost:25565/api/login', state,
         {headers: { 'Content-Type': 'application/json' }})
         .then(r => r.data[0] === undefined ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
-            : logIn(r.data[0]?.id));
+            : logIn(r.data[0].id));
     }
 
     const logIn = (id: number) =>
@@ -101,11 +102,13 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
           </Grid>
         </form>
         : <>
-            <DialogTitle> Connecté en tant que: {state.userEmail} </DialogTitle>
+            <Typography variant="body1" color="textSecondary">
+                Connecté en tant que: {state.userEmail}
+            </Typography>
             <Button fullWidth variant="contained"
             // type="submit"
             onClick={logOut}
-            color="primary" style={{marginTop: 8}}>
+            color="primary" style={{marginTop: 8}} endIcon={<ExitToApp/>}>
                 Se deconnecter
             </Button>
         </> }

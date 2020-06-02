@@ -6,6 +6,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json({ limit: '500MB' }));
+app.use('/files', express.static('files'))
 
 
 const port = process.env.PORT || 25565;

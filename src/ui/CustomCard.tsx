@@ -1,34 +1,13 @@
-import React, { FunctionComponent, useState, useEffect} from "react"
+import React, { FunctionComponent} from "react"
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@material-ui/core";
-
-import axios from 'axios';
 
 type CardProps = {
     row: any,
     onClick: (row :any, strType: string) => void
 }
 
-export interface CardState {
-    fileContent?: string;
-}
-
 const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element => 
 {
-    const [state, setState] = useState<CardState> ({
-        fileContent: undefined,
-    });
-    
-    useEffect(() => {
-            axios.post('http://localhost:25565/api/getFile', {file: props.row.file},
-                {headers: { 'Content-Type': 'application/json' }})
-            .then(r => 
-                setState((prevState)=>({ 
-                    ...prevState,
-                    fileContent: r.data.data,
-                }))
-            );
-    }, [setState]);
-
     const formatDate = (timestamp: string): String => {
 		let date = new Date(timestamp);	
 		let strDate = '';
@@ -51,7 +30,7 @@ const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element
                     component="img"
                     alt=""
                     height="140"
-                    image={state.fileContent}
+                    image={`http://localhost:25565/files/${props.row.file}`}
                 />
                 <CardContent>
                     <Typography variant="h5" noWrap> {props.row.titre} </Typography>

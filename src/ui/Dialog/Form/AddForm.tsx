@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react"
-import { Grid, Select, MenuItem, TextField, Button, FormControl, InputLabel} from "@material-ui/core";
+import { Grid, Select, MenuItem, TextField, Button, FormControl, InputLabel, Typography} from "@material-ui/core";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SendIcon from '@material-ui/icons/Send';
 import axios from 'axios';
@@ -13,6 +13,7 @@ export interface ContactState
 	titre?: string,
 	description?: string,
     file?: string,
+    fileName?: string,
     site?: string,
     keywords?: string,
     theme?: string,
@@ -28,6 +29,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
 		titre: undefined,
 		description: undefined,
         file: undefined,
+        fileName: undefined,
         site: '',
         keywords: undefined,
         theme: '',
@@ -55,10 +57,13 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     const onFileChange = (event: any): void => 
 	{
         event.persist();
-        let reader = new FileReader();
-        reader.readAsDataURL(event.target.files[0]);
-        reader.onload = (e) => {
-            setState(prevState => ({ ...prevState, file: e.target?.result as string}));
+
+        if(event.target.files[0] !== undefined){
+            let reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+            reader.onload = (e) => {
+                setState(prevState => ({ ...prevState, file: e.target?.result as string, fileName: event.target.files[0].name}));
+            }
         }
     }
 
@@ -105,6 +110,14 @@ const AddForm: FunctionComponent = (): JSX.Element =>
 
                 {state.type === "insertActualite" ? (
                     <>
+                        {state.file !== undefined ? 
+                            <>
+                                <img src={state.file} alt="a" style={{marginBottom: 8, maxWidth: '200px', maxHeight: '200px',  borderRadius: 5}}/>
+                                <Typography variant="subtitle2" color="textSecondary" style={{marginBottom: 8, textAlign: 'center', overflowWrap: 'anywhere'}}>
+                                    {state.fileName}
+                                </Typography>
+                            </>
+                        : null}
                         <input accept="image/*" hidden 
                         id="contained-button-file" multiple type="file" onChange={onFileChange}/>
                         <label htmlFor="contained-button-file">
