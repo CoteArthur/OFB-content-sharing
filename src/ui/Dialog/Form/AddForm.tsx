@@ -18,8 +18,6 @@ export interface ContactState
     keywords?: string,
     theme?: string,
     userID?: number,
-
-    buttonColor: string,
 }
 
 const AddForm: FunctionComponent = (): JSX.Element => 
@@ -36,8 +34,6 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         keywords: undefined,
         theme: '',
         userID: undefined,
-
-        buttonColor: "secondary"
     });
 
     const onTypeChange = (event: any): void => 
@@ -165,7 +161,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                             </FormControl>
                         : null}
 
-                        {state.file !== undefined ? 
+                        {state.file !== undefined ?
                             <>
                                 <Typography variant="subtitle2" color="textSecondary" style={{marginBottom: 8, textAlign: 'center', overflowWrap: 'anywhere'}}>
                                     {state.fileName}

@@ -18,19 +18,26 @@ const StyledTableRow = withStyles(() =>
 	}),
 )(TableRow);
 
+export interface IHomeState {
+	selectedTable: string;
+	dataArray: Array<any>;
+	isTable: boolean;
+	selectedRow?: any;
+	dialogType: string;
+}
+
 const Home: React.FunctionComponent = (): JSX.Element =>
 {
 	const [state, setState] = useState<IHomeState> ({
-		selectedTable: undefined,
-		filter: undefined,
+		selectedTable: 'undefined',
 		dataArray: [],
 		isTable: false,
 		selectedRow: undefined,
-		dialogType: "undefined",
+		dialogType: 'undefined',
 	});
 
 	useEffect(() => { 
-			axios.get('http://localhost:25565/api/actualite',
+			axios.post('http://localhost:25565/api/actualite',
 			{headers: { 'Content-Type': 'application/json' }} )
 			.then(r =>
 				setState((prevState)=>({ 
@@ -41,17 +48,16 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			);
 	}, [setState]);
 
-	const handleChange = async (childData: string | undefined, filters?: any) => {
-			//console.log(filters);
+	const fetchContent = async (childData: string, filters?: any) => {
+			console.log(filters);
 			let boolTable: boolean;
 			childData === 'actualite' ? boolTable = false : boolTable = true;
-			axios.get(`http://localhost:25565/api/${childData}`,
+			axios.post(`http://localhost:25565/api/${childData}`, filters,
 			{headers: { 'Content-Type': 'application/json' }} )
 			.then(r =>
 				setState((prevState)=>({ 
 					...prevState,
 					selectedTable: childData,
-					filter: undefined,
 					dataArray: r.data,
 					isTable: boolTable,
 				}))
@@ -60,7 +66,6 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 				setState((prevState)=>({ 
 					...prevState,
 					selectedTable: childData,
-					filter: undefined,
 					dataArray: [],
 					isTable: boolTable,
 				}));
@@ -110,20 +115,6 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		}))
 		setOpen(false);
 	};
-
-	const sortBy = async (cell: String): Promise<void> => {
-		// try {
-		// 	let r;
-		// 	state.filter ? r = await fetch(`http://localhost:25565/api/${state.selectedTable}/${cell}/ASC/${state.filter}`) : r = await fetch(`http://localhost:25565/api/${state.selectedTable}/${cell}/ASC`);
-		// 	let datas = await r.json();
-		// 	setState((prevState)=>({ 
-		// 		...prevState,
-		// 		dataArray: datas,
-		// 	}));
-		// } catch (error) {
-		// 	console.log(error);
-		// }
-	}
 	
 	return (
 		<>	
@@ -131,7 +122,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			<Grid container spacing={1}>
 				<Grid item xs={2}>
 					<Paper elevation={3}>
-						<Menu onMenuChange={handleChange}/>
+						<Menu fetchContent={fetchContent}/>
 					</Paper>
 				</Grid>
 				<Grid item xs={10}>
@@ -139,20 +130,22 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 						<Table stickyHeader aria-label="simple table">
 							<TableHead>
 								<TableRow>
-									<TableCell align="left" onClick={()=>sortBy("titre")}>Titre</TableCell>
-									<TableCell align="left" onClick={()=>sortBy("date")}>Date</TableCell>
-									<TableCell align="left" onClick={()=>sortBy("auteur")}>Auteur</TableCell>
-									<TableCell align="left" onClick={()=>sortBy("site")}>Site</TableCell>
+									<TableCell align="center" onClick={()=>fetchContent(state.selectedTable, {orderBy: 'titre'})}>Titre</TableCell>
+									<TableCell align="center" onClick={()=>fetchContent(state.selectedTable, {orderBy: 'date'})}>Date</TableCell>
+									<TableCell align="center" onClick={()=>fetchContent(state.selectedTable, {orderBy: 'userID'})}>Auteur</TableCell>
+									{state.selectedTable !== 'actualite' ?
+										<TableCell align="center" onClick={()=>fetchContent(state.selectedTable, {orderBy: 'site'})}>Site</TableCell>
+									:null}
 								</TableRow>
 							</TableHead>
 							{state.isTable ? (
 								<TableBody>
 									{state.dataArray.map(row => (
 										<StyledTableRow key={row.id} onClick={()=>handleOpenRow(row, 'pdf')}>
-											<TableCell align="left">{row.titre}</TableCell>
-											<TableCell align="left">{formatDate(row.date)}</TableCell>
-											<TableCell align="left">{row.userID}</TableCell>
-											<TableCell align="left">{row.site}</TableCell>
+											<TableCell align="center">{row.titre}</TableCell>
+											<TableCell align="center">{formatDate(row.date)}</TableCell>
+											<TableCell align="center">{row.userID}</TableCell>
+											<TableCell align="center">{row.site}</TableCell>
 										</StyledTableRow>
 									))}
 								</TableBody>
@@ -171,19 +164,12 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 				</Grid>
 			</Grid>
 
-			{state.selectedRow ? <DialogContenu open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/> 
-			: <DialogForm open={open} type={state.dialogType} handleClose={handleClose} />}
+			{state.selectedRow ? 
+				<DialogContenu open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/> 
+				: <DialogForm open={open} type={state.dialogType} handleClose={handleClose} />
+			}
 		</>
 	);
-}
-
-export interface IHomeState {
-	selectedTable?: string;
-	filter?: string;
-	dataArray: Array<any>;
-	isTable: boolean;
-	selectedRow?: any;
-	dialogType: string;
 }
 
 export default Home;

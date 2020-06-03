@@ -10,7 +10,13 @@ export default class HomeController
 {
 	public actualite(req: Request, res: Response): void
 	{
-                connection.query(`SELECT * FROM actualite`, (err, results) => {
+                let strQuery = `SELECT * FROM actualite`;
+
+                if(req.body.orderBy){
+                        strQuery += ` ORDER BY ${req.body.orderBy} DESC`;
+                }
+
+                connection.query(strQuery, (err, results) => {
                         if(err) {
                         res.json(err);
                         }
@@ -40,7 +46,13 @@ export default class HomeController
         
 	public crterrain(req: Request, res: Response): void
 	{
-                connection.query(`SELECT * FROM crterrain`, (err, results) => {
+                let strQuery = `SELECT * FROM crterrain`;
+
+                if(req.body.orderBy){
+                        strQuery += ` ORDER BY ${req.body.orderBy} DESC`;
+                }
+
+                connection.query(strQuery, (err, results) => {
                         if(err) {
                         res.json(err);
                         }
