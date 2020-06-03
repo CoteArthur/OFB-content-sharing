@@ -1,5 +1,5 @@
 import Menu from './ui/Menu'
-import { Grid, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles, Container } from '@material-ui/core';
+import { Grid, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import NavBar from './ui/NavBar';
 import './scss/Home.scss';
@@ -135,7 +135,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 					</Paper>
 				</Grid>
 				<Grid item xs={10}>
-					<TableContainer component={Paper} style={{height: window.innerHeight-64, cursor: "pointer"}}>
+					<TableContainer component={Paper} style={{cursor: "pointer"}}>
 						<Table stickyHeader aria-label="simple table">
 							<TableHead>
 								<TableRow>
@@ -158,20 +158,16 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 								</TableBody>
 							) : null}
 						</Table>
-
-						{ !state.isTable ? (
-						<Container>
-							<Grid style={{paddingTop: 8}} container spacing={1}>
-								{state.dataArray.map(row => (
-									<Grid item xs={3} key={row.id}>
-										<CustomCard row={row} onClick={handleOpenRow}/>
-									</Grid>
-								))}
-							</Grid>
-						</Container>
-						) : null}
 					</TableContainer>
-
+					{!state.isTable ? (
+						<Grid container spacing={1} style={{paddingTop: 8}}>
+							{state.dataArray.map(row => (
+								<Grid item xs={3} key={row.id} style={{width: '250px'}}>
+									<CustomCard row={row} onClick={handleOpenRow}/>
+								</Grid>
+							))}
+						</Grid>
+					) : null}
 				</Grid>
 			</Grid>
 

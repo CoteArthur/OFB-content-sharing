@@ -18,6 +18,8 @@ export interface ContactState
     keywords?: string,
     theme?: string,
     userID?: number,
+
+    buttonColor: string,
 }
 
 const AddForm: FunctionComponent = (): JSX.Element => 
@@ -34,6 +36,8 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         keywords: undefined,
         theme: '',
         userID: undefined,
+
+        buttonColor: "secondary"
     });
 
     const onTypeChange = (event: any): void => 
@@ -121,7 +125,8 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                         <input accept="image/*" hidden 
                         id="contained-button-file" multiple type="file" onChange={onFileChange}/>
                         <label htmlFor="contained-button-file">
-                            <Button variant="contained" component="span" endIcon={<CloudUploadIcon/>}>
+                            <Button variant="contained" component="span"
+                            endIcon={<CloudUploadIcon/>} style={{marginTop: 8}}color="primary">
                             Image
                             </Button>
                         </label>
@@ -144,24 +149,33 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                             <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.site}/>
                         </FormControl>
 
-                        <FormControl variant="outlined" fullWidth margin="normal" required>
-                            <InputLabel id="labelSelectTheme">Thème</InputLabel>
-                            <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
-                            value={state.theme} onChange={onThemeChange}>
-                                <MenuItem value="Climat">Climat</MenuItem>
-                                <MenuItem value="Activité humaine">Activité humaine</MenuItem>
-                                <MenuItem value="Utilisation Spatialle">Utilisation Spatialle</MenuItem>
-                                <MenuItem value="Fonctionnement démographique">Fonctionnement démographique</MenuItem>
-                                <MenuItem value="Régimes Alimentaires">Régimes Alimentaires</MenuItem>
-                                <MenuItem value="Suivi sanitaire">Suivi sanitaire</MenuItem>
-                            </Select>
-                            <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
-                        </FormControl>
+                        {state.type === "insertCrterrain"?
+                            <FormControl variant="outlined" fullWidth margin="normal" required>
+                                <InputLabel id="labelSelectTheme">Thème</InputLabel>
+                                <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
+                                value={state.theme} onChange={onThemeChange}>
+                                    <MenuItem value="Climat">Climat</MenuItem>
+                                    <MenuItem value="Activité humaine">Activité humaine</MenuItem>
+                                    <MenuItem value="Utilisation Spatialle">Utilisation Spatialle</MenuItem>
+                                    <MenuItem value="Fonctionnement démographique">Fonctionnement démographique</MenuItem>
+                                    <MenuItem value="Régimes Alimentaires">Régimes Alimentaires</MenuItem>
+                                    <MenuItem value="Suivi sanitaire">Suivi sanitaire</MenuItem>
+                                </Select>
+                                <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
+                            </FormControl>
+                        : null}
 
+                        {state.file !== undefined ? 
+                            <>
+                                <Typography variant="subtitle2" color="textSecondary" style={{marginBottom: 8, textAlign: 'center', overflowWrap: 'anywhere'}}>
+                                    {state.fileName}
+                                </Typography>
+                            </>
+                        : null}
                         <input accept="application/pdf" hidden 
                         id="contained-button-file" multiple type="file" onChange={onFileChange}/>
                         <label htmlFor="contained-button-file">
-                            <Button variant="contained" component="span" endIcon={<CloudUploadIcon/>}>
+                            <Button variant="contained" component="span" endIcon={<CloudUploadIcon/>} color="primary">
                             Fichier PDF
                             </Button>
                         </label>
@@ -174,7 +188,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                 <Button fullWidth variant="contained"
                 // type="submit"
                 onClick={sendForm}
-                color="primary" style={{marginTop: 8}} endIcon={<SendIcon/>}>
+                color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
                     Envoyer
                 </Button>
           </Grid>
