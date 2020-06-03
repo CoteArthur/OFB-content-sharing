@@ -20,16 +20,23 @@ const StyledTableRow = withStyles(() =>
 
 export interface IHomeState {
 	selectedTable: string;
+	filters: FiltersType;
 	dataArray: Array<any>;
 	isTable: boolean;
 	selectedRow?: any;
 	dialogType: string;
 }
 
+export type FiltersType = {
+	orderBy?: string;
+	search?: string;
+}
+
 const Home: React.FunctionComponent = (): JSX.Element =>
 {
 	const [state, setState] = useState<IHomeState> ({
 		selectedTable: 'undefined',
+		filters: {orderBy: undefined, search: undefined},
 		dataArray: [],
 		isTable: false,
 		selectedRow: undefined,
@@ -48,28 +55,40 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			);
 	}, [setState]);
 
-	const fetchContent = async (childData: string, filters?: any) => {
-			console.log(filters);
-			let boolTable: boolean;
-			childData === 'actualite' ? boolTable = false : boolTable = true;
-			axios.post(`http://localhost:25565/api/${childData}`, filters,
-			{headers: { 'Content-Type': 'application/json' }} )
-			.then(r =>
-				setState((prevState)=>({ 
-					...prevState,
-					selectedTable: childData,
-					dataArray: r.data,
-					isTable: boolTable,
-				}))
-			).catch(error =>{
-				console.log(error);
-				setState((prevState)=>({ 
-					...prevState,
-					selectedTable: childData,
-					dataArray: [],
-					isTable: boolTable,
-				}));
-			});
+	const fetchContent = async (childData: string, filters?: FiltersType) => {
+		console.log(filters?.orderBy);
+		
+		let boolTable: boolean = childData !== 'actualite';
+		axios.post(`http://localhost:25565/api/${childData}`, filters,
+		{headers: { 'Content-Type': 'application/json' }} )
+		.then(r =>
+			setState((prevState)=>({ 
+				...prevState,
+				selectedTable: childData,
+				dataArray: r.data,
+				isTable: boolTable,
+			}))
+		).catch(error =>{
+			console.log(error);
+			setState((prevState)=>({ 
+				...prevState,
+				selectedTable: childData,
+				dataArray: [],
+				isTable: boolTable,
+			}));
+		});
+	}
+
+	const orderBy = (orderBy: string): void => {
+		let filters = {
+			...state.filters,
+			orderBy
+		};
+		setState((prevState: any)=>({ 
+			...prevState,
+			filters: filters
+		}));
+		fetchContent(state.selectedTable, filters);
 	}
 	
 	const formatDate = (timestamp: any): String => {
@@ -130,11 +149,11 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 						<Table stickyHeader aria-label="simple table">
 							<TableHead>
 								<TableRow>
-									<TableCell align="center" onClick={()=>fetchContent(state.selectedTable, {orderBy: 'titre'})}>Titre</TableCell>
-									<TableCell align="center" onClick={()=>fetchContent(state.selectedTable, {orderBy: 'date'})}>Date</TableCell>
-									<TableCell align="center" onClick={()=>fetchContent(state.selectedTable, {orderBy: 'userID'})}>Auteur</TableCell>
+									<TableCell align="center" onClick={()=>orderBy('titre')}>Titre</TableCell>
+									<TableCell align="center" onClick={()=>orderBy('date')}>Date</TableCell>
+									<TableCell align="center" onClick={()=>orderBy('userID')}>Auteur</TableCell>
 									{state.selectedTable !== 'actualite' ?
-										<TableCell align="center" onClick={()=>fetchContent(state.selectedTable, {orderBy: 'site'})}>Site</TableCell>
+										<TableCell align="center" onClick={()=>orderBy('site')}>Site</TableCell>
 									:null}
 								</TableRow>
 							</TableHead>
