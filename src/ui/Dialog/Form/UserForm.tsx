@@ -44,7 +44,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
             {headers: { 'Content-Type': 'application/json' }})
             .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0].email})));
         }
-    }, [setState]);
+    }, [userID, setState]);
 
     const onEmailChange = (event: any): void => 
 	{
