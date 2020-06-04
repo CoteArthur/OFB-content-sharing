@@ -33,12 +33,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export interface MenuProps {
 	fetchContent: (childData: string, filter?: any) => void,
-	search: (search: string) => void,
+	search: (search?: string) => void,
 }
 
 export interface MenuState {
-	search: string,
-	site?: string,
+	search?: string,
 }
 
 const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element => 
@@ -58,27 +57,28 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 			return;
 		}
 		setExpanded(isExpanded ? panel : false);
+
+		setState({search: undefined});
 		
 		if(isExpanded)
 			props.fetchContent(panel);
 	};
 
 	const [state, setState] = useState<MenuState>({
-		search: '',
-		site: "none",
+		search: undefined,
 	});
 
-	const onSiteChange = (event: any): void => 
-	{
-        event.persist();
-		setState(prevState => ({ ...prevState, site: event.target.value as string}));
-	}
-	
 	const onSearchChange = (event: any): void => 
 	{
 		event.persist();
-        setState(prevState => ({ ...prevState, search: event.target.value }));
-    }
+		setState(prevState => ({ ...prevState, search: event.target.value }));
+	}
+
+	// const onSiteChange = (event: any): void => 
+	// {
+    //     event.persist();
+	// 	setState(prevState => ({ ...prevState, site: event.target.value as string}));
+	// }
 
 	return (
 		<Container fixed className={classes.content}>
@@ -96,7 +96,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 					<ExpansionPanelDetails>
 						<Grid container direction="row" justify="center" alignItems="center">
 							<TextField name="search" id="search" variant="outlined" 
-							margin="normal" required fullWidth label="Search" 
+							margin="normal" fullWidth label="Recherche"
 							onChange={onSearchChange} />
 							<Button fullWidth variant="contained" onClick={()=>props.search(state.search)}
 							color="primary" style={{marginTop: 8}}>
@@ -137,7 +137,14 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="row" justify="center" alignItems="center">
-							<Select name="site" id="site" variant="outlined" 
+							<TextField name="search" variant="outlined" 
+							margin="normal" fullWidth label="Recherche"
+							onChange={onSearchChange} />
+							<Button fullWidth variant="contained" onClick={()=>props.search(state.search)}
+							color="primary" style={{marginTop: 8}}>
+								Envoyer
+							</Button>
+							{/* <Select name="site" id="site" variant="outlined" 
 							required fullWidth value={state.site} onChange={onSiteChange} >
 								<MenuItem value="none" disabled>Site *</MenuItem>
 								<MenuItem value="">Tous</MenuItem>
@@ -145,7 +152,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 								<MenuItem value="Vercors">Vercors</MenuItem>
 								<MenuItem value="Chartreuse">Chartreuse</MenuItem>
 							</Select>
-							{/* <Button fullWidth variant="contained" onClick={()=>props.onFilterclick(state.site)}
+							<Button fullWidth variant="contained" onClick={()=>props.onFilterclick(state.site)}
 							color="primary" style={{marginTop: 8}}>
 								Envoyer
 							</Button> */}

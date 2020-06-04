@@ -18,6 +18,8 @@ export default class HomeController
 
                 if(req.body.orderBy){
                         strQuery += ` ORDER BY ${req.body.orderBy} DESC`;
+                }else{
+                        strQuery += ` ORDER BY date DESC`;
                 }
 
 
@@ -53,8 +55,14 @@ export default class HomeController
 	{
                 let strQuery = `SELECT * FROM crterrain`;
 
+                if(req.body.search){
+                        strQuery += ` WHERE titre LIKE '%${req.body.search}%'`;
+                }
+
                 if(req.body.orderBy){
                         strQuery += ` ORDER BY ${req.body.orderBy} DESC`;
+                }else{
+                        strQuery += ` ORDER BY date DESC`;
                 }
 
                 connection.query(strQuery, (err, results) => {

@@ -57,6 +57,13 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 
 	const fetchContent = async (childData: string, filters?: FiltersType) => {
 		console.log(filters);
+		if(!filters){
+			console.log('filters cleanup');
+			setState((prevState: any)=>({ 
+				...prevState,
+				filters: {orderBy: undefined, search: undefined},
+			}));
+		}
 		
 		let boolTable: boolean = childData !== 'actualite';
 		axios.post(`http://localhost:25565/api/${childData}`, filters,
@@ -91,7 +98,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		fetchContent(state.selectedTable, filters);
 	}
 
-	const search = (search: string): void => {
+	const search = (search?: string): void => {
 		let filters = {
 			...state.filters,
 			search
