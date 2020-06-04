@@ -32,7 +32,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 );
 
 export interface MenuProps {
-	fetchContent: (childData: string, filter?: any) => void
+	fetchContent: (childData: string, filter?: any) => void,
+	search: (search: string) => void,
+}
+
+export interface MenuState {
+	search: string,
+	site?: string,
 }
 
 const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element => 
@@ -57,9 +63,9 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 			props.fetchContent(panel);
 	};
 
-	const [state, setState] = useState<{site?: string, search?: string}>({
+	const [state, setState] = useState<MenuState>({
+		search: '',
 		site: "none",
-		search: "",
 	});
 
 	const onSiteChange = (event: any): void => 
@@ -92,7 +98,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 							<TextField name="search" id="search" variant="outlined" 
 							margin="normal" required fullWidth label="Search" 
 							onChange={onSearchChange} />
-							<Button fullWidth variant="contained" onClick={()=>props.fetchContent('actualite', {search: state.search})}
+							<Button fullWidth variant="contained" onClick={()=>props.search(state.search)}
 							color="primary" style={{marginTop: 8}}>
 								Envoyer
 							</Button>

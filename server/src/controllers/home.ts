@@ -12,9 +12,14 @@ export default class HomeController
 	{
                 let strQuery = `SELECT * FROM actualite`;
 
+                if(req.body.search){
+                        strQuery += ` WHERE titre LIKE '%${req.body.search}%'`;
+                }
+
                 if(req.body.orderBy){
                         strQuery += ` ORDER BY ${req.body.orderBy} DESC`;
                 }
+
 
                 connection.query(strQuery, (err, results) => {
                         if(err) {

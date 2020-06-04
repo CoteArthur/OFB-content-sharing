@@ -18,7 +18,7 @@ const StyledTableRow = withStyles(() =>
 	}),
 )(TableRow);
 
-export interface IHomeState {
+export interface HomeState {
 	selectedTable: string;
 	filters: FiltersType;
 	dataArray: Array<any>;
@@ -34,7 +34,7 @@ export type FiltersType = {
 
 const Home: React.FunctionComponent = (): JSX.Element =>
 {
-	const [state, setState] = useState<IHomeState> ({
+	const [state, setState] = useState<HomeState> ({
 		selectedTable: 'undefined',
 		filters: {orderBy: undefined, search: undefined},
 		dataArray: [],
@@ -56,7 +56,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	}, [setState]);
 
 	const fetchContent = async (childData: string, filters?: FiltersType) => {
-		console.log(filters?.orderBy);
+		console.log(filters);
 		
 		let boolTable: boolean = childData !== 'actualite';
 		axios.post(`http://localhost:25565/api/${childData}`, filters,
@@ -83,6 +83,18 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		let filters = {
 			...state.filters,
 			orderBy
+		};
+		setState((prevState: any)=>({ 
+			...prevState,
+			filters: filters
+		}));
+		fetchContent(state.selectedTable, filters);
+	}
+
+	const search = (search: string): void => {
+		let filters = {
+			...state.filters,
+			search
 		};
 		setState((prevState: any)=>({ 
 			...prevState,
@@ -141,7 +153,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			<Grid container spacing={1}>
 				<Grid item xs={2}>
 					<Paper elevation={3}>
-						<Menu fetchContent={fetchContent}/>
+						<Menu fetchContent={fetchContent} search={search}/>
 					</Paper>
 				</Grid>
 				<Grid item xs={10}>
