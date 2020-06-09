@@ -5,6 +5,8 @@ export default class HomeRoute
 {
 	constructor(app: Express) 
 	{
+		app.route('/').get(homeController.index);
+		
 		app.route('/api/actualite').post(homeController.actualite);
 		app.route('/api/insertActualite').post(homeController.insertActualite);
 

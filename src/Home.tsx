@@ -29,14 +29,16 @@ export interface HomeState {
 
 export type FiltersType = {
 	orderBy?: string;
+	desc?: boolean;
 	search?: string;
+	sites?: string;
 }
 
 const Home: React.FunctionComponent = (): JSX.Element =>
 {
 	const [state, setState] = useState<HomeState> ({
 		selectedTable: 'undefined',
-		filters: {orderBy: undefined, search: undefined},
+		filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined},
 		dataArray: [],
 		isTable: false,
 		selectedRow: undefined,
@@ -58,10 +60,9 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	const fetchContent = async (childData: string, filters?: FiltersType) => {
 		console.log(filters);
 		if(!filters){
-			console.log('filters cleanup');
 			setState((prevState: any)=>({ 
 				...prevState,
-				filters: {orderBy: undefined, search: undefined},
+				filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined},
 			}));
 		}
 		
@@ -87,10 +88,22 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	}
 
 	const orderBy = (orderBy: string): void => {
-		let filters = {
-			...state.filters,
-			orderBy
-		};
+		let filters: FiltersType;
+
+		if(state.filters.orderBy === orderBy){
+			filters = {
+				...state.filters,
+				orderBy,
+				desc: !state.filters.desc
+			};
+		}else{
+			filters = {
+				...state.filters,
+				orderBy,
+				desc: true
+			};
+		}
+		
 		setState((prevState: any)=>({ 
 			...prevState,
 			filters: filters
@@ -98,10 +111,11 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		fetchContent(state.selectedTable, filters);
 	}
 
-	const search = (search?: string): void => {
+	const menuFilters = (search: string, sites: string): void => {
 		let filters = {
 			...state.filters,
-			search
+			search,
+			sites
 		};
 		setState((prevState: any)=>({ 
 			...prevState,
@@ -160,7 +174,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			<Grid container spacing={1}>
 				<Grid item xs={2}>
 					<Paper elevation={3}>
-						<Menu fetchContent={fetchContent} search={search}/>
+						<Menu fetchContent={fetchContent} menuFilters={menuFilters}/>
 					</Paper>
 				</Grid>
 				<Grid item xs={10}>
@@ -168,12 +182,21 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 						<Table stickyHeader aria-label="simple table">
 							<TableHead>
 								<TableRow>
-									<TableCell align="center" onClick={()=>orderBy('titre')}>Titre</TableCell>
-									<TableCell align="center" onClick={()=>orderBy('date')}>Date</TableCell>
-									<TableCell align="center" onClick={()=>orderBy('userID')}>Auteur</TableCell>
-									{state.selectedTable !== 'actualite' ?
-										<TableCell align="center" onClick={()=>orderBy('site')}>Site</TableCell>
-									:null}
+									<TableCell align="center" onClick={()=>orderBy('titre')}>
+										Titre {state.filters.orderBy === 'titre' ? (state.filters.desc ? '▼' : '▲') : null}
+									</TableCell>
+
+									<TableCell align="center" onClick={()=>orderBy('date')}>
+										Date {state.filters.orderBy === 'date' ? (state.filters.desc ? '▼' : '▲') : null}
+									</TableCell>
+
+									<TableCell align="center" onClick={()=>orderBy('userID')}>
+										Auteur {state.filters.orderBy === 'userID' ? (state.filters.desc ? '▼' : '▲') : null}
+									</TableCell>
+									
+									<TableCell align="center" onClick={()=>orderBy('site')}>
+										Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
+									</TableCell>
 								</TableRow>
 							</TableHead>
 							{state.isTable ? (

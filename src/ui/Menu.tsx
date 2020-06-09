@@ -1,16 +1,16 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
-import { List, ListItem, ListItemIcon, ListItemText, Grid, Container, Select, MenuItem, /*Button,*/ TextField, Button } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Grid, Container, TextField, Button, FormControlLabel, Checkbox } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelopeOpenText, faInfoCircle, faFileAlt, faLightbulb, faHardHat, faArchive, faPencilRuler } from '@fortawesome/free-solid-svg-icons'
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles(() => createStyles({
 		ExpansionPanelSummary: {
 			background: "linear-gradient(#FFFFFF, #FFFFFF)",
 			color: "#1D51BB",
@@ -33,11 +33,23 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export interface MenuProps {
 	fetchContent: (childData: string, filter?: any) => void,
-	search: (search?: string) => void,
+	menuFilters: (search: string, sites: string) => void
 }
 
 export interface MenuState {
-	search?: string,
+	search: string,
+	sites: SiteType
+}
+
+export type SiteType = {
+	bauges: SiteTypeInfo,
+	vercors: SiteTypeInfo,
+	chartreuse: SiteTypeInfo
+}
+
+export type SiteTypeInfo = {
+	site: string,
+	value: boolean
 }
 
 const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element => 
@@ -45,11 +57,20 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState<string | false>(false);
 
+	const [state, setState] = useState<MenuState>({
+		search: '',
+		sites: {
+			bauges: {site: "Bauges", value: false},
+			vercors: {site: "Vercors", value: false},
+			chartreuse: {site: "Chartreuse", value: false}
+		}
+	});
+
 	useEffect(() => {	
 		setExpanded('actualite');
 	}, [setExpanded]);
 
-	const handleChange = (panel: string, filter?: any) => (event: React.ChangeEvent<{}>, isExpanded: boolean): void => {
+	const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean): void => {
 		if (!isExpanded)
 		{
 			event.stopPropagation();
@@ -58,15 +79,18 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 		}
 		setExpanded(isExpanded ? panel : false);
 
-		setState({search: undefined});
+		setState({
+			search: '',
+			sites: {
+				bauges: {site: "Bauges", value: false},
+				vercors: {site: "Vercors", value: false},
+				chartreuse: {site: "Chartreuse", value: false}
+			}
+		});
 		
 		if(isExpanded)
 			props.fetchContent(panel);
 	};
-
-	const [state, setState] = useState<MenuState>({
-		search: undefined,
-	});
 
 	const onSearchChange = (event: any): void => 
 	{
@@ -74,19 +98,39 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 		setState(prevState => ({ ...prevState, search: event.target.value }));
 	}
 
-	// const onSiteChange = (event: any): void => 
-	// {
-    //     event.persist();
-	// 	setState(prevState => ({ ...prevState, site: event.target.value as string}));
-	// }
+	const onSiteChange = (event: any): void => 
+	{
+		event.persist();
+		setState(prevState => ({ ...prevState, 
+			sites: {
+				...prevState.sites,
+				[event.target.id]: {
+					site: event.target.name,
+					value: event.target.checked
+				}
+			}
+		}));
+	}
+	
+	const sendFilters = (): void => {
+		let str = '';
+		let sites = Object.entries(state.sites).map(e => e[1]).filter(e => e.value);
+		for(let i = 0; i < sites.length; i++){
+			if(sites[i].value){
+				str += `'${sites[i].site}'`;
+
+				if(i+1 < sites.length && sites[i+1].value)
+					str += ', ';
+			}
+		}
+		props.menuFilters(state.search, str);
+	}
 
 	return (
 		<Container fixed className={classes.content}>
 			<List className={classes.list}>
 				<ExpansionPanel expanded={expanded === 'actualite'} onChange={handleChange('actualite')}>
 					<ExpansionPanelSummary
-						aria-controls="actualitebh-content"
-						id="actualitebh-header"
 						className={expanded === 'actualite' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
 					>
 						<FontAwesomeIcon icon={faEnvelopeOpenText} size="lg" style={{margin:"auto 10 auto 0"}} />
@@ -94,11 +138,38 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 					</ExpansionPanelSummary>
 
 					<ExpansionPanelDetails>
-						<Grid container direction="row" justify="center" alignItems="center">
+						<Grid container direction="column" justify="center" alignItems="stretch">
 							<TextField name="search" id="search" variant="outlined" 
-							margin="normal" fullWidth label="Recherche"
+							margin="normal" fullWidth label="Recherche" value={state.search}
 							onChange={onSearchChange} />
-							<Button fullWidth variant="contained" onClick={()=>props.search(state.search)}
+
+							<ExpansionPanel>
+								<ExpansionPanelSummary style={{backgroundColor: "#ebdfd3", marginTop: '8px'}}>
+									<Typography>Sites</Typography>
+								</ExpansionPanelSummary>
+
+								<ExpansionPanelDetails>
+									<Grid container direction="column" justify="center" alignItems="flex-start">
+										<FormControlLabel 
+											control={<Checkbox checked={state.sites.bauges.value} onChange={onSiteChange}
+											name="Bauges" id="bauges" color="primary" />}
+											label="Bauges"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.sites.vercors.value} onChange={onSiteChange}
+											name="Vercors" id="vercors" color="primary"/>}
+											label="Vercors"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.sites.chartreuse.value} onChange={onSiteChange}
+											name="Chartreuse" id="chartreuse" color="primary"/>}
+											label="Chartreuse"
+										/>
+									</Grid>
+								</ExpansionPanelDetails>
+							</ExpansionPanel>
+							
+							<Button fullWidth variant="contained" onClick={sendFilters}
 							color="primary" style={{marginTop: 8}}>
 								Envoyer
 							</Button>
@@ -136,26 +207,41 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 					</ExpansionPanelSummary>
 
 					<ExpansionPanelDetails>
-						<Grid container direction="row" justify="center" alignItems="center">
+						<Grid container direction="column" justify="center" alignItems="stretch">
 							<TextField name="search" variant="outlined" 
-							margin="normal" fullWidth label="Recherche"
+							margin="normal" fullWidth label="Recherche" value={state.search}
 							onChange={onSearchChange} />
-							<Button fullWidth variant="contained" onClick={()=>props.search(state.search)}
+
+							<ExpansionPanel>
+								<ExpansionPanelSummary style={{backgroundColor: "#ebdfd3", marginTop: '8px'}}>
+									<Typography>Sites</Typography>
+								</ExpansionPanelSummary>
+
+								<ExpansionPanelDetails>
+									<Grid container direction="column" justify="center" alignItems="flex-start">
+										<FormControlLabel 
+											control={<Checkbox checked={state.sites.bauges.value} onChange={onSiteChange}
+											name="Bauges" id="bauges" color="primary" />}
+											label="Bauges"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.sites.vercors.value} onChange={onSiteChange}
+											name="Vercors" id="vercors" color="primary"/>}
+											label="Vercors"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.sites.chartreuse.value} onChange={onSiteChange}
+											name="Chartreuse" id="chartreuse" color="primary"/>}
+											label="Chartreuse"
+										/>
+									</Grid>
+								</ExpansionPanelDetails>
+							</ExpansionPanel>
+
+							<Button fullWidth variant="contained" onClick={sendFilters}
 							color="primary" style={{marginTop: 8}}>
 								Envoyer
 							</Button>
-							{/* <Select name="site" id="site" variant="outlined" 
-							required fullWidth value={state.site} onChange={onSiteChange} >
-								<MenuItem value="none" disabled>Site *</MenuItem>
-								<MenuItem value="">Tous</MenuItem>
-								<MenuItem value="Bauges">Bauges</MenuItem>
-								<MenuItem value="Vercors">Vercors</MenuItem>
-								<MenuItem value="Chartreuse">Chartreuse</MenuItem>
-							</Select>
-							<Button fullWidth variant="contained" onClick={()=>props.onFilterclick(state.site)}
-							color="primary" style={{marginTop: 8}}>
-								Envoyer
-							</Button> */}
 						</Grid>
 					</ExpansionPanelDetails>
 

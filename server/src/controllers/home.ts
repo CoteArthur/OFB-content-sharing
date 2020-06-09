@@ -3,21 +3,44 @@ import * as mysql from 'mysql';
 import config from '../config/config';
 import * as fs from 'fs';
 import * as shortid from 'shortid';
+import * as path from 'path';
 
 const connection = mysql.createConnection(config.mysql);
 
 export default class HomeController 
 {
+        /**
+         * Index get request: serve the react app.
+         * @param req - Unused param.
+         * @param res - Server the react app.
+         * @param next - Unused param.
+         */
+        public index(req: Request, res: Response, next: Function): void
+        {
+                res.sendFile(path.join(__dirname, 'build', 'index.html'));
+        }
+
 	public actualite(req: Request, res: Response): void
 	{
                 let strQuery = `SELECT * FROM actualite`;
 
                 if(req.body.search){
                         strQuery += ` WHERE titre LIKE '%${req.body.search}%'`;
+                        if(req.body.sites){
+                                strQuery += ` AND site IN (${req.body.sites})`;
+                        }
+                }else{
+                        if(req.body.sites){
+                                strQuery += ` WHERE site IN (${req.body.sites})`;
+                        }
                 }
 
                 if(req.body.orderBy){
-                        strQuery += ` ORDER BY ${req.body.orderBy} DESC`;
+                        if(req.body.desc){
+                                strQuery += ` ORDER BY ${req.body.orderBy} DESC`;
+                        }else{
+                                strQuery += ` ORDER BY ${req.body.orderBy} ASC`;
+                        }
                 }else{
                         strQuery += ` ORDER BY date DESC`;
                 }
@@ -42,7 +65,7 @@ export default class HomeController
                         }
                 });
 
-                connection.query(`INSERT INTO actualite (id, titre, description, date, userID, file) VALUES (NULL, '${req.body.titre}', '${req.body.description}', current_timestamp(), '${req.body.userID}', '${fileName}.${fileType}')`,
+                connection.query(`INSERT INTO actualite (id, titre, site, description, date, userID, file) VALUES (NULL, '${req.body.titre}', '${req.body.site}','${req.body.description}', current_timestamp(), '${req.body.userID}', '${fileName}.${fileType}')`,
                 (err, results) => {
                         if(err) {
                         res.json(err);
@@ -57,14 +80,26 @@ export default class HomeController
 
                 if(req.body.search){
                         strQuery += ` WHERE titre LIKE '%${req.body.search}%'`;
+                        if(req.body.sites){
+                                strQuery += ` AND site IN (${req.body.sites})`;
+                        }
+                }else{
+                        if(req.body.sites){
+                                strQuery += ` WHERE site IN (${req.body.sites})`;
+                        }
                 }
-
+                
                 if(req.body.orderBy){
-                        strQuery += ` ORDER BY ${req.body.orderBy} DESC`;
+                        if(req.body.desc){
+                                strQuery += ` ORDER BY ${req.body.orderBy} DESC`;
+                        }else{
+                                strQuery += ` ORDER BY ${req.body.orderBy} ASC`;
+                        }
                 }else{
                         strQuery += ` ORDER BY date DESC`;
                 }
 
+                console.log(strQuery);
                 connection.query(strQuery, (err, results) => {
                         if(err) {
                         res.json(err);

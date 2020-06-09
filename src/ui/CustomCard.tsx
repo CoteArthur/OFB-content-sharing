@@ -35,7 +35,7 @@ const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element
                 <CardContent>
                     <Typography variant="h5" noWrap> {props.row.titre} </Typography>
                     <Typography gutterBottom  variant="subtitle2">
-                        {formatDate(props.row.date)}
+                        {formatDate(props.row.date)} - {props.row.site}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p" noWrap>
                         {props.row.description.split("-").join("\n")}

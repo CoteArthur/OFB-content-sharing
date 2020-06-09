@@ -108,6 +108,17 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                 margin="normal" required fullWidth label="Titre" 
                 onChange={onTitreChange} />
 
+                <FormControl variant="outlined" fullWidth margin="normal" required>
+                    <InputLabel id="labelSelectSite">Site</InputLabel>
+                    <Select name="site" id="site" labelId="labelSelectSite" label="Site *"
+                    value={state.site} onChange={onSiteChange}>
+                        <MenuItem value="Bauges">Bauges</MenuItem>
+                        <MenuItem value="Vercors">Vercors</MenuItem>
+                        <MenuItem value="Chartreuse">Chartreuse</MenuItem>
+                    </Select>
+                    <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.site}/>
+                </FormControl>
+
                 {state.type === "insertActualite" ? (
                     <>
                         {state.file !== undefined ? 
@@ -133,18 +144,6 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     </>
                 ) : (
                     <>
-
-                        <FormControl variant="outlined" fullWidth margin="normal" required>
-                            <InputLabel id="labelSelectSite">Site</InputLabel>
-                            <Select name="site" id="site" labelId="labelSelectSite" label="Site *"
-                            value={state.site} onChange={onSiteChange}>
-                                <MenuItem value="Bauges">Bauges</MenuItem>
-                                <MenuItem value="Vercors">Vercors</MenuItem>
-                                <MenuItem value="Chartreuse">Chartreuse</MenuItem>
-                            </Select>
-                            <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.site}/>
-                        </FormControl>
-
                         {state.type === "insertCrterrain"?
                             <FormControl variant="outlined" fullWidth margin="normal" required>
                                 <InputLabel id="labelSelectTheme">Thème</InputLabel>
