@@ -101,7 +101,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                 required fullWidth value={state.type} onChange={onTypeChange} >
                     <MenuItem value="insertActualite">Actualité</MenuItem>
                     <MenuItem value="insertCrterrain">Comptes-rendus terrain</MenuItem>
-                    <MenuItem value="insertConnaissancesProduites">Connaissances produites</MenuItem>
+                    {/* <MenuItem value="insertConnaissancesProduites">Connaissances produites</MenuItem> */}
                 </Select>
 
                 <TextField name="titre" id="titre" variant="outlined" 
