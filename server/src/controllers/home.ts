@@ -9,12 +9,6 @@ const connection = mysql.createConnection(config.mysql);
 
 export default class HomeController 
 {
-        /**
-         * Index get request: serve the react app.
-         * @param req - Unused param.
-         * @param res - Server the react app.
-         * @param next - Unused param.
-         */
         public index(req: Request, res: Response, next: Function): void
         {
                 res.sendFile(path.join(__dirname, 'build', 'index.html'));
@@ -46,6 +40,7 @@ export default class HomeController
                 }
 
 
+                console.log(strQuery);
                 connection.query(strQuery, (err, results) => {
                         if(err) {
                         res.json(err);
@@ -124,23 +119,6 @@ export default class HomeController
                                 res.json(err);
                         }
                         res.json(results);
-                });
-        }
-
-        public getFile(req: Request, res: Response): void
-	{
-                fs.readFile(`./files/${req.body.file}`, {encoding: 'base64'}, (err, data) => {
-                        // if(err) {
-                        //         res.json(err);
-                        // }
-                        if(data){
-                                let fileType = req.body.file.split('.')[1];
-                                if(fileType !== 'pdf'){
-                                        res.json({data: `data:image/${req.body.file.split('.')[1]};base64,`+data});
-                                }else{
-                                        res.json({data: `data:application/${req.body.file.split('.')[1]};base64,`+data});
-                                }
-                        }       
                 });
         }
 
