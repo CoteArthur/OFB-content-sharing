@@ -87,7 +87,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     
     const sendForm = async () => {
         state.userID = userID;
-        await axios.post(`http://35.214.28.194:25565/api/${state.type}`,
+        await axios.post(`http://localhost:25565/api/${state.type}`,
             state, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
         })
         .then(r => console.log(r.data))
@@ -129,6 +129,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                                 </Typography>
                             </>
                         : null}
+
                         <input accept="image/*" hidden 
                         id="contained-button-file" multiple type="file" onChange={onFileChange}/>
                         <label htmlFor="contained-button-file">
@@ -137,6 +138,9 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                             Image
                             </Button>
                         </label>
+                        <Typography variant="subtitle2" color="textSecondary" style={{textAlign: 'center'}}>
+                                Taille maximale : 500MB
+                        </Typography>
 
                         <TextField name="description" id="description" multiline rows="6"
                         variant="outlined" margin="normal" required fullWidth label="Description"
@@ -167,6 +171,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                                 </Typography>
                             </>
                         : null}
+                        
                         <input accept="application/pdf" hidden 
                         id="contained-button-file" multiple type="file" onChange={onFileChange}/>
                         <label htmlFor="contained-button-file">
@@ -174,6 +179,10 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                             Fichier PDF
                             </Button>
                         </label>
+
+                        <Typography variant="subtitle2" color="textSecondary" style={{textAlign: 'center'}}>
+                                Taille maximale : 500MB
+                        </Typography>
 
                         <TextField name="keywords" id="keywords" variant="outlined" 
                         margin="normal" fullWidth label="Mots clés"

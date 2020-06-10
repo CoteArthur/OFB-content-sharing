@@ -30,7 +30,7 @@ const DialogContenu: FunctionComponent<DialogContenuProps> = (props: DialogConte
     return(
         <Dialog open={props.open} onClose={props.handleClose} maxWidth='md' fullWidth>
             {props.type === 'actualite' ? <>
-                <div style={{backgroundImage: `url(http://35.214.28.194:25565/files/${props.row.file})`, 
+                <div style={{backgroundImage: `url(http://localhost:25565/files/${props.row.file})`, 
                 backgroundSize: "contain", backgroundPositionX: "center",
                 backgroundPositionY: "center", backgroundRepeat: "no-repeat",
                 backgroundColor: "black", height: "300px"}}>
@@ -60,7 +60,7 @@ const DialogContenu: FunctionComponent<DialogContenuProps> = (props: DialogConte
                     </Fab>
                 </DialogTitle>
                 <object type="application/pdf" height='10000px'
-                data={`http://35.214.28.194:25565/files/${props.row.file}`}>
+                data={`http://localhost:25565/files/${props.row.file}`}>
                     Erreur lors du chargement du fichier
                 </object>
             </>}

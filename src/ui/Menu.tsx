@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { List, ListItem, ListItemIcon, ListItemText, Grid, Container, TextField, Button, FormControlLabel, Checkbox } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import TuneIcon from '@material-ui/icons/Tune';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelopeOpenText, faInfoCircle, faFileAlt, faLightbulb, faHardHat, faArchive, faPencilRuler } from '@fortawesome/free-solid-svg-icons'
 
@@ -14,7 +15,6 @@ const useStyles = makeStyles(() => createStyles({
 		ExpansionPanelSummary: {
 			background: "linear-gradient(#FFFFFF, #FFFFFF)",
 			color: "#1D51BB",
-			fontWeight:"bold",
 		}, 
 		ExpansionPanelSummaryActive: {
 			background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
@@ -22,7 +22,6 @@ const useStyles = makeStyles(() => createStyles({
 		},
 		content: {
 			backgroundColor: '#fff',
-			//boxShadow: '3px 0px 5px 0px rgba(0,0,0,0.3)',
 			height: '100vh'
 		},
 		list: {
@@ -133,18 +132,20 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 					<ExpansionPanelSummary
 						className={expanded === 'actualite' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
 					>
-						<FontAwesomeIcon icon={faEnvelopeOpenText} size="lg" style={{margin:"auto 10 auto 0"}} />
-						<Typography>Actualité</Typography>
+						<Typography>
+							<FontAwesomeIcon icon={faEnvelopeOpenText} style={{marginRight: '8px'}}/>
+							Actualité
+						</Typography>
 					</ExpansionPanelSummary>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="column" justify="center" alignItems="stretch">
 							<TextField name="search" id="search" variant="outlined" 
 							margin="normal" fullWidth label="Recherche" value={state.search}
-							onChange={onSearchChange} />
+							onChange={onSearchChange} helperText='Titre/Auteur/Année'/>
 
 							<ExpansionPanel>
-								<ExpansionPanelSummary style={{backgroundColor: "#ebdfd3", marginTop: '8px'}}>
+								<ExpansionPanelSummary style={{marginTop: '8px', backgroundColor: '#05836d', color: "#FFFFFF", borderRadius: 5}}>
 									<Typography>Sites</Typography>
 								</ExpansionPanelSummary>
 
@@ -156,22 +157,22 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 											label="Bauges"
 										/>
 										<FormControlLabel 
-											control={<Checkbox checked={state.sites.vercors.value} onChange={onSiteChange}
-											name="Vercors" id="vercors" color="primary"/>}
-											label="Vercors"
-										/>
-										<FormControlLabel 
 											control={<Checkbox checked={state.sites.chartreuse.value} onChange={onSiteChange}
 											name="Chartreuse" id="chartreuse" color="primary"/>}
 											label="Chartreuse"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.sites.vercors.value} onChange={onSiteChange}
+											name="Vercors" id="vercors" color="primary"/>}
+											label="Vercors"
 										/>
 									</Grid>
 								</ExpansionPanelDetails>
 							</ExpansionPanel>
 							
 							<Button fullWidth variant="contained" onClick={sendFilters}
-							color="primary" style={{marginTop: 8}}>
-								Envoyer
+							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
+								Filtrer
 							</Button>
 						</Grid>
 					</ExpansionPanelDetails>

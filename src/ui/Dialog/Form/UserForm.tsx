@@ -40,7 +40,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
 
     useEffect(() => { 
         if (userID !== 0){
-            axios.post('http://35.214.28.194:25565/api/selectUserInfo', {id: userID},
+            axios.post('http://localhost:25565/api/selectUserInfo', {id: userID},
             {headers: { 'Content-Type': 'application/json' }})
             .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0].email})));
         }
@@ -60,7 +60,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     
     const sendForm = async () => 
     {
-        axios.post('http://35.214.28.194:25565/api/login', state,
+        axios.post('http://localhost:25565/api/login', state,
         {headers: { 'Content-Type': 'application/json' }})
         .then(r => r.data[0] === undefined ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
             : logIn(r.data[0].id));
@@ -69,7 +69,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     const logIn = (id: number) =>
     {
         dispatch(action.setUserId(id));
-        axios.post('http://35.214.28.194:25565/api/selectUserInfo', {id: id},
+        axios.post('http://localhost:25565/api/selectUserInfo', {id: id},
             {headers: { 'Content-Type': 'application/json' }})
         .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email})));
     }
