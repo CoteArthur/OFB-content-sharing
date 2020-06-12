@@ -1,4 +1,4 @@
-import Menu from './ui/Menu'
+import Menu from './ui/Menu/Menu'
 import { Grid, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import NavBar from './ui/NavBar';
@@ -32,13 +32,15 @@ export type FiltersType = {
 	desc?: boolean;
 	search?: string;
 	sites?: string;
+	year?: string;
+	auteur?: string;
 }
 
 const Home: React.FunctionComponent = (): JSX.Element =>
 {
 	const [state, setState] = useState<HomeState> ({
 		selectedTable: 'undefined',
-		filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined},
+		filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined},
 		dataArray: [],
 		isTable: false,
 		selectedRow: undefined,
@@ -70,7 +72,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		if(!filters){
 			setState((prevState: any)=>({ 
 				...prevState,
-				filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined},
+				filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined},
 			}));
 		}
 		
@@ -78,12 +80,21 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		axios.post(`http://localhost:25565/api/${childData}`, filters,
 		{headers: { 'Content-Type': 'application/json' }} )
 		.then(r =>
-			setState((prevState)=>({ 
-				...prevState,
-				selectedTable: childData,
-				dataArray: r.data,
-				isTable: boolTable,
-			}))
+			r.data[0] ? (
+				setState((prevState)=>({ 
+					...prevState,
+					selectedTable: childData,
+					dataArray: r.data,
+					isTable: boolTable,
+				}))
+			) : (
+				setState((prevState)=>({ 
+					...prevState,
+					selectedTable: childData,
+					dataArray: [],
+					isTable: boolTable,
+				}))
+			)
 		).catch(error =>{
 			console.log(error);
 			setState((prevState)=>({ 
@@ -119,11 +130,13 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		fetchContent(state.selectedTable, filters);
 	}
 
-	const menuFilters = (search: string, sites: string): void => {
+	const menuFilters = (search: string, sites: string, year: string, auteur: string): void => {
 		let filters = {
 			...state.filters,
 			search,
-			sites
+			sites,
+			year,
+			auteur
 		};
 		setState((prevState: any)=>({ 
 			...prevState,

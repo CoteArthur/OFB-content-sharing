@@ -4,21 +4,25 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
-import { List, ListItem, ListItemIcon, ListItemText, Grid, Container, TextField, Button, FormControlLabel, Checkbox } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Grid, Container, TextField, Button, FormControl, InputLabel, Select, MenuItem, IconButton } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import TuneIcon from '@material-ui/icons/Tune';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelopeOpenText, faInfoCircle, faFileAlt, faLightbulb, faHardHat, faArchive, faPencilRuler } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelopeOpenText, faInfoCircle, faFileAlt, faLightbulb, faHardHat, faArchive, faPencilRuler, faTimesCircle, faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import emptySites from './emptySites.json';
+import SiteList from './SiteList';
 
 const useStyles = makeStyles(() => createStyles({
 		ExpansionPanelSummary: {
 			background: "linear-gradient(#FFFFFF, #FFFFFF)",
 			color: "#1D51BB",
+			borderRadius: 5
 		}, 
 		ExpansionPanelSummaryActive: {
 			background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
 			color: "#FFFFFF",
+			borderRadius: 5
 		},
 		content: {
 			backgroundColor: '#fff',
@@ -26,24 +30,47 @@ const useStyles = makeStyles(() => createStyles({
 		},
 		list: {
 			maxWidth: '100%'
-		}
+		},
+		formExpansionPanel: {
+			marginTop: '8px',
+			borderColor: '#C3C3C3',
+			borderRadius: 5,
+			"&:hover": {
+				borderColor: '#212121',
+			  },
+		},
+		formExpansionPanelSummary: {
+			height: 0,
+			color: '#777777',
+			paddingLeft: "12px",
+			paddingRight: "12px"
+		},
 	}),
 );
 
 export interface MenuProps {
 	fetchContent: (childData: string, filter?: any) => void,
-	menuFilters: (search: string, sites: string) => void
+	menuFilters: (search: string, sites: string, year: string, auteur: string) => void
 }
 
 export interface MenuState {
 	search: string,
-	sites: SiteType
+	sites: SiteType,
+	year: string,
+	auteur: string,
 }
 
 export type SiteType = {
 	bauges: SiteTypeInfo,
-	vercors: SiteTypeInfo,
-	chartreuse: SiteTypeInfo
+	belledonne: SiteTypeInfo,
+	caroux: SiteTypeInfo,
+	chambord: SiteTypeInfo,
+	chateauvilain: SiteTypeInfo,
+	chize: SiteTypeInfo,
+	grandbirieux: SiteTypeInfo,
+	lapetitepierre: SiteTypeInfo,
+	orlu: SiteTypeInfo,
+	troisfontaines: SiteTypeInfo
 }
 
 export type SiteTypeInfo = {
@@ -58,16 +85,24 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 	const [state, setState] = useState<MenuState>({
 		search: '',
-		sites: {
-			bauges: {site: "Bauges", value: false},
-			vercors: {site: "Vercors", value: false},
-			chartreuse: {site: "Chartreuse", value: false}
-		}
+		sites: emptySites,
+		year: '',
+		auteur: ''
 	});
 
-	useEffect(() => {	
+	useEffect(() => {
 		setExpanded('actualite');
 	}, [setExpanded]);
+
+	const generateYearArray = (): number[] => {
+		let yearArray: number[] = []
+		let currYear = (new Date().getFullYear());
+		for(let i = currYear; i >= (currYear - 10); i--){
+			yearArray.push(i);
+		}
+		return yearArray;
+	}
+	const yearArray = generateYearArray();
 
 	const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean): void => {
 		if (!isExpanded)
@@ -80,11 +115,9 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 		setState({
 			search: '',
-			sites: {
-				bauges: {site: "Bauges", value: false},
-				vercors: {site: "Vercors", value: false},
-				chartreuse: {site: "Chartreuse", value: false}
-			}
+			sites: emptySites,
+			year: '',
+			auteur: ''
 		});
 		
 		if(isExpanded)
@@ -110,19 +143,31 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 			}
 		}));
 	}
+
+	const onYearChange = (event: any): void => 
+	{
+		event.persist();
+		setState(prevState => ({ ...prevState, year: event.target.value}));
+	}
+
+	const onAuteurChange = (event: any): void => 
+	{
+		event.persist();
+		setState(prevState => ({ ...prevState, auteur: event.target.value }));
+	}
 	
 	const sendFilters = (): void => {
-		let str = '';
+		let strSites = '';
 		let sites = Object.entries(state.sites).map(e => e[1]).filter(e => e.value);
 		for(let i = 0; i < sites.length; i++){
 			if(sites[i].value){
-				str += `'${sites[i].site}'`;
+				strSites += `'${sites[i].site}'`;
 
 				if(i+1 < sites.length && sites[i+1].value)
-					str += ', ';
+					strSites += ', ';
 			}
 		}
-		props.menuFilters(state.search, str);
+		props.menuFilters(state.search, strSites, state.year, state.auteur);
 	}
 
 	return (
@@ -134,39 +179,57 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 					>
 						<Typography>
 							<FontAwesomeIcon icon={faEnvelopeOpenText} style={{marginRight: '8px'}}/>
-							Actualité
+							Actualités
 						</Typography>
 					</ExpansionPanelSummary>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="column" justify="center" alignItems="stretch">
 							<TextField name="search" id="search" variant="outlined" 
-							margin="normal" fullWidth label="Recherche" value={state.search}
-							onChange={onSearchChange} helperText='Titre/Auteur/Année'/>
+							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
+							onChange={onSearchChange}
+							InputProps={{ 
+								endAdornment:
+									(state.search !== '' ? (
+										<IconButton size="small" style={{marginRight: 0}} 
+										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
 
-							<ExpansionPanel>
-								<ExpansionPanelSummary style={{marginTop: '8px', backgroundColor: '#05836d', color: "#FFFFFF", borderRadius: 5}}>
+							<TextField name="auteur" id="auteur" variant="outlined" 
+							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
+							onChange={onAuteurChange} style={{marginTop: '8px'}}
+							InputProps={{ 
+								endAdornment:
+									(state.auteur !== '' ? (
+										<IconButton size="small"
+										onClick={() => setState(prevState => ({...prevState, auteur: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
+
+							<FormControl variant="outlined" fullWidth style={{marginTop: '8px'}}>
+								<InputLabel id="labelSelectYear">Année</InputLabel>
+								<Select name="year" id="year" labelId="labelSelectYear" label="Année"
+								value={state.year} onChange={onYearChange}>
+									<MenuItem value={''}><em>Vide</em></MenuItem>
+									{yearArray.map(row => (
+										<MenuItem value={row} key={row}>{row}</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+
+							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
+								className={classes.formExpansionPanelSummary}>
 									<Typography>Sites</Typography>
 								</ExpansionPanelSummary>
 
 								<ExpansionPanelDetails>
-									<Grid container direction="column" justify="center" alignItems="flex-start">
-										<FormControlLabel 
-											control={<Checkbox checked={state.sites.bauges.value} onChange={onSiteChange}
-											name="Bauges" id="bauges" color="primary" />}
-											label="Bauges"
-										/>
-										<FormControlLabel 
-											control={<Checkbox checked={state.sites.chartreuse.value} onChange={onSiteChange}
-											name="Chartreuse" id="chartreuse" color="primary"/>}
-											label="Chartreuse"
-										/>
-										<FormControlLabel 
-											control={<Checkbox checked={state.sites.vercors.value} onChange={onSiteChange}
-											name="Vercors" id="vercors" color="primary"/>}
-											label="Vercors"
-										/>
-									</Grid>
+									<SiteList sites={state.sites} onSiteChange={onSiteChange}/>
 								</ExpansionPanelDetails>
 							</ExpansionPanel>
 							
@@ -220,7 +283,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 								<ExpansionPanelDetails>
 									<Grid container direction="column" justify="center" alignItems="flex-start">
-										<FormControlLabel 
+										{/* <FormControlLabel 
 											control={<Checkbox checked={state.sites.bauges.value} onChange={onSiteChange}
 											name="Bauges" id="bauges" color="primary" />}
 											label="Bauges"
@@ -234,7 +297,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 											control={<Checkbox checked={state.sites.chartreuse.value} onChange={onSiteChange}
 											name="Chartreuse" id="chartreuse" color="primary"/>}
 											label="Chartreuse"
-										/>
+										/> */}
 									</Grid>
 								</ExpansionPanelDetails>
 							</ExpansionPanel>

@@ -16,16 +16,43 @@ export default class HomeController
 
 	public actualite(req: Request, res: Response): void
 	{
-                let strQuery = `SELECT * FROM actualite`;
-
-                if(req.body.search){
-                        strQuery += ` WHERE titre LIKE '%${req.body.search}%'`;
+                let strQuery = `SELECT actualite.* FROM actualite`;
+                
+                if(req.body.auteur){
+                        let arrayAuteur = req.body.auteur.split(' ');
+                        strQuery += ` LEFT JOIN users ON actualite.userID = users.id WHERE users.email LIKE '%${arrayAuteur[0]}%'`;
+                        if(arrayAuteur[1]){
+                                strQuery += ` AND users.email LIKE '%${arrayAuteur[1]}%'`;
+                        }
+                        if(req.body.search){
+                                strQuery += ` AND titre LIKE '%${req.body.search}%'`;
+                        }
                         if(req.body.sites){
                                 strQuery += ` AND site IN (${req.body.sites})`;
                         }
+                        if(req.body.year){
+                                strQuery += ` AND YEAR(date) = ${req.body.year}`
+                        }
                 }else{
-                        if(req.body.sites){
-                                strQuery += ` WHERE site IN (${req.body.sites})`;
+                        if(req.body.search){
+                                strQuery += ` WHERE titre LIKE '%${req.body.search}%'`;
+                                if(req.body.sites){
+                                        strQuery += ` AND site IN (${req.body.sites})`;
+                                }
+                                if(req.body.year){
+                                        strQuery += ` AND YEAR(date) = ${req.body.year}`
+                                }
+                        }else{
+                                if(req.body.sites){
+                                        strQuery += ` WHERE site IN (${req.body.sites})`;
+                                        if(req.body.year){
+                                                strQuery += ` AND YEAR(date) = ${req.body.year}`
+                                        }
+                                }else{
+                                        if(req.body.year){
+                                                strQuery += ` WHERE YEAR(date) = ${req.body.year}`
+                                        }
+                                }
                         }
                 }
 
@@ -39,8 +66,6 @@ export default class HomeController
                         strQuery += ` ORDER BY date DESC`;
                 }
 
-
-                console.log(strQuery);
                 connection.query(strQuery, (err, results) => {
                         if(err) {
                         res.json(err);
@@ -94,7 +119,6 @@ export default class HomeController
                         strQuery += ` ORDER BY date DESC`;
                 }
 
-                console.log(strQuery);
                 connection.query(strQuery, (err, results) => {
                         if(err) {
                         res.json(err);

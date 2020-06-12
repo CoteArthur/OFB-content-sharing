@@ -1,0 +1,12 @@
+{
+    "bauges": {"site": "Bauges", "value": false},
+    "belledonne": {"site": "Belledonne", "value": false},
+    "caroux": {"site": "Caroux", "value": false},
+    "chambord": {"site": "Chambord", "value": false},
+    "chateauvilain": {"site": "Chateauvilain", "value": false},
+    "chize": {"site": "Chizé", "value": false},
+    "grandbirieux": {"site": "Grand Birieux", "value": false},
+    "lapetitepierre": {"site": "La Petite Pierre", "value": false},
+    "orlu": {"site": "Orlu", "value": false},
+    "troisfontaines": {"site": "Trois Fontaines", "value": false}
+}
