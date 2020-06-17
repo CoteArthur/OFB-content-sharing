@@ -1,0 +1,14 @@
+{
+    "climat": {"label": "climat", "value": false},
+    "activiteshumaines": {"label": "activiteshumaines", "value": false},
+    "utilisationspatiale": {"label": "utilisationspatiale", "value": false},
+    "fonctionnementdemographique": {"label": "fonctionnementdemographique", "value": false},
+    "regimesalimentaire": {"label": "regimesalimentaire", "value": false},
+    "suivisanitaire": {"label": "suivisanitaire", "value": false},
+
+    "suivisbiodiversite": {"label": "suivisbiodiversite", "value": false},
+    "travauxinterventions": {"label": "travauxinterventions", "value": false},
+    "gestionagricolepastorale": {"label": "gestionagricolepastorale", "value": false},
+    "gestionforestiere": {"label": "gestionforestiere", "value": false},
+    "valorisationsformations": {"label": "suivisanitaire", "value": false}
+}

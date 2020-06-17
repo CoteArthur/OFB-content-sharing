@@ -39,7 +39,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     const onTypeChange = (event: any): void => 
 	{
         event.persist();
-        setState(prevState => ({ ...prevState, type: event.target.value as string, file: undefined}));
+        setState(prevState => ({ ...prevState, type: event.target.value as string, file: undefined, theme: ''}));
     }
     
     const onTitreChange = (event: any): void => 
@@ -101,7 +101,9 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                 required fullWidth value={state.type} onChange={onTypeChange} >
                     <MenuItem value="insertActualite">Actualité</MenuItem>
                     <MenuItem value="insertCrterrain">Comptes-rendus terrain</MenuItem>
-                    {/* <MenuItem value="insertConnaissancesProduites">Connaissances produites</MenuItem> */}
+                    <MenuItem value="insertCrpolice">Comptes-rendus police</MenuItem>
+                    <MenuItem value="insertConnaissancesproduites">Connaissances produites</MenuItem>
+                    <MenuItem value="insertOperationsgestion">Opérations de gestion</MenuItem>
                 </Select>
 
                 <TextField name="titre" id="titre" variant="outlined" 
@@ -113,8 +115,14 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     <Select name="site" id="site" labelId="labelSelectSite" label="Site *"
                     value={state.site} onChange={onSiteChange}>
                         <MenuItem value="Bauges">Bauges</MenuItem>
-                        <MenuItem value="Vercors">Vercors</MenuItem>
-                        <MenuItem value="Chartreuse">Chartreuse</MenuItem>
+                        <MenuItem value="Belledonne">Belledonne</MenuItem>
+                        <MenuItem value="Caroux">Caroux</MenuItem>
+                        <MenuItem value="Chambord">Chambord</MenuItem>
+                        <MenuItem value="Chateauvilain">Chateauvilain</MenuItem>
+                        <MenuItem value="Grand Birieux">Grand Birieux</MenuItem>
+                        <MenuItem value="La Petite Pierre">La Petite Pierre</MenuItem>
+                        <MenuItem value="Orlu">Orlu</MenuItem>
+                        <MenuItem value="Trois Fontaines">Trois Fontaines</MenuItem>
                     </Select>
                     <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.site}/>
                 </FormControl>
@@ -148,17 +156,32 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     </>
                 ) : (
                     <>
-                        {state.type === "insertCrterrain"?
+                        {state.type === "insertConnaissancesproduites"?
                             <FormControl variant="outlined" fullWidth margin="normal" required>
                                 <InputLabel id="labelSelectTheme">Thème</InputLabel>
                                 <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
                                 value={state.theme} onChange={onThemeChange}>
+                                    <MenuItem value="Activités humaine">Activités humaines</MenuItem>
                                     <MenuItem value="Climat">Climat</MenuItem>
-                                    <MenuItem value="Activité humaine">Activité humaine</MenuItem>
-                                    <MenuItem value="Utilisation Spatialle">Utilisation Spatialle</MenuItem>
                                     <MenuItem value="Fonctionnement démographique">Fonctionnement démographique</MenuItem>
-                                    <MenuItem value="Régimes Alimentaires">Régimes Alimentaires</MenuItem>
+                                    <MenuItem value="Régimes alimentaire">Régimes alimentaire</MenuItem>
                                     <MenuItem value="Suivi sanitaire">Suivi sanitaire</MenuItem>
+                                    <MenuItem value="Utilisation spatiale">Utilisation spatiale</MenuItem>
+                                </Select>
+                                <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
+                            </FormControl>
+                        : null}
+
+                        {state.type === "insertOperationsgestion" ?
+                            <FormControl variant="outlined" fullWidth margin="normal" required>
+                                <InputLabel id="labelSelectTheme">Thème</InputLabel>
+                                <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
+                                value={state.theme} onChange={onThemeChange}>
+                                    <MenuItem value="Gestion agricole / pastorale">Gestion agricole / pastorale</MenuItem>
+                                    <MenuItem value="Gestion forestière">Gestion forestière</MenuItem>
+                                    <MenuItem value="Suivis Biodiversité">Suivis Biodiversité</MenuItem>
+                                    <MenuItem value="Travaux / interventions">Travaux / interventions</MenuItem>
+                                    <MenuItem value="Valorisations / Formations">Valorisations / Formations</MenuItem>
                                 </Select>
                                 <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
                             </FormControl>

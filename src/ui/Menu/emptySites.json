@@ -1,12 +1,12 @@
 {
-    "bauges": {"site": "Bauges", "value": false},
-    "belledonne": {"site": "Belledonne", "value": false},
-    "caroux": {"site": "Caroux", "value": false},
-    "chambord": {"site": "Chambord", "value": false},
-    "chateauvilain": {"site": "Chateauvilain", "value": false},
-    "chize": {"site": "Chizé", "value": false},
-    "grandbirieux": {"site": "Grand Birieux", "value": false},
-    "lapetitepierre": {"site": "La Petite Pierre", "value": false},
-    "orlu": {"site": "Orlu", "value": false},
-    "troisfontaines": {"site": "Trois Fontaines", "value": false}
+    "bauges": {"label": "Bauges", "value": false},
+    "belledonne": {"label": "Belledonne", "value": false},
+    "caroux": {"label": "Caroux", "value": false},
+    "chambord": {"label": "Chambord", "value": false},
+    "chateauvilain": {"label": "Chateauvilain", "value": false},
+    "chize": {"label": "Chizé", "value": false},
+    "grandbirieux": {"label": "Grand Birieux", "value": false},
+    "lapetitepierre": {"label": "La Petite Pierre", "value": false},
+    "orlu": {"label": "Orlu", "value": false},
+    "troisfontaines": {"label": "Trois Fontaines", "value": false}
 }

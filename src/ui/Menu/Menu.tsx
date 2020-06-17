@@ -4,32 +4,25 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
-import { List, ListItem, ListItemIcon, ListItemText, Grid, Container, TextField, Button, FormControl, InputLabel, Select, MenuItem, IconButton } from '@material-ui/core';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import { Grid, TextField, Button, FormControl, InputLabel, Select, MenuItem, IconButton, Drawer, Toolbar, FormControlLabel, Checkbox } from '@material-ui/core';
 import TuneIcon from '@material-ui/icons/Tune';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelopeOpenText, faInfoCircle, faFileAlt, faLightbulb, faHardHat, faArchive, faPencilRuler, faTimesCircle, faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelopeOpenText, faInfoCircle, faFileAlt, faLightbulb, faHardHat, faPencilRuler, faTimesCircle, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import emptySites from './emptySites.json';
 import SiteList from './SiteList';
+import emptyThemes from './emptyThemes.json';
 
 const useStyles = makeStyles(() => createStyles({
 		ExpansionPanelSummary: {
 			background: "linear-gradient(#FFFFFF, #FFFFFF)",
-			color: "#1D51BB",
-			borderRadius: 5
+			color: "#1D51BB"
 		}, 
 		ExpansionPanelSummaryActive: {
 			background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
-			color: "#FFFFFF",
-			borderRadius: 5
-		},
-		content: {
-			backgroundColor: '#fff',
-			height: '100vh'
+			color: "#FFFFFF"
 		},
 		list: {
-			maxWidth: '100%'
+			
 		},
 		formExpansionPanel: {
 			marginTop: '8px',
@@ -56,25 +49,41 @@ export interface MenuProps {
 export interface MenuState {
 	search: string,
 	sites: SiteType,
+	themes: ThemeType,
 	year: string,
 	auteur: string,
 }
 
 export type SiteType = {
-	bauges: SiteTypeInfo,
-	belledonne: SiteTypeInfo,
-	caroux: SiteTypeInfo,
-	chambord: SiteTypeInfo,
-	chateauvilain: SiteTypeInfo,
-	chize: SiteTypeInfo,
-	grandbirieux: SiteTypeInfo,
-	lapetitepierre: SiteTypeInfo,
-	orlu: SiteTypeInfo,
-	troisfontaines: SiteTypeInfo
+	bauges: BooleanStringInfo,
+	belledonne: BooleanStringInfo,
+	caroux: BooleanStringInfo,
+	chambord: BooleanStringInfo,
+	chateauvilain: BooleanStringInfo,
+	chize: BooleanStringInfo,
+	grandbirieux: BooleanStringInfo,
+	lapetitepierre: BooleanStringInfo,
+	orlu: BooleanStringInfo,
+	troisfontaines: BooleanStringInfo
 }
 
-export type SiteTypeInfo = {
-	site: string,
+export type ThemeType = {
+	climat: BooleanStringInfo,
+	activiteshumaines: BooleanStringInfo,
+	utilisationspatiale: BooleanStringInfo,
+	fonctionnementdemographique: BooleanStringInfo,
+	regimesalimentaire: BooleanStringInfo,
+	suivisanitaire: BooleanStringInfo,
+
+	suivisbiodiversite: BooleanStringInfo,
+	travauxinterventions: BooleanStringInfo,
+	gestionagricolepastorale: BooleanStringInfo,
+	gestionforestiere: BooleanStringInfo,
+	valorisationsformations: BooleanStringInfo
+}
+
+export type BooleanStringInfo = {
+	label: string,
 	value: boolean
 }
 
@@ -86,6 +95,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 	const [state, setState] = useState<MenuState>({
 		search: '',
 		sites: emptySites,
+		themes: emptyThemes,
 		year: '',
 		auteur: ''
 	});
@@ -116,6 +126,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 		setState({
 			search: '',
 			sites: emptySites,
+			themes: emptyThemes,
 			year: '',
 			auteur: ''
 		});
@@ -137,11 +148,26 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 			sites: {
 				...prevState.sites,
 				[event.target.id]: {
-					site: event.target.name,
+					label: event.target.name,
 					value: event.target.checked
 				}
 			}
 		}));
+	}
+	
+	const onThemeChange = (event: any): void => 
+	{
+		event.persist();
+		setState(prevState => ({ ...prevState, 
+			themes: {
+				...prevState.themes,
+				[event.target.id]: {
+					label: event.target.name,
+					value: event.target.checked
+				}
+			}
+		}));
+		console.log(state.themes);
 	}
 
 	const onYearChange = (event: any): void => 
@@ -161,7 +187,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 		let sites = Object.entries(state.sites).map(e => e[1]).filter(e => e.value);
 		for(let i = 0; i < sites.length; i++){
 			if(sites[i].value){
-				strSites += `'${sites[i].site}'`;
+				strSites += `'${sites[i].label}'`;
 
 				if(i+1 < sites.length && sites[i+1].value)
 					strSites += ', ';
@@ -171,9 +197,10 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 	}
 
 	return (
-		<Container fixed className={classes.content}>
-			<List className={classes.list}>
-				<ExpansionPanel expanded={expanded === 'actualite'} onChange={handleChange('actualite')}>
+		<Drawer variant="permanent">
+			<Toolbar/>
+			<div style={{width: '271px'}}>
+				<ExpansionPanel expanded={expanded === 'actualite'} onChange={handleChange('actualite')} style={{marginTop: '8px'}}>
 					<ExpansionPanelSummary
 						className={expanded === 'actualite' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
 					>
@@ -185,8 +212,8 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="column" justify="center" alignItems="stretch">
-							<TextField name="search" id="search" variant="outlined" 
-							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
+							<TextField name="search" variant="outlined" 
+							fullWidth label="Recherche" value={state.search}
 							onChange={onSearchChange}
 							InputProps={{ 
 								endAdornment:
@@ -198,7 +225,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 									) : null)
 							}}/>
 
-							<TextField name="auteur" id="auteur" variant="outlined" 
+							<TextField name="auteur" variant="outlined" 
 							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
 							onChange={onAuteurChange} style={{marginTop: '8px'}}
 							InputProps={{ 
@@ -241,181 +268,371 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 					</ExpansionPanelDetails>
 
 				</ExpansionPanel>
-			</List>
 
-			<List className={classes.list}>
-				<ExpansionPanel expanded={expanded === 'panel2'} onChange={handleChange('panel2')} >
-					
+				<ExpansionPanel expanded={expanded === 'presentationSites'} onChange={handleChange('presentationSites')} >
 					<ExpansionPanelSummary
-						aria-controls="panel2bh-content"
-						id="panel2bh-header"
-						className={expanded === 'panel2' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+						className={expanded === 'presentationSites' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
 					>
-						<FontAwesomeIcon icon={faInfoCircle} size="lg" style={{margin:"auto 10 auto 0"}} />
-						<Typography>Présentation des sites</Typography>
+						<Typography>
+							<FontAwesomeIcon icon={faInfoCircle} style={{marginRight: '8px'}}/>
+							Présentation des sites
+						</Typography>
 					</ExpansionPanelSummary>
-
 				</ExpansionPanel>
-			</List>
 
-			<List className={classes.list}>
 				<ExpansionPanel expanded={expanded === 'crterrain'} onChange={handleChange('crterrain')} >
-					
 					<ExpansionPanelSummary
-						aria-controls="crterrainbh-content"
-						id="crterrainbh-header"
 						className={expanded === 'crterrain' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
 					>
-							<FontAwesomeIcon icon={faFileAlt} size="lg" style={{margin:"auto 10 auto 0"}}/>
-							<Typography>Comptes-rendus terrain</Typography>
+							<Typography>
+								<FontAwesomeIcon icon={faFileAlt} style={{marginRight: '8px'}}/>
+								Comptes-rendus terrain
+							</Typography>
 					</ExpansionPanelSummary>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="column" justify="center" alignItems="stretch">
 							<TextField name="search" variant="outlined" 
-							margin="normal" fullWidth label="Recherche" value={state.search}
-							onChange={onSearchChange} />
+							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
+							onChange={onSearchChange}
+							InputProps={{ 
+								endAdornment:
+									(state.search !== '' ? (
+										<IconButton size="small" style={{marginRight: 0}} 
+										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
 
-							<ExpansionPanel>
-								<ExpansionPanelSummary style={{backgroundColor: "#ebdfd3", marginTop: '8px'}}>
+							<TextField name="auteur" variant="outlined" 
+							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
+							onChange={onAuteurChange} style={{marginTop: '8px'}}
+							InputProps={{ 
+								endAdornment:
+									(state.auteur !== '' ? (
+										<IconButton size="small"
+										onClick={() => setState(prevState => ({...prevState, auteur: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
+
+							<FormControl variant="outlined" fullWidth style={{marginTop: '8px'}}>
+								<InputLabel id="labelSelectYear">Année</InputLabel>
+								<Select name="year" id="year" labelId="labelSelectYear" label="Année"
+								value={state.year} onChange={onYearChange}>
+									<MenuItem value={''}><em>Vide</em></MenuItem>
+									{yearArray.map(row => (
+										<MenuItem value={row} key={row}>{row}</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+
+							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
+								className={classes.formExpansionPanelSummary}>
 									<Typography>Sites</Typography>
 								</ExpansionPanelSummary>
 
 								<ExpansionPanelDetails>
-									<Grid container direction="column" justify="center" alignItems="flex-start">
-										{/* <FormControlLabel 
-											control={<Checkbox checked={state.sites.bauges.value} onChange={onSiteChange}
-											name="Bauges" id="bauges" color="primary" />}
-											label="Bauges"
-										/>
-										<FormControlLabel 
-											control={<Checkbox checked={state.sites.vercors.value} onChange={onSiteChange}
-											name="Vercors" id="vercors" color="primary"/>}
-											label="Vercors"
-										/>
-										<FormControlLabel 
-											control={<Checkbox checked={state.sites.chartreuse.value} onChange={onSiteChange}
-											name="Chartreuse" id="chartreuse" color="primary"/>}
-											label="Chartreuse"
-										/> */}
-									</Grid>
+									<SiteList sites={state.sites} onSiteChange={onSiteChange}/>
 								</ExpansionPanelDetails>
 							</ExpansionPanel>
-
+							
 							<Button fullWidth variant="contained" onClick={sendFilters}
-							color="primary" style={{marginTop: 8}}>
-								Envoyer
+							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
+								Filtrer
 							</Button>
 						</Grid>
 					</ExpansionPanelDetails>
 
 				</ExpansionPanel>
-			</List>
 
-			<List className={classes.list}>
-				<ExpansionPanel expanded={expanded === 'panel4'} onChange={handleChange('panel4')} >
-					
+				<ExpansionPanel expanded={expanded === 'crpolice'} onChange={handleChange('crpolice')} >
 					<ExpansionPanelSummary
-						aria-controls="panel4bh-content"
-						id="panel4bh-header"
-						className={expanded === 'panel4' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+						className={expanded === 'crpolice' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
 					>
-							<FontAwesomeIcon icon={faPencilRuler} size="lg" style={{margin:"auto 10 auto 0"}}/>
-							<Typography>Comptes-rendus police</Typography>
+							<Typography>
+								<FontAwesomeIcon icon={faPencilRuler} style={{marginRight: '8px'}}/>
+								Comptes-rendus police
+							</Typography>
 					</ExpansionPanelSummary>
 
 					<ExpansionPanelDetails>
-						<List>
-							{['All mail', 'Trash', 'Spam'].map((text, index) => (
-								<ListItem button key={text}>
-									<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-									<ListItemText primary={text} />
-								</ListItem>
-							))}
-						</List>
+						<Grid container direction="column" justify="center" alignItems="stretch">
+							<TextField name="search" variant="outlined" 
+							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
+							onChange={onSearchChange}
+							InputProps={{ 
+								endAdornment:
+									(state.search !== '' ? (
+										<IconButton size="small" style={{marginRight: 0}} 
+										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
+
+							<TextField name="auteur" variant="outlined" 
+							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
+							onChange={onAuteurChange} style={{marginTop: '8px'}}
+							InputProps={{ 
+								endAdornment:
+									(state.auteur !== '' ? (
+										<IconButton size="small"
+										onClick={() => setState(prevState => ({...prevState, auteur: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
+
+							<FormControl variant="outlined" fullWidth style={{marginTop: '8px'}}>
+								<InputLabel id="labelSelectYear">Année</InputLabel>
+								<Select name="year" id="year" labelId="labelSelectYear" label="Année"
+								value={state.year} onChange={onYearChange}>
+									<MenuItem value={''}><em>Vide</em></MenuItem>
+									{yearArray.map(row => (
+										<MenuItem value={row} key={row}>{row}</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+
+							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
+								className={classes.formExpansionPanelSummary}>
+									<Typography>Sites</Typography>
+								</ExpansionPanelSummary>
+
+								<ExpansionPanelDetails>
+									<SiteList sites={state.sites} onSiteChange={onSiteChange}/>
+								</ExpansionPanelDetails>
+							</ExpansionPanel>
+							
+							<Button fullWidth variant="contained" onClick={sendFilters}
+							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
+								Filtrer
+							</Button>
+						</Grid>
 					</ExpansionPanelDetails>
-
 				</ExpansionPanel>
-			</List>
 
-			<List className={classes.list}>
 				<ExpansionPanel expanded={expanded === 'connaissancesproduites'} onChange={handleChange('connaissancesproduites')} >
-					
 					<ExpansionPanelSummary
-						aria-controls="connaissancesproduitesbh-content"
-						id="connaissancesproduitesbh-header"
 						className={expanded === 'connaissancesproduites' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
 					>
-						<FontAwesomeIcon icon={faLightbulb} size="lg" style={{margin:"auto 10 auto 0"}}/>
-						<Typography>Connaissances produites</Typography>
+						<Typography>
+							<FontAwesomeIcon icon={faLightbulb} style={{marginRight: '8px'}}/>
+							Connaissances produites
+						</Typography>
 					</ExpansionPanelSummary>
 
 					<ExpansionPanelDetails>
-						<List>
-							{['All mail', 'Trash', 'Spam'].map((text, index) => (
-								<ListItem button key={text}>
-									<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-									<ListItemText primary={text} />
-								</ListItem>
-							))}
-						</List>
+						<Grid container direction="column" justify="center" alignItems="stretch">
+							<TextField name="search" variant="outlined" 
+							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
+							onChange={onSearchChange}
+							InputProps={{ 
+								endAdornment:
+									(state.search !== '' ? (
+										<IconButton size="small" style={{marginRight: 0}} 
+										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
+
+							<TextField name="auteur" variant="outlined" 
+							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
+							onChange={onAuteurChange} style={{marginTop: '8px'}}
+							InputProps={{ 
+								endAdornment:
+									(state.auteur !== '' ? (
+										<IconButton size="small"
+										onClick={() => setState(prevState => ({...prevState, auteur: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
+
+							<FormControl variant="outlined" fullWidth style={{marginTop: '8px'}}>
+								<InputLabel id="labelSelectYear">Année</InputLabel>
+								<Select name="year" id="year" labelId="labelSelectYear" label="Année"
+								value={state.year} onChange={onYearChange}>
+									<MenuItem value={''}><em>Vide</em></MenuItem>
+									{yearArray.map(row => (
+										<MenuItem value={row} key={row}>{row}</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+
+							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
+								className={classes.formExpansionPanelSummary}>
+									<Typography>Sites</Typography>
+								</ExpansionPanelSummary>
+
+								<ExpansionPanelDetails>
+									<SiteList sites={state.sites} onSiteChange={onSiteChange}/>
+								</ExpansionPanelDetails>
+							</ExpansionPanel>
+							
+							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
+								className={classes.formExpansionPanelSummary}>
+									<Typography>Thèmes</Typography>
+								</ExpansionPanelSummary>
+
+								<ExpansionPanelDetails>
+									<Grid container direction="column" justify="center" alignItems="flex-start">
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.activiteshumaines.value} onChange={onThemeChange}
+											name="Activités humaines" id="activiteshumaines" color="primary" />}
+											label="Activités humaines"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.climat.value} onChange={onThemeChange}
+											name="Climat" id="climat" color="primary" />}
+											label="Climat"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.fonctionnementdemographique.value} onChange={onThemeChange}
+											name="Fonctionnement démographique" id="fonctionnementdemographique" color="primary" />}
+											label="Fonctionnement démographique"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.regimesalimentaire.value} onChange={onThemeChange}
+											name="Régimes alimentaire" id="regimesalimentaire" color="primary" />}
+											label="Régimes alimentaire"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.suivisanitaire.value} onChange={onThemeChange}
+											name="Suivi sanitaire" id="suivisanitaire" color="primary" />}
+											label="Suivi sanitaire"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.utilisationspatiale.value} onChange={onThemeChange}
+											name="Utilisation spatiale" id="utilisationspatiale" color="primary" />}
+											label="Utilisation spatiale"
+										/>
+									</Grid>
+								</ExpansionPanelDetails>
+							</ExpansionPanel>
+							
+							<Button fullWidth variant="contained" onClick={sendFilters}
+							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
+								Filtrer
+							</Button>
+						</Grid>
 					</ExpansionPanelDetails>
-
 				</ExpansionPanel>
-			</List>
 
-			<List className={classes.list}>
-				<ExpansionPanel expanded={expanded === 'panel6'} onChange={handleChange('panel6')} >
-					
+				<ExpansionPanel expanded={expanded === 'operationsgestion'} onChange={handleChange('operationsgestion')} >
 					<ExpansionPanelSummary
-						aria-controls="panel6bh-content"
-						id="panel6bh-header"
-						className={expanded === 'panel6' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+						className={expanded === 'operationsgestion' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
 					>
-						<FontAwesomeIcon icon={faHardHat} size="lg" style={{margin:"auto 10 auto 0"}}/>
-						<Typography>Opérations de gestion</Typography>
+						<Typography>
+							<FontAwesomeIcon icon={faHardHat} style={{marginRight: '8px'}}/>
+							Opérations de gestion
+						</Typography>
 					</ExpansionPanelSummary>
 
 					<ExpansionPanelDetails>
-						<List>
-							{['All mail', 'Trash', 'Spam'].map((text, index) => (
-								<ListItem button key={text}>
-									<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-									<ListItemText primary={text} />
-								</ListItem>
-							))}
-						</List>
+						<Grid container direction="column" justify="center" alignItems="stretch">
+							<TextField name="search" variant="outlined" 
+							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
+							onChange={onSearchChange}
+							InputProps={{ 
+								endAdornment:
+									(state.search !== '' ? (
+										<IconButton size="small" style={{marginRight: 0}} 
+										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
+
+							<TextField name="auteur" variant="outlined" 
+							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
+							onChange={onAuteurChange} style={{marginTop: '8px'}}
+							InputProps={{ 
+								endAdornment:
+									(state.auteur !== '' ? (
+										<IconButton size="small"
+										onClick={() => setState(prevState => ({...prevState, auteur: ''}))}>
+											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+										</IconButton>
+									) : null)
+							}}/>
+
+							<FormControl variant="outlined" fullWidth style={{marginTop: '8px'}}>
+								<InputLabel id="labelSelectYear">Année</InputLabel>
+								<Select name="year" id="year" labelId="labelSelectYear" label="Année"
+								value={state.year} onChange={onYearChange}>
+									<MenuItem value={''}><em>Vide</em></MenuItem>
+									{yearArray.map(row => (
+										<MenuItem value={row} key={row}>{row}</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+
+							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
+								className={classes.formExpansionPanelSummary}>
+									<Typography>Sites</Typography>
+								</ExpansionPanelSummary>
+
+								<ExpansionPanelDetails>
+									<SiteList sites={state.sites} onSiteChange={onSiteChange}/>
+								</ExpansionPanelDetails>
+							</ExpansionPanel>
+							
+							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
+								className={classes.formExpansionPanelSummary}>
+									<Typography>Thèmes</Typography>
+								</ExpansionPanelSummary>
+
+								<ExpansionPanelDetails>
+									<Grid container direction="column" justify="center" alignItems="flex-start">
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.gestionagricolepastorale.value} onChange={onThemeChange}
+											name="Gestion agricole / pastorale" id="gestionagricolepastorale" color="primary" />}
+											label="Gestion agricole / pastorale"
+										/>
+										<FormControlLabel
+											control={<Checkbox checked={state.themes.gestionforestiere.value} onChange={onThemeChange}
+											name="Gestion forestière" id="gestionforestiere" color="primary" />}
+											label="Gestion forestière"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.suivisbiodiversite.value} onChange={onThemeChange}
+											name="Suivis Biodiversité" id="suivisbiodiversite" color="primary" />}
+											label="Suivis Biodiversité"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.travauxinterventions.value} onChange={onThemeChange}
+											name="Travaux / interventions" id="travauxinterventions" color="primary" />}
+											label="Travaux / interventions"
+										/>
+										<FormControlLabel 
+											control={<Checkbox checked={state.themes.valorisationsformations.value} onChange={onThemeChange}
+											name="Valorisations / Formations" id="valorisationsformations" color="primary" />}
+											label="Valorisations / Formations"
+										/>
+									</Grid>
+								</ExpansionPanelDetails>
+							</ExpansionPanel>
+							
+							<Button fullWidth variant="contained" onClick={sendFilters}
+							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
+								Filtrer
+							</Button>
+						</Grid>
 					</ExpansionPanelDetails>
-
 				</ExpansionPanel>
-			</List>
-
-			<List className={classes.list}>
-				<ExpansionPanel expanded={expanded === 'panel7'} onChange={handleChange('panel7')} >
-					
-					<ExpansionPanelSummary
-						aria-controls="panel7bh-content"
-						id="panel7bh-header"
-						className={expanded === 'panel7' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
-					>
-						<FontAwesomeIcon icon={faArchive} size="lg" style={{margin:"auto 10 auto 0"}}/>
-						<Typography>Archives</Typography>
-					</ExpansionPanelSummary>
-
-					<ExpansionPanelDetails>
-						<List>
-							{['All mail', 'Trash', 'Spam'].map((text, index) => (
-								<ListItem button key={text}>
-									<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-									<ListItemText primary={text} />
-								</ListItem>
-							))}
-						</List>
-					</ExpansionPanelDetails>
-
-				</ExpansionPanel>
-			</List>
-		</Container>
+			</div>
+		</Drawer>
 	);
 }
 

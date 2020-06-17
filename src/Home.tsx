@@ -1,5 +1,5 @@
 import Menu from './ui/Menu/Menu'
-import { Grid, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles } from '@material-ui/core';
+import { Grid, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles, Toolbar } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import NavBar from './ui/NavBar';
 import './scss/Home.scss';
@@ -192,59 +192,53 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	return (
 		<>	
 			<NavBar onClick={handleOpenForm}/>
-			<Grid container spacing={1}>
-				<Grid item xs={2}>
-					<Paper elevation={3}>
-						<Menu fetchContent={fetchContent} menuFilters={menuFilters}/>
-					</Paper>
-				</Grid>
-				<Grid item xs={10}>
-					<TableContainer component={Paper} style={{cursor: "pointer"}}>
-						<Table stickyHeader aria-label="simple table">
-							<TableHead>
-								<TableRow>
-									<TableCell align="center" onClick={()=>orderBy('titre')}>
-										Titre {state.filters.orderBy === 'titre' ? (state.filters.desc ? '▼' : '▲') : null}
-									</TableCell>
+			<Toolbar/>
+			<Menu fetchContent={fetchContent} menuFilters={menuFilters}/>
+			<main style={{marginLeft: '290px'}}>
+				<Table stickyHeader aria-label="simple table" style={{cursor: 'pointer'}}>
+					<TableHead>
+						<TableRow>
+							<TableCell align="center" onClick={()=>orderBy('titre')}>
+								Titre {state.filters.orderBy === 'titre' ? (state.filters.desc ? '▼' : '▲') : null}
+							</TableCell>
 
-									<TableCell align="center" onClick={()=>orderBy('date')}>
-										Date {state.filters.orderBy === 'date' ? (state.filters.desc ? '▼' : '▲') : null}
-									</TableCell>
+							<TableCell align="center" onClick={()=>orderBy('date')}>
+								Date {state.filters.orderBy === 'date' ? (state.filters.desc ? '▼' : '▲') : null}
+							</TableCell>
 
-									<TableCell align="center" onClick={()=>orderBy('userID')}>
-										Auteur {state.filters.orderBy === 'userID' ? (state.filters.desc ? '▼' : '▲') : null}
-									</TableCell>
-									
-									<TableCell align="center" onClick={()=>orderBy('site')}>
-										Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
-									</TableCell>
-								</TableRow>
-							</TableHead>
-							{state.isTable ? (
-								<TableBody>
-									{state.dataArray.map(row => (
-										<StyledTableRow key={row.id} onClick={()=>handleOpenRow(row, 'pdf')}>
-											<TableCell align="center">{row.titre}</TableCell>
-											<TableCell align="center">{formatDate(row.date)}</TableCell>
-											<TableCell align="center">{row.userID}</TableCell>
-											<TableCell align="center">{row.site}</TableCell>
-										</StyledTableRow>
-									))}
-								</TableBody>
-							) : null}
-						</Table>
-					</TableContainer>
-					{!state.isTable ? (
-						<Grid container spacing={1} style={{paddingTop: 8}}>
+							<TableCell align="center" onClick={()=>orderBy('userID')}>
+								Auteur {state.filters.orderBy === 'userID' ? (state.filters.desc ? '▼' : '▲') : null}
+							</TableCell>
+							
+							<TableCell align="center" onClick={()=>orderBy('site')}>
+								Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
+							</TableCell>
+						</TableRow>
+					</TableHead>
+					{state.isTable ? (
+						<TableBody>
 							{state.dataArray.map(row => (
-								<Grid item xs={3} key={row.id} style={{width: '250px'}}>
-									<CustomCard row={row} onClick={handleOpenRow}/>
-								</Grid>
+								<StyledTableRow key={row.id} onClick={()=>handleOpenRow(row, 'pdf')}>
+									<TableCell align="center">{row.titre}</TableCell>
+									<TableCell align="center">{formatDate(row.date)}</TableCell>
+									<TableCell align="center">{row.userID}</TableCell>
+									<TableCell align="center">{row.site}</TableCell>
+								</StyledTableRow>
 							))}
-						</Grid>
+						</TableBody>
 					) : null}
-				</Grid>
-			</Grid>
+				</Table>
+
+				{!state.isTable ? (
+					<Grid container spacing={1} style={{paddingTop: 8}}>
+						{state.dataArray.map(row => (
+							<Grid item xs={3} key={row.id} style={{width: '250px'}}>
+								<CustomCard row={row} onClick={handleOpenRow}/>
+							</Grid>
+						))}
+					</Grid>
+				) : null}
+			</main>
 
 			{state.selectedRow ? 
 				<DialogContenu open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/> 
