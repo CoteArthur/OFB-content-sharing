@@ -87,7 +87,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     
     const sendForm = async () => {
         state.userID = userID;
-        await axios.post(`http://localhost:25565/api/${state.type}`,
+        await axios.post(`http://http://35.214.28.194:25565//api/${state.type}`,
             state, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
         })
         .then(r => console.log(r.data))

@@ -48,7 +48,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	});
 
 	useEffect(() => { 
-			axios.post('http://localhost:25565/api/actualite',
+			axios.post('http://http://35.214.28.194:25565//api/actualite',
 			{headers: { 'Content-Type': 'application/json' }} )
 			.then(r =>
 				r.data[0] ? (
@@ -77,7 +77,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		}
 		
 		let boolTable: boolean = childData !== 'actualite';
-		axios.post(`http://localhost:25565/api/${childData}`, filters,
+		axios.post(`http://http://35.214.28.194:25565//api/${childData}`, filters,
 		{headers: { 'Content-Type': 'application/json' }} )
 		.then(r =>
 			r.data[0] ? (
