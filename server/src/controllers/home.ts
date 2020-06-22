@@ -16,11 +16,11 @@ export default class HomeController
 
 	public actualite(req: Request, res: Response): void
 	{
-                let strQuery = `SELECT actualite.* FROM actualite`;
+                let strQuery = `SELECT actualite.*, users.email FROM actualite LEFT JOIN users ON actualite.userID = users.id`;
                 
                 if(req.body.auteur){
                         let arrayAuteur = req.body.auteur.split(' ');
-                        strQuery += ` LEFT JOIN users ON actualite.userID = users.id WHERE users.email LIKE '%${arrayAuteur[0]}%'`;
+                        strQuery += ` WHERE users.email LIKE '%${arrayAuteur[0]}%'`;
                         if(arrayAuteur[1]){
                                 strQuery += ` AND users.email LIKE '%${arrayAuteur[1]}%'`;
                         }
@@ -96,11 +96,11 @@ export default class HomeController
         
 	public crterrain(req: Request, res: Response): void
 	{
-                let strQuery = `SELECT crterrain.* FROM crterrain`;
+                let strQuery = `SELECT crterrain.*, users.email FROM crterrain LEFT JOIN users ON crterrain.userID = users.id`;
 
                 if(req.body.auteur){
                         let arrayAuteur = req.body.auteur.split(' ');
-                        strQuery += ` LEFT JOIN users ON crterrain.userID = users.id WHERE users.email LIKE '%${arrayAuteur[0]}%'`;
+                        strQuery += ` WHERE users.email LIKE '%${arrayAuteur[0]}%'`;
                         if(arrayAuteur[1]){
                                 strQuery += ` AND users.email LIKE '%${arrayAuteur[1]}%'`;
                         }

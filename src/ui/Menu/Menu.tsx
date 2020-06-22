@@ -21,9 +21,6 @@ const useStyles = makeStyles(() => createStyles({
 			background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
 			color: "#FFFFFF"
 		},
-		list: {
-			
-		},
 		formExpansionPanel: {
 			marginTop: '8px',
 			borderColor: '#C3C3C3',
@@ -72,7 +69,7 @@ export type ThemeType = {
 	activiteshumaines: BooleanStringInfo,
 	utilisationspatiale: BooleanStringInfo,
 	fonctionnementdemographique: BooleanStringInfo,
-	regimesalimentaire: BooleanStringInfo,
+	regimealimentaire: BooleanStringInfo,
 	suivisanitaire: BooleanStringInfo,
 
 	suivisbiodiversite: BooleanStringInfo,
@@ -262,7 +259,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 							
 							<Button fullWidth variant="contained" onClick={sendFilters}
 							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
-								Filtrer
+								Valider
 							</Button>
 						</Grid>
 					</ExpansionPanelDetails>
@@ -342,7 +339,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 							
 							<Button fullWidth variant="contained" onClick={sendFilters}
 							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
-								Filtrer
+								Valider
 							</Button>
 						</Grid>
 					</ExpansionPanelDetails>
@@ -355,7 +352,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 					>
 							<Typography>
 								<FontAwesomeIcon icon={faPencilRuler} style={{marginRight: '8px'}}/>
-								Comptes-rendus police
+								Comptes-rendus Police
 							</Typography>
 					</ExpansionPanelSummary>
 
@@ -411,7 +408,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 							
 							<Button fullWidth variant="contained" onClick={sendFilters}
 							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
-								Filtrer
+								Valider
 							</Button>
 						</Grid>
 					</ExpansionPanelDetails>
@@ -501,9 +498,9 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 											label="Fonctionnement démographique"
 										/>
 										<FormControlLabel 
-											control={<Checkbox checked={state.themes.regimesalimentaire.value} onChange={onThemeChange}
-											name="Régimes alimentaire" id="regimesalimentaire" color="primary" />}
-											label="Régimes alimentaire"
+											control={<Checkbox checked={state.themes.regimealimentaire.value} onChange={onThemeChange}
+											name="Régime alimentaire" id="regimealimentaire" color="primary" />}
+											label="Régime alimentaire"
 										/>
 										<FormControlLabel 
 											control={<Checkbox checked={state.themes.suivisanitaire.value} onChange={onThemeChange}
@@ -521,7 +518,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 							
 							<Button fullWidth variant="contained" onClick={sendFilters}
 							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
-								Filtrer
+								Valider
 							</Button>
 						</Grid>
 					</ExpansionPanelDetails>
@@ -597,8 +594,8 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 									<Grid container direction="column" justify="center" alignItems="flex-start">
 										<FormControlLabel 
 											control={<Checkbox checked={state.themes.gestionagricolepastorale.value} onChange={onThemeChange}
-											name="Gestion agricole / pastorale" id="gestionagricolepastorale" color="primary" />}
-											label="Gestion agricole / pastorale"
+											name="Gestion agricole, pastorale" id="gestionagricolepastorale" color="primary" />}
+											label="Gestion agricole, pastorale"
 										/>
 										<FormControlLabel
 											control={<Checkbox checked={state.themes.gestionforestiere.value} onChange={onThemeChange}
@@ -612,13 +609,13 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 										/>
 										<FormControlLabel 
 											control={<Checkbox checked={state.themes.travauxinterventions.value} onChange={onThemeChange}
-											name="Travaux / interventions" id="travauxinterventions" color="primary" />}
-											label="Travaux / interventions"
+											name="Travaux, Interventions" id="travauxinterventions" color="primary" />}
+											label="Travaux, Interventions"
 										/>
 										<FormControlLabel 
 											control={<Checkbox checked={state.themes.valorisationsformations.value} onChange={onThemeChange}
-											name="Valorisations / Formations" id="valorisationsformations" color="primary" />}
-											label="Valorisations / Formations"
+											name="Valorisations, Formations" id="valorisationsformations" color="primary" />}
+											label="Valorisations, Formations"
 										/>
 									</Grid>
 								</ExpansionPanelDetails>
@@ -626,7 +623,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 							
 							<Button fullWidth variant="contained" onClick={sendFilters}
 							color="primary" style={{marginTop: 8}} endIcon={<TuneIcon/>}>
-								Filtrer
+								Valider
 							</Button>
 						</Grid>
 					</ExpansionPanelDetails>

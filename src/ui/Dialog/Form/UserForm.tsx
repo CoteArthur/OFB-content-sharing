@@ -111,6 +111,20 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
             color="primary" style={{marginTop: 8}} endIcon={<ExitToApp/>}>
                 Se deconnecter
             </Button>
+
+            {userID === 1 ?
+                <form>
+                    <TextField name="email" id="email" type="email"
+                    label="Email" variant="outlined" margin="normal" required fullWidth
+                    onChange={onEmailChange} />
+
+                    <Button fullWidth variant="contained"
+                    onClick={()=>{console.log('nega')}}
+                    color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
+                        Creer l'utilisateur
+                    </Button>
+                </form>
+            : null}
         </> }
 
         </>

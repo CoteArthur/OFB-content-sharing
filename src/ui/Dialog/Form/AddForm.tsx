@@ -97,14 +97,18 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     return(
         <form onSubmit={sendForm}>
             <Grid container direction="column" justify="space-evenly" alignItems="center">
-                <Select name="type" id="type" variant="outlined" 
-                required fullWidth value={state.type} onChange={onTypeChange} >
-                    <MenuItem value="insertActualite">Actualité</MenuItem>
-                    <MenuItem value="insertCrterrain">Comptes-rendus terrain</MenuItem>
-                    <MenuItem value="insertCrpolice">Comptes-rendus police</MenuItem>
-                    <MenuItem value="insertConnaissancesproduites">Connaissances produites</MenuItem>
-                    <MenuItem value="insertOperationsgestion">Opérations de gestion</MenuItem>
-                </Select>
+
+                <FormControl variant="outlined" fullWidth margin="normal" required>
+                    <InputLabel id="labelSelectType">Type</InputLabel>
+                    <Select name="type" id="type" labelId="labelSelectType" label="Type *"
+                    value={state.type} onChange={onTypeChange}>
+                        <MenuItem value="insertActualite">Actualité</MenuItem>
+                        <MenuItem value="insertCrterrain">Comptes-rendus terrain</MenuItem>
+                        <MenuItem value="insertCrpolice">Comptes-rendus Police</MenuItem>
+                        <MenuItem value="insertConnaissancesproduites">Connaissances produites</MenuItem>
+                        <MenuItem value="insertOperationsgestion">Opérations de gestion</MenuItem>
+                    </Select>
+                </FormControl>
 
                 <TextField name="titre" id="titre" variant="outlined" 
                 margin="normal" required fullWidth label="Titre" 
@@ -177,11 +181,11 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                                 <InputLabel id="labelSelectTheme">Thème</InputLabel>
                                 <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
                                 value={state.theme} onChange={onThemeChange}>
-                                    <MenuItem value="Gestion agricole / pastorale">Gestion agricole / pastorale</MenuItem>
+                                    <MenuItem value="Gestion agricole, pastorale">Gestion agricole, pastorale</MenuItem>
                                     <MenuItem value="Gestion forestière">Gestion forestière</MenuItem>
                                     <MenuItem value="Suivis Biodiversité">Suivis Biodiversité</MenuItem>
-                                    <MenuItem value="Travaux / interventions">Travaux / interventions</MenuItem>
-                                    <MenuItem value="Valorisations / Formations">Valorisations / Formations</MenuItem>
+                                    <MenuItem value="Travaux, Interventions">Travaux, Interventions</MenuItem>
+                                    <MenuItem value="Valorisations, Formations">Valorisations, Formations</MenuItem>
                                 </Select>
                                 <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
                             </FormControl>

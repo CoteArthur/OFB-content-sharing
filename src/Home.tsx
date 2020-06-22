@@ -206,8 +206,8 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 								Date {state.filters.orderBy === 'date' ? (state.filters.desc ? '▼' : '▲') : null}
 							</TableCell>
 
-							<TableCell align="center" onClick={()=>orderBy('userID')}>
-								Auteur {state.filters.orderBy === 'userID' ? (state.filters.desc ? '▼' : '▲') : null}
+							<TableCell align="center" onClick={()=>orderBy('users.email')}>
+								Auteur {state.filters.orderBy === 'users.email' ? (state.filters.desc ? '▼' : '▲') : null}
 							</TableCell>
 							
 							<TableCell align="center" onClick={()=>orderBy('site')}>
@@ -221,7 +221,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 								<StyledTableRow key={row.id} onClick={()=>handleOpenRow(row, 'pdf')}>
 									<TableCell align="center">{row.titre}</TableCell>
 									<TableCell align="center">{formatDate(row.date)}</TableCell>
-									<TableCell align="center">{row.userID}</TableCell>
+									<TableCell align="center">{row.email}</TableCell>
 									<TableCell align="center">{row.site}</TableCell>
 								</StyledTableRow>
 							))}

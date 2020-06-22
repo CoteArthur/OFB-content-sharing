@@ -39,16 +39,15 @@ const DialogContenu: FunctionComponent<DialogContenuProps> = (props: DialogConte
                         <FontAwesomeIcon icon={faTimes}/>
                     </Fab>
                 </div>
-                <DialogTitle>
-                    {props.row.titre}
-                </DialogTitle>
                 <DialogContent>
+                    <Typography variant="h5" noWrap>{props.row.titre}</Typography>
+                    
                     <DialogContentText>
                         {props.row.description}
                     </DialogContentText>
                     
                     <Typography variant="subtitle2" color="textSecondary">
-                        {formatDate(props.row.date)} - {props.row.userID}
+                        {formatDate(props.row.date)} - {props.row.site} - {props.row.email}
                     </Typography>
                 </DialogContent>
             </> : <>
