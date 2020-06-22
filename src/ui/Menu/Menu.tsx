@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => createStyles({
 
 export interface MenuProps {
 	fetchContent: (childData: string, filter?: any) => void,
-	menuFilters: (search: string, sites: string, year: string, auteur: string) => void
+	menuFilters: (search: string, sites: string, year: string, auteur: string, themes: string) => void
 }
 
 export interface MenuState {
@@ -164,7 +164,6 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 				}
 			}
 		}));
-		console.log(state.themes);
 	}
 
 	const onYearChange = (event: any): void => 
@@ -190,7 +189,18 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 					strSites += ', ';
 			}
 		}
-		props.menuFilters(state.search, strSites, state.year, state.auteur);
+
+		let strThemes = '';
+		let themes = Object.entries(state.themes).map(e => e[1]).filter(e => e.value);
+		for(let i = 0; i < themes.length; i++){
+			if(themes[i].value){
+				strThemes += `'${themes[i].label}'`;
+
+				if(i+1 < themes.length && themes[i+1].value)
+					strThemes += ', ';
+			}
+		}
+		props.menuFilters(state.search, strSites, state.year, state.auteur, strThemes);
 	}
 
 	return (

@@ -25,7 +25,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     const userID = useSelector((state: AppState) => state.app.userID);
 
     const [state, setState] = useState<ContactState>({
-        type: 'insertActualite',
+        type: 'actualite',
 		titre: undefined,
 		description: undefined,
         file: undefined,
@@ -87,7 +87,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     
     const sendForm = async () => {
         state.userID = userID;
-        await axios.post(`http://localhost:25565/api/${state.type}`,
+        await axios.post(`http://localhost:25565/api/insert`,
             state, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
         })
         .then(r => console.log(r.data))
@@ -102,11 +102,11 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     <InputLabel id="labelSelectType">Type</InputLabel>
                     <Select name="type" id="type" labelId="labelSelectType" label="Type *"
                     value={state.type} onChange={onTypeChange}>
-                        <MenuItem value="insertActualite">Actualité</MenuItem>
-                        <MenuItem value="insertCrterrain">Comptes-rendus terrain</MenuItem>
-                        <MenuItem value="insertCrpolice">Comptes-rendus Police</MenuItem>
-                        <MenuItem value="insertConnaissancesproduites">Connaissances produites</MenuItem>
-                        <MenuItem value="insertOperationsgestion">Opérations de gestion</MenuItem>
+                        <MenuItem value="actualite">Actualité</MenuItem>
+                        <MenuItem value="crterrain">Comptes-rendus terrain</MenuItem>
+                        <MenuItem value="crpolice">Comptes-rendus Police</MenuItem>
+                        <MenuItem value="connaissancesproduites">Connaissances produites</MenuItem>
+                        <MenuItem value="operationsgestion">Opérations de gestion</MenuItem>
                     </Select>
                 </FormControl>
 
@@ -131,7 +131,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.site}/>
                 </FormControl>
 
-                {state.type === "insertActualite" ? (
+                {state.type === "actualite" ? (
                     <>
                         {state.file !== undefined ? 
                             <>
@@ -160,12 +160,12 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     </>
                 ) : (
                     <>
-                        {state.type === "insertConnaissancesproduites"?
+                        {state.type === "connaissancesproduites"?
                             <FormControl variant="outlined" fullWidth margin="normal" required>
                                 <InputLabel id="labelSelectTheme">Thème</InputLabel>
                                 <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
                                 value={state.theme} onChange={onThemeChange}>
-                                    <MenuItem value="Activités humaine">Activités humaines</MenuItem>
+                                    <MenuItem value="Activités humaines">Activités humaines</MenuItem>
                                     <MenuItem value="Climat">Climat</MenuItem>
                                     <MenuItem value="Fonctionnement démographique">Fonctionnement démographique</MenuItem>
                                     <MenuItem value="Régimes alimentaire">Régimes alimentaire</MenuItem>
@@ -176,7 +176,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                             </FormControl>
                         : null}
 
-                        {state.type === "insertOperationsgestion" ?
+                        {state.type === "operationsgestion" ?
                             <FormControl variant="outlined" fullWidth margin="normal" required>
                                 <InputLabel id="labelSelectTheme">Thème</InputLabel>
                                 <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"

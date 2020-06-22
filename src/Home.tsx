@@ -34,13 +34,14 @@ export type FiltersType = {
 	sites?: string;
 	year?: string;
 	auteur?: string;
+	themes?: string;
 }
 
 const Home: React.FunctionComponent = (): JSX.Element =>
 {
 	const [state, setState] = useState<HomeState> ({
 		selectedTable: 'undefined',
-		filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined},
+		filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined, themes: undefined},
 		dataArray: [],
 		isTable: false,
 		selectedRow: undefined,
@@ -48,23 +49,23 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	});
 
 	useEffect(() => { 
-			axios.post('http://localhost:25565/api/actualite',
-			{headers: { 'Content-Type': 'application/json' }} )
-			.then(r =>
-				r.data[0] ? (
-					setState((prevState)=>({ 
-						...prevState,
-						selectedTable: 'actualite',
-						dataArray: r.data,
-					}))
-				) : (
-					setState((prevState)=>({ 
-						...prevState,
-						selectedTable: 'actualite',
-						dataArray: [],
-					}))
-				)
-			)
+			// axios.post('http://localhost:25565/api/actualite',
+			// {headers: { 'Content-Type': 'application/json' }} )
+			// .then(r =>
+			// 	r.data[0] ? (
+			// 		setState((prevState)=>({ 
+			// 			...prevState,
+			// 			selectedTable: 'actualite',
+			// 			dataArray: r.data,
+			// 		}))
+			// 	) : (
+			// 		setState((prevState)=>({ 
+			// 			...prevState,
+			// 			selectedTable: 'actualite',
+			// 			dataArray: [],
+			// 		}))
+			// 	)
+			// )
 	}, [setState]);
 
 	const fetchContent = async (childData: string, filters?: FiltersType) => {
@@ -72,12 +73,13 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		if(!filters){
 			setState((prevState: any)=>({ 
 				...prevState,
-				filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined},
+				filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined, themes: undefined},
 			}));
 		}
 		
 		let boolTable: boolean = childData !== 'actualite';
-		axios.post(`http://localhost:25565/api/${childData}`, filters,
+		
+		axios.post(`http://localhost:25565/api/select`, {table: childData, filters},
 		{headers: { 'Content-Type': 'application/json' }} )
 		.then(r =>
 			r.data[0] ? (
@@ -130,13 +132,14 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		fetchContent(state.selectedTable, filters);
 	}
 
-	const menuFilters = (search: string, sites: string, year: string, auteur: string): void => {
+	const menuFilters = (search: string, sites: string, year: string, auteur: string, themes: string): void => {
 		let filters = {
 			...state.filters,
 			search,
 			sites,
 			year,
-			auteur
+			auteur,
+			themes
 		};
 		setState((prevState: any)=>({ 
 			...prevState,
@@ -213,6 +216,12 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 							<TableCell align="center" onClick={()=>orderBy('site')}>
 								Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
 							</TableCell>
+
+							{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ? 
+								<TableCell align="center" onClick={()=>orderBy('theme')}>
+									Theme {state.filters.orderBy === 'theme' ? (state.filters.desc ? '▼' : '▲') : null}
+								</TableCell>
+							: null}
 						</TableRow>
 					</TableHead>
 					{state.isTable ? (
@@ -223,6 +232,9 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 									<TableCell align="center">{formatDate(row.date)}</TableCell>
 									<TableCell align="center">{row.email}</TableCell>
 									<TableCell align="center">{row.site}</TableCell>
+									{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ? 
+										<TableCell align="center">{row.theme}</TableCell>
+									: null}
 								</StyledTableRow>
 							))}
 						</TableBody>
