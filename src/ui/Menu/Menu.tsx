@@ -46,7 +46,9 @@ export interface MenuProps {
 export interface MenuState {
 	search: string,
 	sites: SiteType,
+	sitesExpanded: boolean,
 	themes: ThemeType,
+	themesExpanded: boolean,
 	year: string,
 	auteur: string,
 }
@@ -92,7 +94,9 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 	const [state, setState] = useState<MenuState>({
 		search: '',
 		sites: emptySites,
+		sitesExpanded: false,
 		themes: emptyThemes,
+		themesExpanded: false,
 		year: '',
 		auteur: ''
 	});
@@ -123,7 +127,9 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 		setState({
 			search: '',
 			sites: emptySites,
+			sitesExpanded: false,
 			themes: emptyThemes,
+			themesExpanded: false,
 			year: '',
 			auteur: ''
 		});
@@ -256,7 +262,8 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 								</Select>
 							</FormControl>
 
-							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+							<ExpansionPanel expanded={state.sitesExpanded} onChange={()=>setState(prevState => ({ ...prevState, sitesExpanded: !state.sitesExpanded}))}
+							elevation={0} variant="outlined" className={classes.formExpansionPanel}>
 								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
 								className={classes.formExpansionPanelSummary}>
 									<Typography>Sites</Typography>
@@ -336,7 +343,8 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 								</Select>
 							</FormControl>
 
-							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+							<ExpansionPanel expanded={state.sitesExpanded} onChange={()=>setState(prevState => ({ ...prevState, sitesExpanded: !state.sitesExpanded}))}
+							elevation={0} variant="outlined" className={classes.formExpansionPanel}>
 								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
 								className={classes.formExpansionPanelSummary}>
 									<Typography>Sites</Typography>
@@ -405,7 +413,8 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 								</Select>
 							</FormControl>
 
-							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+							<ExpansionPanel expanded={state.sitesExpanded} onChange={()=>setState(prevState => ({ ...prevState, sitesExpanded: !state.sitesExpanded}))}
+							elevation={0} variant="outlined" className={classes.formExpansionPanel}>
 								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
 								className={classes.formExpansionPanelSummary}>
 									<Typography>Sites</Typography>
@@ -473,7 +482,8 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 								</Select>
 							</FormControl>
 
-							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+							<ExpansionPanel expanded={state.sitesExpanded} onChange={()=>setState(prevState => ({ ...prevState, sitesExpanded: !state.sitesExpanded}))}
+							elevation={0} variant="outlined" className={classes.formExpansionPanel}>
 								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
 								className={classes.formExpansionPanelSummary}>
 									<Typography>Sites</Typography>
@@ -484,7 +494,8 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 								</ExpansionPanelDetails>
 							</ExpansionPanel>
 							
-							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+							<ExpansionPanel expanded={state.themesExpanded} onChange={()=>setState(prevState => ({ ...prevState, themesExpanded: !state.themesExpanded}))}
+							elevation={0} variant="outlined" className={classes.formExpansionPanel}>
 								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
 								className={classes.formExpansionPanelSummary}>
 									<Typography>Thèmes</Typography>
@@ -583,7 +594,8 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 								</Select>
 							</FormControl>
 
-							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+							<ExpansionPanel expanded={state.sitesExpanded} onChange={()=>setState(prevState => ({ ...prevState, sitesExpanded: !state.sitesExpanded}))}
+							elevation={0} variant="outlined" className={classes.formExpansionPanel}>
 								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
 								className={classes.formExpansionPanelSummary}>
 									<Typography>Sites</Typography>
@@ -594,7 +606,8 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 								</ExpansionPanelDetails>
 							</ExpansionPanel>
 							
-							<ExpansionPanel elevation={0} variant="outlined" className={classes.formExpansionPanel}>
+							<ExpansionPanel expanded={state.themesExpanded} onChange={()=>setState(prevState => ({ ...prevState, themesExpanded: !state.themesExpanded}))}
+							elevation={0} variant="outlined" className={classes.formExpansionPanel}>
 								<ExpansionPanelSummary expandIcon={<FontAwesomeIcon icon={faCaretDown} size="xs"/>}
 								className={classes.formExpansionPanelSummary}>
 									<Typography>Thèmes</Typography>
