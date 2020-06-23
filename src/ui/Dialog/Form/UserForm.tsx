@@ -94,48 +94,46 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     return(
         <>
         {userID === 0 ?
-        <form onSubmit={sendForm}>
-            <Grid container direction="column" justify="space-evenly" alignItems="center">
-                <TextField name="email" id="email" type="email" error={state.error}
-                label="Email" variant="outlined" required fullWidth
-                onChange={onEmailChange} />
+            <form onSubmit={sendForm}>
+                <Grid container direction="column" justify="space-evenly" alignItems="center">
+                    <TextField name="email" id="email" type="email" error={state.error}
+                    label="Email" variant="outlined" required fullWidth
+                    onChange={onEmailChange} />
 
-                <TextField name="password" id="password" type="password" label="Mot de passe" error={state.error} helperText={state.errorString}
-                variant="outlined" margin="normal" required fullWidth
-                onChange={onPasswordChange} />
+                    <TextField name="password" id="password" type="password" label="Mot de passe" error={state.error} helperText={state.errorString}
+                    variant="outlined" margin="normal" required fullWidth
+                    onChange={onPasswordChange} />
 
-                <Button fullWidth variant="contained" onClick={sendForm}
-                type="submit"
-                color="primary" style={{marginTop: 8}} endIcon={<SendIcon/>}>
-                    Se connecter
-                </Button>
-          </Grid>
-        </form>
-        : <>
-            <Typography variant="body1" color="textSecondary">
-                Connecté en tant que: {state.userEmail}
-            </Typography>
-            <Button fullWidth variant="contained" onClick={logOut}
-            // type="submit"
-            color="primary" style={{marginTop: 8}} endIcon={<ExitToApp/>}>
-                Se deconnecter
-            </Button>
-
-            {userID === 1 ?
-                <form>
-                    <TextField name="email" id="email" type="email"
-                    label="Email" variant="outlined" required fullWidth style={{marginTop: '32px'}}
-                    onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
-
-                    <Button fullWidth variant="contained" onClick={createUser}
+                    <Button fullWidth variant="contained" onClick={sendForm}
                     type="submit"
-                    color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
-                        Creer l'utilisateur
+                    color="primary" style={{marginTop: 8}} endIcon={<SendIcon/>}>
+                        Se connecter
                     </Button>
-                </form>
-            : null}
-        </> }
+                </Grid>
+            </form>
+            : <>
+                <Typography variant="body1" color="textSecondary">
+                    Connecté en tant que: {state.userEmail}
+                </Typography>
+                <Button fullWidth variant="contained" onClick={logOut}
+                color="primary" style={{marginTop: 8}} endIcon={<ExitToApp/>}>
+                    Se deconnecter
+                </Button>
 
+                {userID === 1 ?
+                    <form>
+                        <TextField name="email" id="email" type="email"
+                        label="Email" variant="outlined" required fullWidth style={{marginTop: '32px'}}
+                        onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
+
+                        <Button fullWidth variant="contained" onClick={createUser}
+                        type="submit"
+                        color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
+                            Creer l'utilisateur
+                        </Button>
+                    </form>
+                : null}
+            </> }
         </>
     )
 }
