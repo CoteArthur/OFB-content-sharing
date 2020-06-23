@@ -7,6 +7,7 @@ export default class HomeRoute {
 
 		app.route('/api/login').post(homeController.login);
 		app.route('/api/selectUserInfo').post(homeController.selectUserInfo);
+		
 		app.route('/api/createUser').post(homeController.createUser);
 
 		app.route('/api/select').post(homeController.select);
