@@ -49,19 +49,22 @@ export default class HomeController {
                         if (!(results[0]?.id)) {
                                 let password = nouns[Math.floor(Math.random() * Math.floor(nouns.length))]
                                         + Math.floor(Math.random() * Math.floor(100));
+                                
                                 connection.query(`INSERT INTO users (id, email, password) VALUES (NULL, '${req.body.email}', '${password}');`,
-                                (err, results) => {
-                                        if (err) res.json(err);
-                                        console.log(results);
+                                (errInsert, resultsInsert) => {
+                                        if (errInsert) res.json(errInsert);
+                                        console.log(resultsInsert);
+
                                         const message = {
                                                 from: 'cote.arthur.lgm@gmail.com',
                                                 to: `${req.body.email}`,
                                                 subject: 'Application de partage OFB',
                                                 text: `password: ${password}`,
                                         };
-                                        transport.sendMail(message, function(err, info) {
-                                                if (err) {
-                                                        console.log(err)
+                                        
+                                        transport.sendMail(message, function(errSendMail, info) {
+                                                if (errSendMail) {
+                                                        console.log(errSendMail)
                                                 } else {
                                                         console.log(info);
                                                 }
@@ -89,7 +92,7 @@ export default class HomeController {
                                 if (req.body.filters.sites)
                                         strQuery += ` AND site IN (${req.body.filters.sites})`;
 
-                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') 
+                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
                                         && req.body.filters.themes)
                                         strQuery += ` AND theme IN (${req.body.filters.themes})`;
 
