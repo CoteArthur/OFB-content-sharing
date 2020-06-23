@@ -106,8 +106,7 @@ export default class HomeController {
                         }
 
                         if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
-                                && req.body.filters.themes)
-                        {
+                                && req.body.filters.themes) {
                                 if (req.body.filters.auteur || req.body.filters.search || req.body.filters.sites) {
                                         strQuery += ` AND`;
                                 } else {
@@ -118,8 +117,7 @@ export default class HomeController {
 
                         if (req.body.filters.year) {
                                 if (req.body.filters.auteur || req.body.filters.search
-                                        || req.body.filters.sites || req.body.filters.themes)
-                                {
+                                        || req.body.filters.sites || req.body.filters.themes) {
                                         strQuery += ` AND`;
                                 } else {
                                         strQuery += ` WHERE`;
