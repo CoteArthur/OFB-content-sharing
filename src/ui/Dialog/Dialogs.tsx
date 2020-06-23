@@ -62,13 +62,13 @@ export const DialogImage: FunctionComponent<DialogProps> = (props: DialogProps):
                     </Fab>
                 </div>
                 <DialogContent>
-                    <Typography variant="h5" noWrap>{props.row.titre}</Typography>
+                    <Typography variant="h5" style={{marginBottom: 8}}>{props.row.titre}</Typography>
                     
                     <DialogContentText>
                         {props.row.description}
                     </DialogContentText>
                     
-                    <Typography variant="subtitle2" color="textSecondary">
+                    <Typography variant="subtitle1" color="textSecondary">
                         {formatDate(props.row.date)} - {props.row.site} - {props.row.email}
                     </Typography>
                 </DialogContent>

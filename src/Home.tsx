@@ -89,7 +89,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 				filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined, themes: undefined},
 			}));
 		}
-		
+
 		if(table === 'presentationsites'){
 			setState((prevState)=>({
 				...prevState,
@@ -136,7 +136,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 				desc: true
 			};
 		}
-		
+
 		setState((prevState: any)=>({
 			...prevState,
 			filters: filters
@@ -207,7 +207,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 							<TableCell align="center" onClick={()=>orderBy('users.email')}>
 								Auteur {state.filters.orderBy === 'users.email' ? (state.filters.desc ? '▼' : '▲') : null}
 							</TableCell>
-							
+
 							<TableCell align="center" onClick={()=>orderBy('site')}>
 								Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
 							</TableCell>

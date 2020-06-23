@@ -83,7 +83,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
         props.handleClose();
     }
     
-    const createUser = (e: any) =>
+    const createUser = async (e: any) =>
     {
         if(state.email){
             axios.post(`http://localhost:25565/api/createUser`, {email: state.email}, {headers: { 'Content-Type': 'application/json' }})
