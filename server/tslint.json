@@ -7,11 +7,7 @@
       "curly": false,
       "eofline": true,
       "forin": true,
-      "indent": [
-        true,
-        "tabs",
-        4
-      ],
+      "indent": [true, "spaces"],
       "linebreak-style": [true, "LF"],
       "interface-name": false,
       "jsdoc-format": true,
