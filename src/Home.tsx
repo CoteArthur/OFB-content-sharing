@@ -48,28 +48,27 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		dialogType: 'undefined',
 	});
 
-	useEffect(() => { 
-			// axios.post('http://localhost:25565/api/actualite',
-			// {headers: { 'Content-Type': 'application/json' }} )
-			// .then(r =>
-			// 	r.data[0] ? (
-			// 		setState((prevState)=>({ 
-			// 			...prevState,
-			// 			selectedTable: 'actualite',
-			// 			dataArray: r.data,
-			// 		}))
-			// 	) : (
-			// 		setState((prevState)=>({ 
-			// 			...prevState,
-			// 			selectedTable: 'actualite',
-			// 			dataArray: [],
-			// 		}))
-			// 	)
-			// )
+	useEffect(() => {
+		axios.post(`http://localhost:25565/api/select`, {table: 'actualite'},
+		{headers: { 'Content-Type': 'application/json' }} )
+			.then(r =>
+				r.data[0] ? (
+					setState((prevState)=>({ 
+						...prevState,
+						selectedTable: 'actualite',
+						dataArray: r.data,
+					}))
+				) : (
+					setState((prevState)=>({ 
+						...prevState,
+						selectedTable: 'actualite',
+						dataArray: [],
+					}))
+				)
+			)
 	}, [setState]);
 
 	const fetchContent = async (childData: string, filters?: FiltersType) => {
-		console.log(filters);
 		if(!filters){
 			setState((prevState: any)=>({ 
 				...prevState,
@@ -77,35 +76,42 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			}));
 		}
 		
-		let boolTable: boolean = childData !== 'actualite';
-		
-		axios.post(`http://localhost:25565/api/select`, {table: childData, filters},
-		{headers: { 'Content-Type': 'application/json' }} )
-		.then(r =>
-			r.data[0] ? (
-				setState((prevState)=>({ 
-					...prevState,
-					selectedTable: childData,
-					dataArray: r.data,
-					isTable: boolTable,
-				}))
-			) : (
+		if(childData === 'presentationsites'){
+			setState((prevState)=>({ 
+				...prevState,
+				selectedTable: 'presentationsites',
+				dataArray: [],
+			}));
+		}else{
+			let boolTable: boolean = childData !== 'actualite';
+			axios.post(`http://localhost:25565/api/select`, {table: childData, filters},
+			{headers: { 'Content-Type': 'application/json' }} )
+			.then(r =>
+				r.data[0] ? (
+					setState((prevState)=>({ 
+						...prevState,
+						selectedTable: childData,
+						dataArray: r.data,
+						isTable: boolTable,
+					}))
+				) : (
+					setState((prevState)=>({ 
+						...prevState,
+						selectedTable: childData,
+						dataArray: [],
+						isTable: boolTable,
+					}))
+				)
+			).catch(error =>{
+				console.log(error);
 				setState((prevState)=>({ 
 					...prevState,
 					selectedTable: childData,
 					dataArray: [],
 					isTable: boolTable,
 				}))
-			)
-		).catch(error =>{
-			console.log(error);
-			setState((prevState)=>({ 
-				...prevState,
-				selectedTable: childData,
-				dataArray: [],
-				isTable: boolTable,
-			}))
-		});
+			});
+		}
 	}
 
 	const orderBy = (orderBy: string): void => {
@@ -175,7 +181,6 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	};
 
 	const handleOpenForm = (strType: string) => {
-		//TODO check if user is logged in
 		setState((prevState)=>({
 			...prevState,
 			dialogType: strType,

@@ -20,13 +20,11 @@ const App: React.FunctionComponent<ReduxAppProps> = (props: ReduxAppProps): JSX.
 
 interface LinkStateProps
 {
-	isClick: boolean
 	userID: number
 }
 
 interface LinkDispatchProps
 {
-	toggleClick: (active: boolean) => void
 	setUserId: (value: number) => void
 }
 
@@ -34,13 +32,11 @@ export type ReduxAppProps = LinkStateProps & LinkDispatchProps;
 
 const mapStateToProps = (state: AppState, ownProps: any): LinkStateProps => 
 ({
-	isClick: state.app.isClick,
 	userID: state.app.userID
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, ownProps: any): LinkDispatchProps => 
 ({
-	toggleClick: bindActionCreators(actions.toggleClick, dispatch),
 	setUserId: bindActionCreators(actions.setUserId, dispatch),
 });
 

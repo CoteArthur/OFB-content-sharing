@@ -58,12 +58,15 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
         setState(prevState => ({ ...prevState, password: event.target.value, error: false, errorString: undefined}));
     }
     
-    const sendForm = async () => 
+    const sendForm = async (e: any) => 
     {
-        axios.post('http://localhost:25565/api/login', state,
-        {headers: { 'Content-Type': 'application/json' }})
-        .then(r => r.data[0] === undefined ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
-            : logIn(r.data[0].id));
+        if(state.email && state.password){
+            axios.post('http://localhost:25565/api/login', state,
+            {headers: { 'Content-Type': 'application/json' }})
+            .then(r => r.data[0] === undefined ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
+                : logIn(r.data[0].id))
+            .then(e.preventDefault());
+        }
     }
 
     const logIn = (id: number) =>
@@ -71,15 +74,23 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
         dispatch(action.setUserId(id));
         axios.post('http://localhost:25565/api/selectUserInfo', {id: id},
             {headers: { 'Content-Type': 'application/json' }})
-        .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email})));
+        .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, email: undefined})));
     }
-
+    
     const logOut = () => 
     {
         dispatch(action.setUserId(0));
         props.handleClose();
     }
     
+    const createUser = (e: any) =>
+    {
+        if(state.email){
+            axios.post(`http://localhost:25565/api/createUser`, {email: state.email}, {headers: { 'Content-Type': 'application/json' }})
+            .then(r => r.data ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email déjà enregistré'})) : null)
+            .then(e.preventDefault());
+        }
+    }
     return(
         <>
         {userID === 0 ?
@@ -93,9 +104,8 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
                 variant="outlined" margin="normal" required fullWidth
                 onChange={onPasswordChange} />
 
-                <Button fullWidth variant="contained"
-                // type="submit"
-                onClick={sendForm}
+                <Button fullWidth variant="contained" onClick={sendForm}
+                type="submit"
                 color="primary" style={{marginTop: 8}} endIcon={<SendIcon/>}>
                     Se connecter
                 </Button>
@@ -105,21 +115,20 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
             <Typography variant="body1" color="textSecondary">
                 Connecté en tant que: {state.userEmail}
             </Typography>
-            <Button fullWidth variant="contained"
+            <Button fullWidth variant="contained" onClick={logOut}
             // type="submit"
-            onClick={logOut}
             color="primary" style={{marginTop: 8}} endIcon={<ExitToApp/>}>
                 Se deconnecter
             </Button>
 
             {userID === 1 ?
                 <form>
-                    <TextField name="email" id="email" type="email"
-                    label="Email" variant="outlined" margin="normal" required fullWidth
-                    onChange={onEmailChange} />
+                    <TextField name="email" id="email" type="email" 
+                    label="Email" variant="outlined" required fullWidth style={{marginTop: '32px'}}
+                    onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
 
-                    <Button fullWidth variant="contained"
-                    onClick={()=>{console.log('nega')}}
+                    <Button fullWidth variant="contained" onClick={createUser}
+                    type="submit"
                     color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
                         Creer l'utilisateur
                     </Button>

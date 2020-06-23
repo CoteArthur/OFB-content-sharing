@@ -4,8 +4,19 @@ import config from '../config/config';
 import * as fs from 'fs';
 import * as shortid from 'shortid';
 import * as path from 'path';
+import { nouns } from '../nouns';
+import { createTransport } from 'nodemailer';
 
 const connection = mysql.createConnection(config.mysql);
+
+const transport = createTransport({
+        host: 'smtp.mailtrap.io',
+        port: 2525,
+        auth: {
+                user: '89dc2ce0d2ce06',
+                pass: 'e3ff3c98586f64'
+        }
+});
 
 export default class HomeController 
 {
@@ -31,6 +42,38 @@ export default class HomeController
                         if(err) 
                                 res.json(err);
                         res.json(results);
+                });
+        }
+
+        public createUser(req: Request, res: Response): void
+        {
+                connection.query(`SELECT id FROM users WHERE email = '${req.body.email}'`,
+                (err, results) => {
+                        if(err) res.json(err);
+
+                        if(!(results[0]?.id)){
+                                let password = nouns[Math.floor(Math.random() * Math.floor(nouns.length))]+Math.floor(Math.random() * Math.floor(100));
+                                connection.query(`INSERT INTO users (id, email, password) VALUES (NULL, '${req.body.email}', '${password}');`,
+                                (err, results) => {
+                                        if(err) res.json(err);
+                                        console.log(results);
+                                        const message = {
+                                                from: 'cote.arthur.lgm@gmail.com',
+                                                to: `${req.body.email}`,
+                                                subject: 'Application de partage OFB',
+                                                text: `password: ${password}`
+                                        };
+                                        transport.sendMail(message, function(err, info) {
+                                                if (err) {
+                                                        console.log(err)
+                                                } else {
+                                                        console.log(info);
+                                                }
+                                        });
+                                });
+                        }else{
+                                res.json(true);
+                        }
                 });
         }
 

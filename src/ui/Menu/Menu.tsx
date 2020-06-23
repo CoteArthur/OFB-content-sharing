@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => createStyles({
 		ExpansionPanelSummary: {
 			background: "linear-gradient(#FFFFFF, #FFFFFF)",
 			color: "#1D51BB"
-		}, 
+		},
 		ExpansionPanelSummaryActive: {
 			background: "linear-gradient(130deg,#0BA34D, #0D7155, #0057B2)",
 			color: "#FFFFFF"
@@ -86,7 +86,7 @@ export type BooleanStringInfo = {
 	value: boolean
 }
 
-const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element => 
+const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 {
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState<string | false>(false);
@@ -138,16 +138,16 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 			props.fetchContent(panel);
 	};
 
-	const onSearchChange = (event: any): void => 
+	const onSearchChange = (event: any): void =>
 	{
 		event.persist();
 		setState(prevState => ({ ...prevState, search: event.target.value }));
 	}
 
-	const onSiteChange = (event: any): void => 
+	const onSiteChange = (event: any): void =>
 	{
 		event.persist();
-		setState(prevState => ({ ...prevState, 
+		setState(prevState => ({ ...prevState,
 			sites: {
 				...prevState.sites,
 				[event.target.id]: {
@@ -161,7 +161,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 	const onThemeChange = (event: any): void => 
 	{
 		event.persist();
-		setState(prevState => ({ ...prevState, 
+		setState(prevState => ({ ...prevState,
 			themes: {
 				...prevState.themes,
 				[event.target.id]: {
@@ -172,13 +172,13 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 		}));
 	}
 
-	const onYearChange = (event: any): void => 
+	const onYearChange = (event: any): void =>
 	{
 		event.persist();
 		setState(prevState => ({ ...prevState, year: event.target.value}));
 	}
 
-	const onAuteurChange = (event: any): void => 
+	const onAuteurChange = (event: any): void =>
 	{
 		event.persist();
 		setState(prevState => ({ ...prevState, auteur: event.target.value }));
@@ -225,23 +225,23 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="column" justify="center" alignItems="stretch">
-							<TextField name="search" variant="outlined" 
+							<TextField name="search" variant="outlined"
 							fullWidth label="Recherche" value={state.search}
 							onChange={onSearchChange}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.search !== '' ? (
-										<IconButton size="small" style={{marginRight: 0}} 
+										<IconButton size="small" style={{marginRight: 0}}
 										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
 											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
 										</IconButton>
 									) : null)
 							}}/>
 
-							<TextField name="auteur" variant="outlined" 
+							<TextField name="auteur" variant="outlined"
 							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
 							onChange={onAuteurChange} style={{marginTop: '8px'}}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.auteur !== '' ? (
 										<IconButton size="small"
@@ -283,9 +283,9 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 				</ExpansionPanel>
 
-				<ExpansionPanel expanded={expanded === 'presentationSites'} onChange={handleChange('presentationSites')} >
+				<ExpansionPanel expanded={expanded === 'presentationsites'} onChange={handleChange('presentationsites')} >
 					<ExpansionPanelSummary
-						className={expanded === 'presentationSites' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
+						className={expanded === 'presentationsites' ? classes.ExpansionPanelSummaryActive : classes.ExpansionPanelSummary}
 					>
 						<Typography>
 							<FontAwesomeIcon icon={faInfoCircle} style={{marginRight: '8px'}}/>
@@ -306,23 +306,23 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="column" justify="center" alignItems="stretch">
-							<TextField name="search" variant="outlined" 
+							<TextField name="search" variant="outlined"
 							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
 							onChange={onSearchChange}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.search !== '' ? (
-										<IconButton size="small" style={{marginRight: 0}} 
+										<IconButton size="small" style={{marginRight: 0}}
 										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
 											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
 										</IconButton>
 									) : null)
 							}}/>
 
-							<TextField name="auteur" variant="outlined" 
+							<TextField name="auteur" variant="outlined"
 							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
 							onChange={onAuteurChange} style={{marginTop: '8px'}}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.auteur !== '' ? (
 										<IconButton size="small"
@@ -376,23 +376,23 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="column" justify="center" alignItems="stretch">
-							<TextField name="search" variant="outlined" 
+							<TextField name="search" variant="outlined"
 							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
 							onChange={onSearchChange}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.search !== '' ? (
-										<IconButton size="small" style={{marginRight: 0}} 
+										<IconButton size="small" style={{marginRight: 0}}
 										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
 											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
 										</IconButton>
 									) : null)
 							}}/>
 
-							<TextField name="auteur" variant="outlined" 
+							<TextField name="auteur" variant="outlined"
 							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
 							onChange={onAuteurChange} style={{marginTop: '8px'}}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.auteur !== '' ? (
 										<IconButton size="small"
@@ -445,23 +445,23 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="column" justify="center" alignItems="stretch">
-							<TextField name="search" variant="outlined" 
+							<TextField name="search" variant="outlined"
 							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
 							onChange={onSearchChange}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.search !== '' ? (
-										<IconButton size="small" style={{marginRight: 0}} 
+										<IconButton size="small" style={{marginRight: 0}}
 										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
 											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
 										</IconButton>
 									) : null)
 							}}/>
 
-							<TextField name="auteur" variant="outlined" 
+							<TextField name="auteur" variant="outlined"
 							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
 							onChange={onAuteurChange} style={{marginTop: '8px'}}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.auteur !== '' ? (
 										<IconButton size="small"
@@ -503,32 +503,32 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 								<ExpansionPanelDetails>
 									<Grid container direction="column" justify="center" alignItems="flex-start">
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.activiteshumaines.value} onChange={onThemeChange}
 											name="Activités humaines" id="activiteshumaines" color="primary" />}
 											label="Activités humaines"
 										/>
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.climat.value} onChange={onThemeChange}
 											name="Climat" id="climat" color="primary" />}
 											label="Climat"
 										/>
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.fonctionnementdemographique.value} onChange={onThemeChange}
 											name="Fonctionnement démographique" id="fonctionnementdemographique" color="primary" />}
 											label="Fonctionnement démographique"
 										/>
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.regimealimentaire.value} onChange={onThemeChange}
 											name="Régime alimentaire" id="regimealimentaire" color="primary" />}
 											label="Régime alimentaire"
 										/>
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.suivisanitaire.value} onChange={onThemeChange}
 											name="Suivi sanitaire" id="suivisanitaire" color="primary" />}
 											label="Suivi sanitaire"
 										/>
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.utilisationspatiale.value} onChange={onThemeChange}
 											name="Utilisation spatiale" id="utilisationspatiale" color="primary" />}
 											label="Utilisation spatiale"

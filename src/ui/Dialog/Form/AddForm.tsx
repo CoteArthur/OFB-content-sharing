@@ -39,7 +39,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     const onTypeChange = (event: any): void => 
 	{
         event.persist();
-        setState(prevState => ({ ...prevState, type: event.target.value as string, file: undefined, theme: ''}));
+        setState(prevState => ({ ...prevState, type: event.target.value as string, file: undefined, fileName: undefined, theme: ''}));
     }
     
     const onTitreChange = (event: any): void => 
@@ -57,7 +57,6 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     const onFileChange = (event: any): void => 
 	{
         event.persist();
-
         if(event.target.files[0] !== undefined){
             let reader = new FileReader();
             reader.readAsDataURL(event.target.files[0]);
@@ -86,19 +85,24 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     }
     
     const sendForm = async () => {
-        state.userID = userID;
-        await axios.post(`http://localhost:25565/api/insert`,
-            state, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        })
-        .then(r => console.log(r.data))
-        .catch(err => console.log(err));
+        if(state.titre && state.site && state.fileName
+            && (state.type === 'actualite' ? state.description : true)
+            && ((state.type === 'connaissancesproduites' || state.type === 'operationsgestion') ? state.theme : true))
+        {
+            state.userID = userID;
+            await axios.post(`http://localhost:25565/api/insert`,
+                state, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+            })
+            .then(r => console.log(r.data))
+            .catch(err => console.log(err));
+        }
     }
     
     return(
         <form onSubmit={sendForm}>
             <Grid container direction="column" justify="space-evenly" alignItems="center">
 
-                <FormControl variant="outlined" fullWidth margin="normal" required>
+                <FormControl variant="outlined" fullWidth required>
                     <InputLabel id="labelSelectType">Type</InputLabel>
                     <Select name="type" id="type" labelId="labelSelectType" label="Type *"
                     value={state.type} onChange={onTypeChange}>
@@ -133,25 +137,23 @@ const AddForm: FunctionComponent = (): JSX.Element =>
 
                 {state.type === "actualite" ? (
                     <>
-                        {state.file !== undefined ? 
+                        {state.fileName !== undefined ? 
                             <>
-                                <img src={state.file} alt="a" style={{marginBottom: 8, maxWidth: '200px', maxHeight: '200px',  borderRadius: 5}}/>
+                                <img src={state.file} alt="a" style={{maxWidth: '200px', maxHeight: '200px',  borderRadius: 5}}/>
                                 <Typography variant="subtitle2" color="textSecondary" style={{marginBottom: 8, textAlign: 'center', overflowWrap: 'anywhere'}}>
                                     {state.fileName}
                                 </Typography>
                             </>
                         : null}
-
-                        <input accept="image/*" hidden 
-                        id="contained-button-file" multiple type="file" onChange={onFileChange}/>
-                        <label htmlFor="contained-button-file">
-                            <Button variant="contained" component="span"
-                            endIcon={<CloudUploadIcon/>} style={{marginTop: 8}}color="primary">
+                        
+                        <Button variant="contained" component="label" endIcon={<CloudUploadIcon/>} color="primary">
                             Image
-                            </Button>
-                        </label>
+                            <input type="file" accept="image/png, image/jpeg" hidden onChange={onFileChange}/>
+                        </Button>
+                        <input required style={{opacity: 0, pointerEvents: "none", height: 0, width: 0}} defaultValue={state.fileName}/>
+
                         <Typography variant="subtitle2" color="textSecondary" style={{textAlign: 'center'}}>
-                                Taille maximale : 500MB
+                                Taille maximale : 10MB
                         </Typography>
 
                         <TextField name="description" id="description" multiline rows="6"
@@ -191,7 +193,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                             </FormControl>
                         : null}
 
-                        {state.file !== undefined ?
+                        {state.fileName !== undefined ?
                             <>
                                 <Typography variant="subtitle2" color="textSecondary" style={{marginBottom: 8, textAlign: 'center', overflowWrap: 'anywhere'}}>
                                     {state.fileName}
@@ -199,16 +201,14 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                             </>
                         : null}
                         
-                        <input accept="application/pdf" hidden 
-                        id="contained-button-file" multiple type="file" onChange={onFileChange}/>
-                        <label htmlFor="contained-button-file">
-                            <Button variant="contained" component="span" endIcon={<CloudUploadIcon/>} color="primary">
+                        <Button variant="contained" component="label" endIcon={<CloudUploadIcon/>} color="primary">
                             Fichier PDF
-                            </Button>
-                        </label>
+                            <input type="file" accept="application/pdf" hidden onChange={onFileChange}/>
+                        </Button>
+                        <input required style={{opacity: 0, pointerEvents: "none", height: 0, width: 0}} defaultValue={state.fileName}/>
 
                         <Typography variant="subtitle2" color="textSecondary" style={{textAlign: 'center'}}>
-                                Taille maximale : 500MB
+                                Taille maximale : 10MO
                         </Typography>
 
                         <TextField name="keywords" id="keywords" variant="outlined" 
@@ -217,7 +217,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     </>
                 )}
                 <Button fullWidth variant="contained"
-                // type="submit"
+                type="submit"
                 onClick={sendForm}
                 color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
                     Envoyer
