@@ -47,7 +47,8 @@ export default class HomeController {
                         if (err) res.json(err);
 
                         if (!(results[0]?.id)) {
-                                let password = nouns[Math.floor(Math.random() * Math.floor(nouns.length))] + Math.floor(Math.random() * Math.floor(100));
+                                let password = nouns[Math.floor(Math.random() * Math.floor(nouns.length))]
+                                        + Math.floor(Math.random() * Math.floor(100));
                                 connection.query(`INSERT INTO users (id, email, password) VALUES (NULL, '${req.body.email}', '${password}');`,
                                 (err, results) => {
                                         if (err) res.json(err);
@@ -100,7 +101,8 @@ export default class HomeController {
                                         if (req.body.filters.sites)
                                                 strQuery += ` AND theme IN (${req.body.filters.sites})`;
 
-                                        if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes)
+                                        if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
+                                                && req.body.filters.themes)
                                                 strQuery += ` AND theme IN (${req.body.filters.themes})`;
 
                                         if (req.body.filters.year)
@@ -109,13 +111,15 @@ export default class HomeController {
                                         if (req.body.filters.sites) {
                                                 strQuery += ` WHERE site IN (${req.body.filters.sites})`;
 
-                                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes)
+                                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
+                                                        && req.body.filters.themes)
                                                         strQuery += ` AND theme IN (${req.body.filters.themes})`;
 
                                                 if (req.body.filters.year)
                                                         strQuery += ` AND YEAR(date) = ${req.body.filters.year}`;
                                         } else {
-                                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes) {
+                                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
+                                                        && req.body.filters.themes) {
                                                         strQuery += ` WHERE theme IN (${req.body.filters.themes})`;
 
                                                         if (req.body.filters.year)
