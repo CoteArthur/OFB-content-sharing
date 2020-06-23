@@ -104,7 +104,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
                     variant="outlined" margin="normal" required fullWidth
                     onChange={onPasswordChange} />
 
-                    <Button fullWidth variant="contained" onClick={sendForm}
+                    <Button fullWidth variant="contained"
                     type="submit"
                     color="primary" style={{marginTop: 8}} endIcon={<SendIcon/>}>
                         Se connecter
@@ -121,12 +121,12 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
                 </Button>
 
                 {userID === 1 ?
-                    <form>
+                    <form onSubmit={createUser}>
                         <TextField name="email" id="email" type="email"
                         label="Email" variant="outlined" required fullWidth style={{marginTop: '32px'}}
                         onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
 
-                        <Button fullWidth variant="contained" onClick={createUser}
+                        <Button fullWidth variant="contained"
                         type="submit"
                         color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
                             Creer l'utilisateur

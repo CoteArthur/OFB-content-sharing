@@ -218,7 +218,6 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                 )}
                 <Button fullWidth variant="contained"
                 type="submit"
-                onClick={sendForm}
                 color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
                     Envoyer
                 </Button>
