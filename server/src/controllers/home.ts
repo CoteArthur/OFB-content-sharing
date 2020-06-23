@@ -59,7 +59,7 @@ export default class HomeController {
                                                 from: 'cote.arthur.lgm@gmail.com',
                                                 to: `${req.body.email}`,
                                                 subject: 'Application de partage OFB',
-                                                text: `password: ${password}`,
+                                                text: `Mot de passe : ${password}`,
                                         };
 
                                         transport.sendMail(message, function(errSendMail, info) {

@@ -11,6 +11,7 @@ import { faEnvelopeOpenText, faInfoCircle, faFileAlt, faLightbulb, faHardHat, fa
 import emptySites from './emptySites.json';
 import SiteList from './SiteList';
 import emptyThemes from './emptyThemes.json';
+import {ThemeType, SiteType} from './CustomTypes';
 
 const useStyles = makeStyles(() => createStyles({
 		ExpansionPanelSummary: {
@@ -39,7 +40,7 @@ const useStyles = makeStyles(() => createStyles({
 );
 
 export interface MenuProps {
-	fetchContent: (childData: string, filter?: any) => void,
+	fetchContent: (table: string, filter?: any) => void,
 	menuFilters: (search: string, sites: string, year: string, auteur: string, themes: string) => void
 }
 
@@ -51,39 +52,6 @@ export interface MenuState {
 	themesExpanded: boolean,
 	year: string,
 	auteur: string,
-}
-
-export type SiteType = {
-	bauges: BooleanStringInfo,
-	belledonne: BooleanStringInfo,
-	caroux: BooleanStringInfo,
-	chambord: BooleanStringInfo,
-	chateauvilain: BooleanStringInfo,
-	chize: BooleanStringInfo,
-	grandbirieux: BooleanStringInfo,
-	lapetitepierre: BooleanStringInfo,
-	orlu: BooleanStringInfo,
-	troisfontaines: BooleanStringInfo
-}
-
-export type ThemeType = {
-	climat: BooleanStringInfo,
-	activiteshumaines: BooleanStringInfo,
-	utilisationspatiale: BooleanStringInfo,
-	fonctionnementdemographique: BooleanStringInfo,
-	regimealimentaire: BooleanStringInfo,
-	suivisanitaire: BooleanStringInfo,
-
-	suivisbiodiversite: BooleanStringInfo,
-	travauxinterventions: BooleanStringInfo,
-	gestionagricolepastorale: BooleanStringInfo,
-	gestionforestiere: BooleanStringInfo,
-	valorisationsformations: BooleanStringInfo
-}
-
-export type BooleanStringInfo = {
-	label: string,
-	value: boolean
 }
 
 const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>

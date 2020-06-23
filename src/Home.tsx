@@ -4,9 +4,8 @@ import React, { useEffect, useState } from 'react';
 import NavBar from './ui/NavBar';
 import './scss/Home.scss';
 import CustomCard from './ui/CustomCard';
-import DialogContenu from './ui/Dialog/DialogContenu';
-import DialogForm from './ui/Dialog/DialogForm';
 import axios from 'axios';
+import {DialogUser, DialogAjout, DialogImage, DialogPdf} from './ui/Dialog/Dialogs';
 
 const StyledTableRow = withStyles(() =>
 	createStyles({
@@ -24,7 +23,7 @@ export interface HomeState {
 	dataArray: Array<any>;
 	isTable: boolean;
 	selectedRow?: any;
-	dialogType: string;
+	dialogType?: string;
 }
 
 export type FiltersType = {
@@ -37,6 +36,21 @@ export type FiltersType = {
 	themes?: string;
 }
 
+export const formatDate = (timestamp: any): String => {
+	let date = new Date(timestamp);
+	let strDate = '';
+
+	if(date.getDate()<10)
+		strDate+='0';
+	strDate+=date.getDate()+'/';
+
+	if(date.getMonth()+1<10)
+		strDate+='0';
+	strDate+=date.getMonth()+1+'/'+date.getFullYear();
+
+	return strDate;
+}
+
 const Home: React.FunctionComponent = (): JSX.Element =>
 {
 	const [state, setState] = useState<HomeState> ({
@@ -45,7 +59,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		dataArray: [],
 		isTable: false,
 		selectedRow: undefined,
-		dialogType: 'undefined',
+		dialogType: undefined,
 	});
 
 	useEffect(() => {
@@ -68,7 +82,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			)
 	}, [setState]);
 
-	const fetchContent = async (childData: string, filters?: FiltersType) => {
+	const fetchContent = async (table: string, filters?: FiltersType) => {
 		if(!filters){
 			setState((prevState: any)=>({
 				...prevState,
@@ -76,41 +90,33 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			}));
 		}
 		
-		if(childData === 'presentationsites'){
+		if(table === 'presentationsites'){
 			setState((prevState)=>({
 				...prevState,
 				selectedTable: 'presentationsites',
 				dataArray: [],
 			}));
 		}else{
-			let boolTable: boolean = childData !== 'actualite';
-			axios.post(`http://localhost:25565/api/select`, {table: childData, filters},
+			let boolTable: boolean = table !== 'actualite';
+			axios.post(`http://localhost:25565/api/select`, {table: table, filters},
 			{headers: { 'Content-Type': 'application/json' }} )
 			.then(r =>
 				r.data[0] ? (
 					setState((prevState)=>({
 						...prevState,
-						selectedTable: childData,
+						selectedTable: table,
 						dataArray: r.data,
 						isTable: boolTable,
 					}))
 				) : (
 					setState((prevState)=>({
 						...prevState,
-						selectedTable: childData,
+						selectedTable: table,
 						dataArray: [],
 						isTable: boolTable,
 					}))
 				)
-			).catch(error =>{
-				console.log(error);
-				setState((prevState)=>({
-					...prevState,
-					selectedTable: childData,
-					dataArray: [],
-					isTable: boolTable,
-				}))
-			});
+			);
 		}
 	}
 
@@ -153,53 +159,37 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		}));
 		fetchContent(state.selectedTable, filters);
 	}
-	
-	const formatDate = (timestamp: any): String => {
-		let date = new Date(timestamp);
-		let strDate = '';
-
-		if(date.getDate()<10)
-			strDate+='0';
-		strDate+=date.getDate()+'/';
-
-		if(date.getMonth()+1<10)
-			strDate+='0';
-		strDate+=date.getMonth()+1+'/'+date.getFullYear();
-
-		return strDate;
-	}
 
 	const [open, setOpen] = React.useState(false);
 
-	const handleOpenRow = (row: any, strType: string) => {
-		setState((prevState)=>({
-			...prevState,
-			selectedRow: row,
-			dialogType: strType,
-		}))
+	const openDialog = (type: string, row?: any) => {
+		if (row) {
+			setState((prevState)=>({
+				...prevState,
+				selectedRow: row,
+				dialogType: type,
+			}))
+		} else {
+			setState((prevState)=>({
+				...prevState,
+				dialogType: type,
+			}));
+		}
 		setOpen(true);
 	};
 
-	const handleOpenForm = (strType: string) => {
-		setState((prevState)=>({
-			...prevState,
-			dialogType: strType,
-		}))
-		setOpen(true);
-	};
-	
-	const handleClose = () => {
+	const closeDialog = () => {
 		setState((prevState)=>({
 			...prevState,
 			selectedRow: undefined,
-			dialogType: "undefined",
+			dialogType: undefined,
 		}))
 		setOpen(false);
 	};
-	
+
 	return (
 		<>
-			<NavBar onClick={handleOpenForm}/>
+			<NavBar openDialog={openDialog}/>
 			<Toolbar/>
 			<Menu fetchContent={fetchContent} menuFilters={menuFilters}/>
 			<main style={{marginLeft: '290px'}}>
@@ -232,7 +222,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 					{state.isTable ? (
 						<TableBody>
 							{state.dataArray.map(row => (
-								<StyledTableRow key={row.id} onClick={()=>handleOpenRow(row, 'pdf')}>
+								<StyledTableRow key={row.id} onClick={()=>openDialog('pdf', row)}>
 									<TableCell align="center">{row.titre}</TableCell>
 									<TableCell align="center">{formatDate(row.date)}</TableCell>
 									<TableCell align="center">{row.email}</TableCell>
@@ -250,17 +240,27 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 					<Grid container spacing={1} style={{paddingTop: 8}}>
 						{state.dataArray.map(row => (
 							<Grid item xs={3} key={row.id} style={{width: '250px'}}>
-								<CustomCard row={row} onClick={handleOpenRow}/>
+								<CustomCard row={row} openDialog={openDialog}/>
 							</Grid>
 						))}
 					</Grid>
 				) : null}
 			</main>
 
-			{state.selectedRow ?
-				<DialogContenu open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/>
-				: <DialogForm open={open} type={state.dialogType} handleClose={handleClose} />
-			}
+			{(() => {
+				switch (state.dialogType) {
+					case 'user':
+						return <DialogUser open={open} closeDialog={closeDialog}/>;
+					case 'ajout':
+						return <DialogAjout open={open} closeDialog={closeDialog}/>;
+					case 'image':
+						return <DialogImage open={open} closeDialog={closeDialog} row={state.selectedRow}/>;
+					case 'pdf':
+						return <DialogPdf open={open} closeDialog={closeDialog} row={state.selectedRow}/>;;
+					default:
+						return null;
+				}
+			})()}
 		</>
 	);
 }

@@ -1,27 +1,10 @@
 import React, { FunctionComponent } from 'react';
 import { Grid, FormControlLabel, Checkbox } from '@material-ui/core';
+import {SiteType} from './CustomTypes';
 
 export interface SiteListProps {
     sites: SiteType,
     onSiteChange: (event: any) => void
-}
-
-export type SiteType = {
-	bauges: BooleanStringInfo,
-	belledonne: BooleanStringInfo,
-	caroux: BooleanStringInfo,
-	chambord: BooleanStringInfo,
-	chateauvilain: BooleanStringInfo,
-	chize: BooleanStringInfo,
-	grandbirieux: BooleanStringInfo,
-	lapetitepierre: BooleanStringInfo,
-	orlu: BooleanStringInfo,
-	troisfontaines: BooleanStringInfo
-}
-
-export type BooleanStringInfo = {
-	label: string,
-	value: boolean
 }
 
 const SiteList: FunctionComponent<SiteListProps> = (props: SiteListProps): JSX.Element =>

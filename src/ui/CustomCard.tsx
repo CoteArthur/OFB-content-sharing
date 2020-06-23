@@ -1,30 +1,16 @@
 import React, { FunctionComponent} from "react"
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@material-ui/core";
+import {formatDate} from "../Home";
 
 type CardProps = {
     row: any,
-    onClick: (row :any, strType: string) => void
+    openDialog: (type: string, row?: any) => void
 }
 
 const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element =>
 {
-    const formatDate = (timestamp: string): String => {
-		let date = new Date(timestamp);
-		let strDate = '';
-
-		if(date.getDate()<10)
-			strDate+='0';
-		strDate+=date.getDate()+'/';
-
-		if(date.getMonth()+1<10)
-			strDate+='0';
-		strDate+=date.getMonth()+1+'/'+date.getFullYear();
-
-		return strDate;
-	}
-
     return(
-        <Card onClick={()=>{props.onClick(props.row, 'actualite');}}>
+        <Card onClick={()=>{props.openDialog('image', props.row)}}>
             <CardActionArea>
                 <CardMedia
                     component="img"
