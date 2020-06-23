@@ -49,7 +49,7 @@ export default class HomeController {
                         if (!(results[0]?.id)) {
                                 let password = nouns[Math.floor(Math.random() * Math.floor(nouns.length))]
                                         + Math.floor(Math.random() * Math.floor(100));
-                                
+
                                 connection.query(`INSERT INTO users (id, email, password) VALUES (NULL, '${req.body.email}', '${password}');`,
                                 (errInsert, resultsInsert) => {
                                         if (errInsert) res.json(errInsert);
@@ -61,7 +61,7 @@ export default class HomeController {
                                                 subject: 'Application de partage OFB',
                                                 text: `password: ${password}`,
                                         };
-                                        
+
                                         transport.sendMail(message, function(errSendMail, info) {
                                                 if (errSendMail) {
                                                         console.log(errSendMail)
