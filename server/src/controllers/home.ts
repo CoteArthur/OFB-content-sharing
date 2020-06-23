@@ -85,65 +85,48 @@ export default class HomeController {
                                 strQuery += ` WHERE users.email LIKE '%${arrayAuteur[0]}%'`;
                                 if (arrayAuteur[1])
                                         strQuery += ` AND users.email LIKE '%${arrayAuteur[1]}%'`;
-
-                                if (req.body.filters.search)
-                                        strQuery += ` AND titre LIKE '%${req.body.filters.search}%'`;
-
-                                if (req.body.filters.sites)
-                                        strQuery += ` AND site IN (${req.body.filters.sites})`;
-
-                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
-                                        && req.body.filters.themes)
-                                        strQuery += ` AND theme IN (${req.body.filters.themes})`;
-
-                                if (req.body.filters.year)
-                                        strQuery += ` AND YEAR(date) = ${req.body.filters.year}`
-                        } else {
-                                if (req.body.filters.search) {
-                                        strQuery += ` WHERE titre LIKE '%${req.body.filters.search}%'`;
-
-                                        if (req.body.filters.sites)
-                                                strQuery += ` AND theme IN (${req.body.filters.sites})`;
-
-                                        if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
-                                                && req.body.filters.themes)
-                                                strQuery += ` AND theme IN (${req.body.filters.themes})`;
-
-                                        if (req.body.filters.year)
-                                                strQuery += ` AND YEAR(date) = ${req.body.filters.year}`;
-                                } else {
-                                        if (req.body.filters.sites) {
-                                                strQuery += ` WHERE site IN (${req.body.filters.sites})`;
-
-                                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
-                                                        && req.body.filters.themes)
-                                                        strQuery += ` AND theme IN (${req.body.filters.themes})`;
-
-                                                if (req.body.filters.year)
-                                                        strQuery += ` AND YEAR(date) = ${req.body.filters.year}`;
-                                        } else {
-                                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
-                                                        && req.body.filters.themes) {
-                                                        strQuery += ` WHERE theme IN (${req.body.filters.themes})`;
-
-                                                        if (req.body.filters.year)
-                                                                strQuery += ` AND YEAR(date) = ${req.body.filters.year}`;
-                                                } else {
-                                                        if (req.body.filters.year)
-                                                                strQuery += ` WHERE YEAR(date) = ${req.body.filters.year}`;
-                                                }
-                                        }
-                                }
                         }
 
-                        if (req.body.filters.orderBy) {
-                                if (req.body.filters.desc) {
-                                        strQuery += ` ORDER BY ${req.body.filters.orderBy} DESC`;
+                        if (req.body.filters.search) {
+                                if (req.body.filters.auteur) {
+                                        strQuery += ` AND`;
                                 } else {
-                                        strQuery += ` ORDER BY ${req.body.filters.orderBy} ASC`;
+                                        strQuery += ` WHERE`;
                                 }
+                                strQuery += ` titre LIKE '%${req.body.filters.search}%'`;
+                        }
+
+                        if (req.body.filters.sites) {
+                                if (req.body.filters.auteur || req.body.filters.search) {
+                                        strQuery += ` AND`;
+                                } else {
+                                        strQuery += ` WHERE`;
+                                }
+                                strQuery += ` site IN (${req.body.filters.sites})`;
+                        }
+
+                        if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes) {
+                                if (req.body.filters.auteur || req.body.filters.search || req.body.filters.sites) {
+                                        strQuery += ` AND`;
+                                } else {
+                                        strQuery += ` WHERE`;
+                                }
+                                strQuery += ` theme IN (${req.body.filters.themes})`;
+                        }
+
+                        if (req.body.filters.year) {
+                                if (req.body.filters.auteur || req.body.filters.search || req.body.filters.sites || req.body.filters.themes) {
+                                        strQuery += ` AND`;
+                                } else {
+                                        strQuery += ` WHERE`;
+                                }
+                                strQuery += ` YEAR(date) = ${req.body.filters.year}`
+                        }
+
+                        if (req.body.filters.desc) {
+                                strQuery += ` ORDER BY ${req.body.filters.orderBy} DESC`;
                         } else {
-                                strQuery += ` ORDER BY date DESC`;
+                                strQuery += ` ORDER BY ${req.body.filters.orderBy} ASC`;
                         }
                 } else {
                         strQuery += ` ORDER BY date DESC`;
