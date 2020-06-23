@@ -4,6 +4,6 @@ export default {
         port: 3306,
         user: 'root',
         database: 'ofb',
-        password: ''
-    }
+        password: '',
+    },
 }

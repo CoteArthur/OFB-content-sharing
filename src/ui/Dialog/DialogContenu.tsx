@@ -10,10 +10,10 @@ type DialogContenuProps = {
     handleClose: () => void,
 }
 
-const DialogContenu: FunctionComponent<DialogContenuProps> = (props: DialogContenuProps): JSX.Element => 
+const DialogContenu: FunctionComponent<DialogContenuProps> = (props: DialogContenuProps): JSX.Element =>
 {
     const formatDate = (timestamp: any): String => {
-		let date = new Date(timestamp);	
+		let date = new Date(timestamp);
 		let strDate = '';
 
 		if(date.getDate()<10)
@@ -30,7 +30,7 @@ const DialogContenu: FunctionComponent<DialogContenuProps> = (props: DialogConte
     return(
         <Dialog open={props.open} onClose={props.handleClose} maxWidth='md' fullWidth>
             {props.type === 'actualite' ? <>
-                <div style={{backgroundImage: `url(http://localhost:25565/files/${props.row.file})`, 
+                <div style={{backgroundImage: `url(http://localhost:25565/files/${props.row.file})`,
                 backgroundSize: "contain", backgroundPositionX: "center",
                 backgroundPositionY: "center", backgroundRepeat: "no-repeat",
                 backgroundColor: "black", height: "300px"}}>
@@ -65,6 +65,6 @@ const DialogContenu: FunctionComponent<DialogContenuProps> = (props: DialogConte
             </>}
         </Dialog>
     )
-}   
+}
 
 export default DialogContenu;

@@ -158,7 +158,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 		}));
 	}
 	
-	const onThemeChange = (event: any): void => 
+	const onThemeChange = (event: any): void =>
 	{
 		event.persist();
 		setState(prevState => ({ ...prevState,
@@ -557,23 +557,23 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 					<ExpansionPanelDetails>
 						<Grid container direction="column" justify="center" alignItems="stretch">
-							<TextField name="search" variant="outlined" 
+							<TextField name="search" variant="outlined"
 							fullWidth label="Recherche" value={state.search} helperText="Titre, Mots clés"
 							onChange={onSearchChange}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.search !== '' ? (
-										<IconButton size="small" style={{marginRight: 0}} 
+										<IconButton size="small" style={{marginRight: 0}}
 										onClick={() => setState(prevState => ({...prevState, search: ''}))}>
 											<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
 										</IconButton>
 									) : null)
 							}}/>
 
-							<TextField name="auteur" variant="outlined" 
+							<TextField name="auteur" variant="outlined"
 							fullWidth label="Auteur" value={state.auteur} helperText="Nom, Prénom"
 							onChange={onAuteurChange} style={{marginTop: '8px'}}
-							InputProps={{ 
+							InputProps={{
 								endAdornment:
 									(state.auteur !== '' ? (
 										<IconButton size="small"
@@ -615,7 +615,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 
 								<ExpansionPanelDetails>
 									<Grid container direction="column" justify="center" alignItems="flex-start">
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.gestionagricolepastorale.value} onChange={onThemeChange}
 											name="Gestion agricole, pastorale" id="gestionagricolepastorale" color="primary" />}
 											label="Gestion agricole, pastorale"
@@ -625,17 +625,17 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 											name="Gestion forestière" id="gestionforestiere" color="primary" />}
 											label="Gestion forestière"
 										/>
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.suivisbiodiversite.value} onChange={onThemeChange}
 											name="Suivis Biodiversité" id="suivisbiodiversite" color="primary" />}
 											label="Suivis Biodiversité"
 										/>
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.travauxinterventions.value} onChange={onThemeChange}
 											name="Travaux, Interventions" id="travauxinterventions" color="primary" />}
 											label="Travaux, Interventions"
 										/>
-										<FormControlLabel 
+										<FormControlLabel
 											control={<Checkbox checked={state.themes.valorisationsformations.value} onChange={onThemeChange}
 											name="Valorisations, Formations" id="valorisationsformations" color="primary" />}
 											label="Valorisations, Formations"

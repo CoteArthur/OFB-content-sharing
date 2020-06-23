@@ -24,56 +24,56 @@ export type BooleanStringInfo = {
 	value: boolean
 }
 
-const SiteList: FunctionComponent<SiteListProps> = (props: SiteListProps): JSX.Element => 
+const SiteList: FunctionComponent<SiteListProps> = (props: SiteListProps): JSX.Element =>
 {
 	return (
 		<Grid container direction="column" justify="center" alignItems="flex-start">
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.bauges.value} onChange={props.onSiteChange}
 				name="Bauges" id="bauges" color="primary" />}
 				label="Bauges"
 			/>
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.belledonne.value} onChange={props.onSiteChange}
 				name="Belledonne" id="belledonne" color="primary" />}
 				label="Belledonne"
 			/>
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.caroux.value} onChange={props.onSiteChange}
 				name="Caroux" id="caroux" color="primary" />}
 				label="Caroux"
 			/>
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.chambord.value} onChange={props.onSiteChange}
 				name="Chambord" id="chambord" color="primary" />}
 				label="Chambord"
 			/>
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.chateauvilain.value} onChange={props.onSiteChange}
 				name="Chateauvilain" id="chateauvilain" color="primary" />}
 				label="Chateauvilain"
 			/>
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.chize.value} onChange={props.onSiteChange}
 				name="Chizé" id="chize" color="primary" />}
 				label="Chizé"
 			/>
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.grandbirieux.value} onChange={props.onSiteChange}
 				name="Grand Birieux" id="grandbirieux" color="primary" />}
 				label="Grand Birieux"
 			/>
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.lapetitepierre.value} onChange={props.onSiteChange}
 				name="La Petite Pierre" id="lapetitepierre" color="primary" />}
 				label="La Petite Pierre"
 			/>
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.orlu.value} onChange={props.onSiteChange}
 				name="Orlu" id="orlu" color="primary" />}
 				label="Orlu"
 			/>
-			<FormControlLabel 
+			<FormControlLabel
 				control={<Checkbox checked={props.sites.troisfontaines.value} onChange={props.onSiteChange}
 				name="Trois Fontaines" id="troisfontaines" color="primary" />}
 				label="Trois Fontaines"

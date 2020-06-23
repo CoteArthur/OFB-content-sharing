@@ -12,7 +12,7 @@ import appReducer from './store/reducer';
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
-export const composeEnhancers: any = process.env.NODE_ENV === 'development' 
+export const composeEnhancers: any = process.env.NODE_ENV === 'development'
     ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose;
 
 export const rootReducer = combineReducers({
