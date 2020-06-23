@@ -11,7 +11,7 @@ import { AppActions } from './store/types';
 const App: React.FunctionComponent<ReduxAppProps> = (props: ReduxAppProps): JSX.Element =>
 {
 	return (
-		<>	
+		<>
 			<CssBaseline />
 			<Home/>
 		</>
@@ -30,12 +30,12 @@ interface LinkDispatchProps
 
 export type ReduxAppProps = LinkStateProps & LinkDispatchProps;
 
-const mapStateToProps = (state: AppState, ownProps: any): LinkStateProps => 
+const mapStateToProps = (state: AppState, ownProps: any): LinkStateProps =>
 ({
 	userID: state.app.userID
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, ownProps: any): LinkDispatchProps => 
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>, ownProps: any): LinkDispatchProps =>
 ({
 	setUserId: bindActionCreators(actions.setUserId, dispatch),
 });

@@ -20,7 +20,7 @@ export interface ContactState
     userID?: number,
 }
 
-const AddForm: FunctionComponent = (): JSX.Element => 
+const AddForm: FunctionComponent = (): JSX.Element =>
 {
     const userID = useSelector((state: AppState) => state.app.userID);
 
@@ -36,25 +36,25 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         userID: undefined,
     });
 
-    const onTypeChange = (event: any): void => 
+    const onTypeChange = (event: any): void =>
 	{
         event.persist();
         setState(prevState => ({ ...prevState, type: event.target.value as string, file: undefined, fileName: undefined, theme: ''}));
     }
     
-    const onTitreChange = (event: any): void => 
+    const onTitreChange = (event: any): void =>
 	{
 		event.persist();
         setState(prevState => ({ ...prevState, titre: event.target.value }));
     }
     
-    const onDescriptionChange = (event: any): void => 
+    const onDescriptionChange = (event: any): void =>
 	{
 		event.persist();
         setState(prevState => ({ ...prevState, description: event.target.value }));
     }
     
-    const onFileChange = (event: any): void => 
+    const onFileChange = (event: any): void =>
 	{
         event.persist();
         if(event.target.files[0] !== undefined){
@@ -66,19 +66,19 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         }
     }
 
-    const onSiteChange = (event: any): void => 
+    const onSiteChange = (event: any): void =>
 	{
         event.persist();
         setState(prevState => ({ ...prevState, site: event.target.value as string}));
     }
     
-    const onKeywordsChange = (event: any): void => 
+    const onKeywordsChange = (event: any): void =>
 	{
         event.persist();
         setState(prevState => ({ ...prevState, keywords: event.target.value}));
     }
 
-    const onThemeChange = (event: any): void => 
+    const onThemeChange = (event: any): void =>
 	{
         event.persist();
         setState(prevState => ({ ...prevState, theme: event.target.value as string}));
@@ -114,8 +114,8 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     </Select>
                 </FormControl>
 
-                <TextField name="titre" id="titre" variant="outlined" 
-                margin="normal" required fullWidth label="Titre" 
+                <TextField name="titre" id="titre" variant="outlined"
+                margin="normal" required fullWidth label="Titre"
                 onChange={onTitreChange} />
 
                 <FormControl variant="outlined" fullWidth margin="normal" required>
@@ -137,7 +137,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
 
                 {state.type === "actualite" ? (
                     <>
-                        {state.fileName !== undefined ? 
+                        {state.fileName !== undefined ?
                             <>
                                 <img src={state.file} alt="a" style={{maxWidth: '200px', maxHeight: '200px',  borderRadius: 5}}/>
                                 <Typography variant="subtitle2" color="textSecondary" style={{marginBottom: 8, textAlign: 'center', overflowWrap: 'anywhere'}}>
@@ -211,7 +211,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                                 Taille maximale : 10MO
                         </Typography>
 
-                        <TextField name="keywords" id="keywords" variant="outlined" 
+                        <TextField name="keywords" id="keywords" variant="outlined"
                         margin="normal" fullWidth label="Mots clés"
                         onChange={onKeywordsChange} />
                     </>

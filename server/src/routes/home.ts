@@ -1,10 +1,8 @@
 import { Express } from 'express';
 import { homeController } from '../controllers/home';
 
-export default class HomeRoute 
-{
-	constructor(app: Express) 
-	{
+export default class HomeRoute {
+	constructor(app: Express) {
 		app.route('/').get(homeController.index);
 
 		app.route('/api/login').post(homeController.login);

@@ -53,13 +53,13 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		{headers: { 'Content-Type': 'application/json' }} )
 			.then(r =>
 				r.data[0] ? (
-					setState((prevState)=>({ 
+					setState((prevState)=>({
 						...prevState,
 						selectedTable: 'actualite',
 						dataArray: r.data,
 					}))
 				) : (
-					setState((prevState)=>({ 
+					setState((prevState)=>({
 						...prevState,
 						selectedTable: 'actualite',
 						dataArray: [],
@@ -70,14 +70,14 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 
 	const fetchContent = async (childData: string, filters?: FiltersType) => {
 		if(!filters){
-			setState((prevState: any)=>({ 
+			setState((prevState: any)=>({
 				...prevState,
 				filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined, themes: undefined},
 			}));
 		}
 		
 		if(childData === 'presentationsites'){
-			setState((prevState)=>({ 
+			setState((prevState)=>({
 				...prevState,
 				selectedTable: 'presentationsites',
 				dataArray: [],
@@ -88,14 +88,14 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			{headers: { 'Content-Type': 'application/json' }} )
 			.then(r =>
 				r.data[0] ? (
-					setState((prevState)=>({ 
+					setState((prevState)=>({
 						...prevState,
 						selectedTable: childData,
 						dataArray: r.data,
 						isTable: boolTable,
 					}))
 				) : (
-					setState((prevState)=>({ 
+					setState((prevState)=>({
 						...prevState,
 						selectedTable: childData,
 						dataArray: [],
@@ -104,7 +104,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 				)
 			).catch(error =>{
 				console.log(error);
-				setState((prevState)=>({ 
+				setState((prevState)=>({
 					...prevState,
 					selectedTable: childData,
 					dataArray: [],
@@ -131,7 +131,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			};
 		}
 		
-		setState((prevState: any)=>({ 
+		setState((prevState: any)=>({
 			...prevState,
 			filters: filters
 		}));
@@ -147,7 +147,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			auteur,
 			themes
 		};
-		setState((prevState: any)=>({ 
+		setState((prevState: any)=>({
 			...prevState,
 			filters: filters
 		}));
@@ -155,7 +155,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	}
 	
 	const formatDate = (timestamp: any): String => {
-		let date = new Date(timestamp);	
+		let date = new Date(timestamp);
 		let strDate = '';
 
 		if(date.getDate()<10)
@@ -198,7 +198,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	};
 	
 	return (
-		<>	
+		<>
 			<NavBar onClick={handleOpenForm}/>
 			<Toolbar/>
 			<Menu fetchContent={fetchContent} menuFilters={menuFilters}/>
@@ -222,7 +222,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 								Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
 							</TableCell>
 
-							{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ? 
+							{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ?
 								<TableCell align="center" onClick={()=>orderBy('theme')}>
 									Theme {state.filters.orderBy === 'theme' ? (state.filters.desc ? '▼' : '▲') : null}
 								</TableCell>
@@ -237,7 +237,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 									<TableCell align="center">{formatDate(row.date)}</TableCell>
 									<TableCell align="center">{row.email}</TableCell>
 									<TableCell align="center">{row.site}</TableCell>
-									{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ? 
+									{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ?
 										<TableCell align="center">{row.theme}</TableCell>
 									: null}
 								</StyledTableRow>
@@ -257,8 +257,8 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 				) : null}
 			</main>
 
-			{state.selectedRow ? 
-				<DialogContenu open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/> 
+			{state.selectedRow ?
+				<DialogContenu open={open} row={state.selectedRow} type={state.dialogType} handleClose={handleClose}/>
 				: <DialogForm open={open} type={state.dialogType} handleClose={handleClose} />
 			}
 		</>

@@ -23,7 +23,7 @@ export interface ContactState
     userEmail?: string,
 }
 
-const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.Element => 
+const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.Element =>
 {
     const dispatch = useDispatch();
 	const userID = useSelector((state: AppState) => state.app.userID);
@@ -38,7 +38,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
         userEmail: undefined,
     });
 
-    useEffect(() => { 
+    useEffect(() => {
         if (userID !== 0){
             axios.post('http://localhost:25565/api/selectUserInfo', {id: userID},
             {headers: { 'Content-Type': 'application/json' }})
@@ -46,19 +46,19 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
         }
     }, [userID, setState]);
 
-    const onEmailChange = (event: any): void => 
+    const onEmailChange = (event: any): void =>
 	{
         event.persist();
         setState(prevState => ({ ...prevState, email: event.target.value, error: false, errorString: undefined}));
     }
 
-    const onPasswordChange = (event: any): void => 
+    const onPasswordChange = (event: any): void =>
 	{
         event.persist();
         setState(prevState => ({ ...prevState, password: event.target.value, error: false, errorString: undefined}));
     }
     
-    const sendForm = async (e: any) => 
+    const sendForm = async (e: any) =>
     {
         if(state.email && state.password){
             axios.post('http://localhost:25565/api/login', state,
@@ -77,7 +77,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
         .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, email: undefined})));
     }
     
-    const logOut = () => 
+    const logOut = () =>
     {
         dispatch(action.setUserId(0));
         props.handleClose();
@@ -123,7 +123,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
 
             {userID === 1 ?
                 <form>
-                    <TextField name="email" id="email" type="email" 
+                    <TextField name="email" id="email" type="email"
                     label="Email" variant="outlined" required fullWidth style={{marginTop: '32px'}}
                     onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
 

@@ -11,7 +11,7 @@ type DialogFormProps = {
     handleClose: () => void
 }
 
-const DialogForm: FunctionComponent<DialogFormProps> = (props: DialogFormProps): JSX.Element => 
+const DialogForm: FunctionComponent<DialogFormProps> = (props: DialogFormProps): JSX.Element =>
 {
     return(
         <Dialog open={props.open} onClose={props.handleClose} fullWidth>

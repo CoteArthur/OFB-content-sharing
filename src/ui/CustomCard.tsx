@@ -6,10 +6,10 @@ type CardProps = {
     onClick: (row :any, strType: string) => void
 }
 
-const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element => 
+const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element =>
 {
     const formatDate = (timestamp: string): String => {
-		let date = new Date(timestamp);	
+		let date = new Date(timestamp);
 		let strDate = '';
 
 		if(date.getDate()<10)

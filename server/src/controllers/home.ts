@@ -14,54 +14,49 @@ const transport = createTransport({
         port: 2525,
         auth: {
                 user: '89dc2ce0d2ce06',
-                pass: 'e3ff3c98586f64'
-        }
+                pass: 'e3ff3c98586f64',
+        },
 });
 
-export default class HomeController 
-{
-        public index(req: Request, res: Response, next: Function): void
-        {
+export default class HomeController {
+        public index(req: Request, res: Response, next: Function): void {
                 res.sendFile(path.join(__dirname, 'build', 'index.html'));
         }
 
-        public login(req: Request, res: Response): void
-	{
+        public login(req: Request, res: Response): void {
                 connection.query(`SELECT id FROM users WHERE email = '${req.body.email}' AND password = '${req.body.password}'`,
                 (err, results) => {
-                        if(err) 
+                        if (err)
                                 res.json(err);
                         res.json(results);
                 });
         }
 
-        public selectUserInfo(req: Request, res: Response): void
-	{
+        public selectUserInfo(req: Request, res: Response): void {
                 connection.query(`SELECT email FROM users WHERE id = '${req.body.id}'`,
                 (err, results) => {
-                        if(err) 
+                        if (err)
                                 res.json(err);
                         res.json(results);
                 });
         }
 
-        public createUser(req: Request, res: Response): void
-        {
+        public createUser(req: Request, res: Response): void {
                 connection.query(`SELECT id FROM users WHERE email = '${req.body.email}'`,
                 (err, results) => {
-                        if(err) res.json(err);
+                        if (err) res.json(err);
 
-                        if(!(results[0]?.id)){
-                                let password = nouns[Math.floor(Math.random() * Math.floor(nouns.length))]+Math.floor(Math.random() * Math.floor(100));
+                        if (!(results[0]?.id)) {
+                                let password = nouns[Math.floor(Math.random() * Math.floor(nouns.length))] + Math.floor(Math.random() * Math.floor(100));
                                 connection.query(`INSERT INTO users (id, email, password) VALUES (NULL, '${req.body.email}', '${password}');`,
                                 (err, results) => {
-                                        if(err) res.json(err);
+                                        if (err) res.json(err);
                                         console.log(results);
                                         const message = {
                                                 from: 'cote.arthur.lgm@gmail.com',
                                                 to: `${req.body.email}`,
                                                 subject: 'Application de partage OFB',
-                                                text: `password: ${password}`
+                                                text: `password: ${password}`,
                                         };
                                         transport.sendMail(message, function(err, info) {
                                                 if (err) {
@@ -71,127 +66,125 @@ export default class HomeController
                                                 }
                                         });
                                 });
-                        }else{
+                        } else {
                                 res.json(true);
                         }
                 });
         }
 
-        public select(req: Request, res: Response): void
-	{
+        public select(req: Request, res: Response): void {
                 let strQuery = `SELECT ${req.body.table}.*, users.email FROM ${req.body.table} LEFT JOIN users ON ${req.body.table}.userID = users.id`;
 
-                if(req.body.filters){
-                        if(req.body.filters.auteur){
+                if (req.body.filters) {
+                        if (req.body.filters.auteur) {
                                 let arrayAuteur = req.body.filters.auteur.split(' ');
                                 strQuery += ` WHERE users.email LIKE '%${arrayAuteur[0]}%'`;
-                                if(arrayAuteur[1])
+                                if (arrayAuteur[1])
                                         strQuery += ` AND users.email LIKE '%${arrayAuteur[1]}%'`;
-        
-                                if(req.body.filters.search)
+
+                                if (req.body.filters.search)
                                         strQuery += ` AND titre LIKE '%${req.body.filters.search}%'`;
-        
-                                if(req.body.filters.sites)
+
+                                if (req.body.filters.sites)
                                         strQuery += ` AND site IN (${req.body.filters.sites})`;
-        
-                                if((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes)
+
+                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes)
                                         strQuery += ` AND theme IN (${req.body.filters.themes})`;
-        
-                                if(req.body.filters.year)
+
+                                if (req.body.filters.year)
                                         strQuery += ` AND YEAR(date) = ${req.body.filters.year}`
-                        }else{
-                                if(req.body.filters.search){
+                        } else {
+                                if (req.body.filters.search) {
                                         strQuery += ` WHERE titre LIKE '%${req.body.filters.search}%'`;
-        
-                                        if(req.body.filters.sites)
+
+                                        if (req.body.filters.sites)
                                                 strQuery += ` AND theme IN (${req.body.filters.sites})`;
-        
-                                        if((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes)
+
+                                        if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes)
                                                 strQuery += ` AND theme IN (${req.body.filters.themes})`;
-        
-                                        if(req.body.filters.year)
+
+                                        if (req.body.filters.year)
                                                 strQuery += ` AND YEAR(date) = ${req.body.filters.year}`;
-                                }else{
-                                        if(req.body.filters.sites){
+                                } else {
+                                        if (req.body.filters.sites) {
                                                 strQuery += ` WHERE site IN (${req.body.filters.sites})`;
-        
-                                                if((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes)
+
+                                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes)
                                                         strQuery += ` AND theme IN (${req.body.filters.themes})`;
-        
-                                                if(req.body.filters.year)
+
+                                                if (req.body.filters.year)
                                                         strQuery += ` AND YEAR(date) = ${req.body.filters.year}`;
-                                        }else{
-                                                if((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes){
+                                        } else {
+                                                if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion') && req.body.filters.themes) {
                                                         strQuery += ` WHERE theme IN (${req.body.filters.themes})`;
-        
-                                                        if(req.body.filters.year)
+
+                                                        if (req.body.filters.year)
                                                                 strQuery += ` AND YEAR(date) = ${req.body.filters.year}`;
-                                                }else{
-                                                        if(req.body.filters.year)
+                                                } else {
+                                                        if (req.body.filters.year)
                                                                 strQuery += ` WHERE YEAR(date) = ${req.body.filters.year}`;
                                                 }
                                         }
                                 }
                         }
-                        
-                        if(req.body.filters.orderBy){
-                                if(req.body.filters.desc){
+
+                        if (req.body.filters.orderBy) {
+                                if (req.body.filters.desc) {
                                         strQuery += ` ORDER BY ${req.body.filters.orderBy} DESC`;
-                                }else{
+                                } else {
                                         strQuery += ` ORDER BY ${req.body.filters.orderBy} ASC`;
                                 }
-                        }else{
+                        } else {
                                 strQuery += ` ORDER BY date DESC`;
                         }
-                }else{
+                } else {
                         strQuery += ` ORDER BY date DESC`;
                 }
 
                 connection.query(strQuery, (err, results) => {
-                        if(err)
+                        if (err)
                                 res.json(err);
                         res.json(results);
                 });
         }
-        
-        public insert(req: Request, res: Response): void
-	{      
+
+        public insert(req: Request, res: Response): void {
                 let fileName = shortid.generate();
                 let fileType = req.body.file.split('/')[1].split(';')[0];
 
                 fs.writeFile(`./files/${fileName}.${fileType}`, req.body.file.split(';base64,').pop(), {encoding: 'base64'}, (err) => {
-                        if(err)
+                        if (err)
                                 console.log(err);
                 });
 
                 let strQuery: string;
-                switch(req.body.type) { 
-                        case 'actualite': { 
+                switch (req.body.type) {
+                        case 'actualite': {
                                 strQuery = `INSERT INTO actualite (id, titre, site, description, date, userID, file) VALUES (NULL, '${req.body.titre}', '${req.body.site}','${req.body.description}', current_timestamp(), '${req.body.userID}', '${fileName}.${fileType}')`;
-                                break; 
-                        } 
+                                break;
+                        }
                         case 'crterrain':
-                        case 'crpolice': { 
+                        case 'crpolice': {
                                 strQuery = `INSERT INTO ${req.body.type} (id, titre, site, keywords, file, date, userID) VALUES (NULL, '${req.body.titre}', '${req.body.site}', '${req.body.keywords}', '${fileName}.pdf', current_timestamp(), '${req.body.userID}')`;
-                                break; 
-                        } 
+                                break;
+                        }
                         case 'connaissancesproduites':
-                        case 'operationsgestion': { 
+                        case 'operationsgestion': {
                                 strQuery = `INSERT INTO ${req.body.type} (id, titre, site, theme, keywords, file, date, userID) VALUES (NULL, '${req.body.titre}', '${req.body.site}', '${req.body.theme}', '${req.body.keywords}', '${fileName}.pdf', current_timestamp(), '${req.body.userID}')`;
-                                break; 
-                        } 
-                        default: { 
+                                break;
+                        }
+                        default: {
                                 console.log('error');
-                                break; 
-                        } 
-                } 
+                                break;
+                        }
+                }
                 connection.query(strQuery,
                 (err, results) => {
-                        if(err) 
+                        if (err)
                                 res.json(err);
                         res.json(results);
                 });
-        }              
+        }
 }
 
 export const homeController = new HomeController();

@@ -158,7 +158,7 @@ const Menu: FunctionComponent<MenuProps> = (props: MenuProps): JSX.Element =>
 		}));
 	}
 	
-	const onThemeChange = (event: any): void => 
+	const onThemeChange = (event: any): void =>
 	{
 		event.persist();
 		setState(prevState => ({ ...prevState,
