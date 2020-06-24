@@ -10,12 +10,12 @@ import { createTransport } from 'nodemailer';
 const connection = mysql.createConnection(config.mysql);
 
 const transport = createTransport({
-        host: 'smtp.mailtrap.io',
-        port: 2525,
+        host: 'smtp.gmail.com',
+        port: 465,
         auth: {
-                user: '89dc2ce0d2ce06',
-                pass: 'e3ff3c98586f64',
-        },
+                user: 'application.partage.ofb@gmail.com',
+                pass: 'testofb38'
+        }
 });
 
 export default class HomeController {
@@ -78,54 +78,57 @@ export default class HomeController {
 
         public select(req: Request, res: Response): void {
                 let strQuery = `SELECT ${req.body.table}.*, users.email FROM ${req.body.table} LEFT JOIN users ON ${req.body.table}.userID = users.id`;
-
+                
                 if (req.body.filters) {
-                        if (req.body.filters.auteur) {
-                                let arrayAuteur = req.body.filters.auteur.split(' ');
-                                strQuery += ` WHERE users.email LIKE '%${arrayAuteur[0]}%'`;
-                                if (arrayAuteur[1])
-                                        strQuery += ` AND users.email LIKE '%${arrayAuteur[1]}%'`;
-                        }
+                        let j: number, i: number;
+                        let filtersArray = [
+                                req.body.filters.auteur, 
+                                req.body.filters.search, 
+                                req.body.filters.sites, 
+                                req.body.filters.themes, 
+                                req.body.filters.year,
+                        ];
 
-                        if (req.body.filters.search) {
-                                if (req.body.filters.auteur) {
-                                        strQuery += ` AND`;
-                                } else {
-                                        strQuery += ` WHERE`;
+                        for (i = 0; i < filtersArray.length; i++) {
+                                if (filtersArray[i]){
+                                        for(j = i-1; j >= 0; j--){
+                                                if (filtersArray[j]) {
+                                                        j = 1;
+                                                }
+                                        }
+
+                                        if (j === -2) {
+                                                strQuery += ` AND`;
+                                        } else {
+                                                strQuery += ` WHERE`;
+                                        }
+
+                                        switch (i) {
+                                                case 0:
+                                                        let arrayAuteur = req.body.filters.auteur.split(' ');
+                                                        strQuery += ` users.email LIKE '%${arrayAuteur[0]}%'`;
+                                                        if (arrayAuteur[1])
+                                                                strQuery += ` AND users.email LIKE '%${arrayAuteur[1]}%'`;
+                                                        break;
+                                                case 1:
+                                                        strQuery += ` titre LIKE '%${req.body.filters.search}%'`;
+                                                        break;
+                                                case 2:
+                                                        strQuery += ` site IN (${req.body.filters.sites})`;
+                                                        break;
+                                                case 3:
+                                                        strQuery += ` theme IN (${req.body.filters.themes})`;
+                                                        break;
+                                                case 4:
+                                                        strQuery += ` YEAR(date) = ${req.body.filters.year}`;
+                                                        break;
+                                                default:
+                                                        break;
+                                        }
                                 }
-                                strQuery += ` titre LIKE '%${req.body.filters.search}%'`;
                         }
 
-                        if (req.body.filters.sites) {
-                                if (req.body.filters.auteur || req.body.filters.search) {
-                                        strQuery += ` AND`;
-                                } else {
-                                        strQuery += ` WHERE`;
-                                }
-                                strQuery += ` site IN (${req.body.filters.sites})`;
-                        }
-
-                        if ((req.body.table === 'connaissancesproduites' || req.body.table === 'operationsgestion')
-                                && req.body.filters.themes) {
-                                if (req.body.filters.auteur || req.body.filters.search || req.body.filters.sites) {
-                                        strQuery += ` AND`;
-                                } else {
-                                        strQuery += ` WHERE`;
-                                }
-                                strQuery += ` theme IN (${req.body.filters.themes})`;
-                        }
-
-                        if (req.body.filters.year) {
-                                if (req.body.filters.auteur || req.body.filters.search
-                                        || req.body.filters.sites || req.body.filters.themes) {
-                                        strQuery += ` AND`;
-                                } else {
-                                        strQuery += ` WHERE`;
-                                }
-                                strQuery += ` YEAR(date) = ${req.body.filters.year}`
-                        }
-
-                        if (req.body.filters.desc) {
+                        if (req.body.filters.orderBy && req.body.filters.desc) {
                                 strQuery += ` ORDER BY ${req.body.filters.orderBy} DESC`;
                         } else {
                                 strQuery += ` ORDER BY ${req.body.filters.orderBy} ASC`;
