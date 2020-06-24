@@ -40,7 +40,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
 
     useEffect(() => {
         if (userID !== 0){
-            axios.post('http://localhost:25565/api/selectUserInfo', {id: userID},
+            axios.post('http://35.214.28.194:25565/api/selectUserInfo', {id: userID},
             {headers: { 'Content-Type': 'application/json' }})
             .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0].email})));
         }
@@ -61,7 +61,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     const sendForm = async (e: any) =>
     {
         if(state.email && state.password){
-            axios.post('http://localhost:25565/api/login', state,
+            axios.post('http://35.214.28.194:25565/api/login', state,
             {headers: { 'Content-Type': 'application/json' }})
             .then(r => r.data[0] === undefined ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
                 : logIn(r.data[0].id))
@@ -71,7 +71,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
 
     const logIn = (id: number) =>
     {
-        axios.post('http://localhost:25565/api/selectUserInfo', {id: id}, {headers: { 'Content-Type': 'application/json' }})
+        axios.post('http://35.214.28.194:25565/api/selectUserInfo', {id: id}, {headers: { 'Content-Type': 'application/json' }})
         .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, email: ''})))
         .then(() => dispatch(action.setUserId(id)));
     }
@@ -85,7 +85,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     const createUser = async (e: any) =>
     {
         if(state.email){
-            axios.post(`http://localhost:25565/api/createUser`, {email: state.email}, {headers: { 'Content-Type': 'application/json' }})
+            axios.post(`http://35.214.28.194:25565/api/createUser`, {email: state.email}, {headers: { 'Content-Type': 'application/json' }})
             .then(r => {
                 if (r.data) {
                     setState(prevState => ({ ...prevState, email: ''}));

@@ -2,9 +2,9 @@ export default {
     mysql: {
         host: 'localhost',
         port: 3306,
-        user: 'root',
+        user: 'server',
         database: 'ofb',
-        password: '',
+        password: 'server',
     },
 }
 // export const CREDS_USER: string = "application.partage.ofb@gmail.com";

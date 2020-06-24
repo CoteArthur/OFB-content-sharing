@@ -16,7 +16,7 @@ const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element
                     component="img"
                     alt=""
                     height="140"
-                    image={`http://localhost:25565/files/${props.row.file}`}
+                    image={`http://35.214.28.194:25565/files/${props.row.file}`}
                 />
                 <CardContent>
                     <Typography variant="h5" noWrap>{props.row.titre}</Typography>

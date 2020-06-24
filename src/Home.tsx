@@ -63,7 +63,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	});
 
 	useEffect(() => {
-		axios.post(`http://localhost:25565/api/select`, {table: 'actualite'},
+		axios.post(`http://35.214.28.194:25565/api/select`, {table: 'actualite'},
 		{headers: { 'Content-Type': 'application/json' }} )
 			.then(r =>
 				r.data[0] ? (
@@ -98,7 +98,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			}));
 		}else{
 			let boolTable: boolean = table !== 'actualite';
-			axios.post(`http://localhost:25565/api/select`, {table: table, filters},
+			axios.post(`http://35.214.28.194:25565/api/select`, {table: table, filters},
 			{headers: { 'Content-Type': 'application/json' }} )
 			.then(r =>
 				r.data[0] ? (
