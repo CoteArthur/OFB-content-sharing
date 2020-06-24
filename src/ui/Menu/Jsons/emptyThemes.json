@@ -3,7 +3,7 @@
     "activiteshumaines": {"label": "activiteshumaines", "value": false},
     "utilisationspatiale": {"label": "utilisationspatiale", "value": false},
     "fonctionnementdemographique": {"label": "fonctionnementdemographique", "value": false},
-    "regimesalimentaire": {"label": "regimesalimentaire", "value": false},
+    "regimealimentaire": {"label": "regimealimentaire", "value": false},
     "suivisanitaire": {"label": "suivisanitaire", "value": false},
 
     "suivisbiodiversite": {"label": "suivisbiodiversite", "value": false},

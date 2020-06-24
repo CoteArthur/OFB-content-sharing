@@ -20,12 +20,12 @@ export interface ContactState
     userID?: number,
 }
 
-const AddForm: FunctionComponent = (): JSX.Element => 
+const AddForm: FunctionComponent = (): JSX.Element =>
 {
     const userID = useSelector((state: AppState) => state.app.userID);
 
     const [state, setState] = useState<ContactState>({
-        type: 'insertActualite',
+        type: 'actualite',
 		titre: undefined,
 		description: undefined,
         file: undefined,
@@ -36,28 +36,27 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         userID: undefined,
     });
 
-    const onTypeChange = (event: any): void => 
+    const onTypeChange = (event: any): void =>
 	{
         event.persist();
-        setState(prevState => ({ ...prevState, type: event.target.value as string, file: undefined, theme: ''}));
+        setState(prevState => ({ ...prevState, type: event.target.value as string, file: undefined, fileName: undefined, theme: ''}));
     }
     
-    const onTitreChange = (event: any): void => 
+    const onTitreChange = (event: any): void =>
 	{
 		event.persist();
         setState(prevState => ({ ...prevState, titre: event.target.value }));
     }
     
-    const onDescriptionChange = (event: any): void => 
+    const onDescriptionChange = (event: any): void =>
 	{
 		event.persist();
         setState(prevState => ({ ...prevState, description: event.target.value }));
     }
     
-    const onFileChange = (event: any): void => 
+    const onFileChange = (event: any): void =>
 	{
         event.persist();
-
         if(event.target.files[0] !== undefined){
             let reader = new FileReader();
             reader.readAsDataURL(event.target.files[0]);
@@ -67,47 +66,55 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         }
     }
 
-    const onSiteChange = (event: any): void => 
+    const onSiteChange = (event: any): void =>
 	{
         event.persist();
         setState(prevState => ({ ...prevState, site: event.target.value as string}));
     }
     
-    const onKeywordsChange = (event: any): void => 
+    const onKeywordsChange = (event: any): void =>
 	{
         event.persist();
         setState(prevState => ({ ...prevState, keywords: event.target.value}));
     }
 
-    const onThemeChange = (event: any): void => 
+    const onThemeChange = (event: any): void =>
 	{
         event.persist();
         setState(prevState => ({ ...prevState, theme: event.target.value as string}));
     }
     
-    const sendForm = async () => {
-        state.userID = userID;
-        await axios.post(`http://35.214.28.194:25565/api/${state.type}`,
-            state, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        })
-        .then(r => console.log(r.data))
-        .catch(err => console.log(err));
+    const sendForm = async (e: any) => {
+        if(state.titre && state.site && state.fileName
+            && (state.type === 'actualite' ? state.description : true)
+            && ((state.type === 'connaissancesproduites' || state.type === 'operationsgestion') ? state.theme : true))
+        {
+            await axios.post(`http://localhost:25565/api/insert`, {...state, userID},
+                {headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'}
+            })
+            .then(r => console.log(r.data))
+            .catch(err => console.log(err));
+        }
     }
     
     return(
         <form onSubmit={sendForm}>
             <Grid container direction="column" justify="space-evenly" alignItems="center">
-                <Select name="type" id="type" variant="outlined" 
-                required fullWidth value={state.type} onChange={onTypeChange} >
-                    <MenuItem value="insertActualite">Actualité</MenuItem>
-                    <MenuItem value="insertCrterrain">Comptes-rendus terrain</MenuItem>
-                    <MenuItem value="insertCrpolice">Comptes-rendus police</MenuItem>
-                    <MenuItem value="insertConnaissancesproduites">Connaissances produites</MenuItem>
-                    <MenuItem value="insertOperationsgestion">Opérations de gestion</MenuItem>
-                </Select>
 
-                <TextField name="titre" id="titre" variant="outlined" 
-                margin="normal" required fullWidth label="Titre" 
+                <FormControl variant="outlined" fullWidth required>
+                    <InputLabel id="labelSelectType">Type</InputLabel>
+                    <Select name="type" id="type" labelId="labelSelectType" label="Type *"
+                    value={state.type} onChange={onTypeChange}>
+                        <MenuItem value="actualite">Actualité</MenuItem>
+                        <MenuItem value="crterrain">Comptes-rendus terrain</MenuItem>
+                        <MenuItem value="crpolice">Comptes-rendus Police</MenuItem>
+                        <MenuItem value="connaissancesproduites">Connaissances produites</MenuItem>
+                        <MenuItem value="operationsgestion">Opérations de gestion</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <TextField name="titre" id="titre" variant="outlined"
+                margin="normal" required fullWidth label="Titre"
                 onChange={onTitreChange} />
 
                 <FormControl variant="outlined" fullWidth margin="normal" required>
@@ -127,27 +134,25 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.site}/>
                 </FormControl>
 
-                {state.type === "insertActualite" ? (
+                {state.type === "actualite" ? (
                     <>
-                        {state.file !== undefined ? 
+                        {state.fileName !== undefined ?
                             <>
-                                <img src={state.file} alt="a" style={{marginBottom: 8, maxWidth: '200px', maxHeight: '200px',  borderRadius: 5}}/>
+                                <img src={state.file} alt="a" style={{maxWidth: '200px', maxHeight: '200px',  borderRadius: 5}}/>
                                 <Typography variant="subtitle2" color="textSecondary" style={{marginBottom: 8, textAlign: 'center', overflowWrap: 'anywhere'}}>
                                     {state.fileName}
                                 </Typography>
                             </>
                         : null}
-
-                        <input accept="image/*" hidden 
-                        id="contained-button-file" multiple type="file" onChange={onFileChange}/>
-                        <label htmlFor="contained-button-file">
-                            <Button variant="contained" component="span"
-                            endIcon={<CloudUploadIcon/>} style={{marginTop: 8}}color="primary">
+                        
+                        <Button variant="contained" component="label" endIcon={<CloudUploadIcon/>} color="primary">
                             Image
-                            </Button>
-                        </label>
+                            <input type="file" accept="image/png, image/jpeg" hidden onChange={onFileChange}/>
+                        </Button>
+                        <input required style={{opacity: 0, pointerEvents: "none", height: 0, width: 0}} defaultValue={state.fileName}/>
+
                         <Typography variant="subtitle2" color="textSecondary" style={{textAlign: 'center'}}>
-                                Taille maximale : 500MB
+                                Taille maximale : 10MB
                         </Typography>
 
                         <TextField name="description" id="description" multiline rows="6"
@@ -156,12 +161,12 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                     </>
                 ) : (
                     <>
-                        {state.type === "insertConnaissancesproduites"?
+                        {state.type === "connaissancesproduites"?
                             <FormControl variant="outlined" fullWidth margin="normal" required>
                                 <InputLabel id="labelSelectTheme">Thème</InputLabel>
                                 <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
                                 value={state.theme} onChange={onThemeChange}>
-                                    <MenuItem value="Activités humaine">Activités humaines</MenuItem>
+                                    <MenuItem value="Activités humaines">Activités humaines</MenuItem>
                                     <MenuItem value="Climat">Climat</MenuItem>
                                     <MenuItem value="Fonctionnement démographique">Fonctionnement démographique</MenuItem>
                                     <MenuItem value="Régimes alimentaire">Régimes alimentaire</MenuItem>
@@ -172,22 +177,22 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                             </FormControl>
                         : null}
 
-                        {state.type === "insertOperationsgestion" ?
+                        {state.type === "operationsgestion" ?
                             <FormControl variant="outlined" fullWidth margin="normal" required>
                                 <InputLabel id="labelSelectTheme">Thème</InputLabel>
                                 <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
                                 value={state.theme} onChange={onThemeChange}>
-                                    <MenuItem value="Gestion agricole / pastorale">Gestion agricole / pastorale</MenuItem>
+                                    <MenuItem value="Gestion agricole, pastorale">Gestion agricole, pastorale</MenuItem>
                                     <MenuItem value="Gestion forestière">Gestion forestière</MenuItem>
                                     <MenuItem value="Suivis Biodiversité">Suivis Biodiversité</MenuItem>
-                                    <MenuItem value="Travaux / interventions">Travaux / interventions</MenuItem>
-                                    <MenuItem value="Valorisations / Formations">Valorisations / Formations</MenuItem>
+                                    <MenuItem value="Travaux, Interventions">Travaux, Interventions</MenuItem>
+                                    <MenuItem value="Valorisations, Formations">Valorisations, Formations</MenuItem>
                                 </Select>
                                 <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
                             </FormControl>
                         : null}
 
-                        {state.file !== undefined ?
+                        {state.fileName !== undefined ?
                             <>
                                 <Typography variant="subtitle2" color="textSecondary" style={{marginBottom: 8, textAlign: 'center', overflowWrap: 'anywhere'}}>
                                     {state.fileName}
@@ -195,26 +200,23 @@ const AddForm: FunctionComponent = (): JSX.Element =>
                             </>
                         : null}
                         
-                        <input accept="application/pdf" hidden 
-                        id="contained-button-file" multiple type="file" onChange={onFileChange}/>
-                        <label htmlFor="contained-button-file">
-                            <Button variant="contained" component="span" endIcon={<CloudUploadIcon/>} color="primary">
+                        <Button variant="contained" component="label" endIcon={<CloudUploadIcon/>} color="primary">
                             Fichier PDF
-                            </Button>
-                        </label>
+                            <input type="file" accept="application/pdf" hidden onChange={onFileChange}/>
+                        </Button>
+                        <input required style={{opacity: 0, pointerEvents: "none", height: 0, width: 0}} defaultValue={state.fileName}/>
 
                         <Typography variant="subtitle2" color="textSecondary" style={{textAlign: 'center'}}>
-                                Taille maximale : 500MB
+                                Taille maximale : 10MO
                         </Typography>
 
-                        <TextField name="keywords" id="keywords" variant="outlined" 
+                        <TextField name="keywords" id="keywords" variant="outlined"
                         margin="normal" fullWidth label="Mots clés"
                         onChange={onKeywordsChange} />
                     </>
                 )}
                 <Button fullWidth variant="contained"
-                // type="submit"
-                onClick={sendForm}
+                type="submit"
                 color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
                     Envoyer
                 </Button>

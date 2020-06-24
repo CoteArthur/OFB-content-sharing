@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 );
 
 export interface NavBarProps {
-	onClick: (StrType: string) => void
+	openDialog: (type: string) => void
 }
 
 const NavBar: FunctionComponent<NavBarProps> = (props: NavBarProps): JSX.Element =>
@@ -38,11 +38,11 @@ const NavBar: FunctionComponent<NavBarProps> = (props: NavBarProps): JSX.Element
 					Réserves et territoires en gestion
 				</Typography>
 
-				<Fab disabled={!userID} size='small' color="primary" onClick={() => props.onClick("Ajout")} style={{marginRight: "10px"}}>
+				<Fab disabled={!userID} size='small' color="primary" onClick={() => props.openDialog("ajout")} style={{marginRight: "10px"}}>
 					<FontAwesomeIcon icon={faPlus}/>
 				</Fab>
 
-				<Fab size='small' color="primary" onClick={() => props.onClick("Connexion")}>
+				<Fab size='small' color="primary" onClick={() => props.openDialog("user")}>
 					<FontAwesomeIcon icon={faUser}/>
 				</Fab>
 
