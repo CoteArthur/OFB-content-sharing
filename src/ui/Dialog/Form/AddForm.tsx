@@ -85,6 +85,7 @@ const AddForm: FunctionComponent = (): JSX.Element =>
     }
     
     const sendForm = async (e: any) => {
+        e.preventDefault();
         if(state.titre && state.site && state.fileName
             && (state.type === 'actualite' ? state.description : true)
             && ((state.type === 'connaissancesproduites' || state.type === 'operationsgestion') ? state.theme : true))
