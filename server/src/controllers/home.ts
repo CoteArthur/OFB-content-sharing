@@ -14,8 +14,8 @@ const transport = createTransport({
         port: 465,
         auth: {
                 user: 'application.partage.ofb@gmail.com',
-                pass: 'testofb38'
-        }
+                pass: 'testofb38',
+        },
 });
 
 export default class HomeController {
@@ -78,20 +78,20 @@ export default class HomeController {
 
         public select(req: Request, res: Response): void {
                 let strQuery = `SELECT ${req.body.table}.*, users.email FROM ${req.body.table} LEFT JOIN users ON ${req.body.table}.userID = users.id`;
-                
+
                 if (req.body.filters) {
                         let j: number, i: number;
                         let filtersArray = [
-                                req.body.filters.auteur, 
-                                req.body.filters.search, 
-                                req.body.filters.sites, 
-                                req.body.filters.themes, 
+                                req.body.filters.auteur,
+                                req.body.filters.search,
+                                req.body.filters.sites,
+                                req.body.filters.themes,
                                 req.body.filters.year,
                         ];
 
                         for (i = 0; i < filtersArray.length; i++) {
-                                if (filtersArray[i]){
-                                        for(j = i-1; j >= 0; j--){
+                                if (filtersArray[i]) {
+                                        for (j = i - 1; j >= 0; j--) {
                                                 if (filtersArray[j]) {
                                                         j = 1;
                                                 }
