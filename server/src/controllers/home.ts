@@ -64,10 +64,10 @@ export default class HomeController {
                                         console.log(resultsInsert);
 
                                         const message = {
-                                                from: 'cote.arthur.lgm@gmail.com',
+                                                from: "application.partage.ofb@gmail.com",
                                                 to: `${req.body.email}`,
-                                                subject: 'Application de partage OFB',
-                                                text: `Mot de passe : ${password}`,
+                                                subject: "Mot de passe pour l'application de partage OFB",
+                                                text: `Mot de passe :\n${password}`,
                                         };
 
                                         transport.sendMail(message, function(errSendMail, info) {
@@ -88,7 +88,7 @@ export default class HomeController {
                 let strQuery = `SELECT ${req.body.table}.*, users.email FROM ${req.body.table} LEFT JOIN users ON ${req.body.table}.userID = users.id`;
 
                 if (req.body.filters) {
-                        let j: number, i: number;
+                        let isFirst = true;
                         let filtersArray = [
                                 req.body.filters.auteur,
                                 req.body.filters.search,
@@ -97,20 +97,14 @@ export default class HomeController {
                                 req.body.filters.year,
                         ];
 
-                        for (i = 0; i < filtersArray.length; i++) {
+                        for (let i = 0; i < filtersArray.length; i++) {
                                 if (filtersArray[i]) {
-                                        for (j = i - 1; j >= 0; j--) {
-                                                if (filtersArray[j]) {
-                                                        j = 1;
-                                                }
-                                        }
-
-                                        if (j === -2) {
-                                                strQuery += ` AND`;
-                                        } else {
+                                        if (isFirst) {
                                                 strQuery += ` WHERE`;
+                                                isFirst = false;
+                                        } else {
+                                                strQuery += ` AND`;
                                         }
-
                                         switch (i) {
                                                 case 0:
                                                         let arrayAuteur = req.body.filters.auteur.split(' ');
@@ -146,8 +140,7 @@ export default class HomeController {
                 }
 
                 connection.query(strQuery, (err, results) => {
-                        if (err)
-                                res.json(err);
+                        if (err) res.json(err);
                         res.json(results);
                 });
         }
@@ -157,8 +150,7 @@ export default class HomeController {
                 let fileType = req.body.file.split('/')[1].split(';')[0];
 
                 fs.writeFile(`./files/${fileName}.${fileType}`, req.body.file.split(';base64,').pop(), {encoding: 'base64'}, (err) => {
-                        if (err)
-                                console.log(err);
+                        if (err) console.log(err);
                 });
 
                 let strQuery: string;
@@ -184,8 +176,7 @@ export default class HomeController {
                 }
                 connection.query(strQuery,
                 (err, results) => {
-                        if (err)
-                                res.json(err);
+                        if (err) res.json(err);
                         res.json(results);
                 });
         }

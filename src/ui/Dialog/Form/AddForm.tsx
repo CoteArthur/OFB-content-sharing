@@ -84,14 +84,13 @@ const AddForm: FunctionComponent = (): JSX.Element =>
         setState(prevState => ({ ...prevState, theme: event.target.value as string}));
     }
     
-    const sendForm = async () => {
+    const sendForm = async (e: any) => {
         if(state.titre && state.site && state.fileName
             && (state.type === 'actualite' ? state.description : true)
             && ((state.type === 'connaissancesproduites' || state.type === 'operationsgestion') ? state.theme : true))
         {
-            state.userID = userID;
-            await axios.post(`http://localhost:25565/api/insert`,
-                state, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+            await axios.post(`http://localhost:25565/api/insert`, {...state, userID},
+                {headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'}
             })
             .then(r => console.log(r.data))
             .catch(err => console.log(err));
