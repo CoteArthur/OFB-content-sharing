@@ -64,9 +64,9 @@ export default class HomeController {
                                         console.log(resultsInsert);
 
                                         const message = {
-                                                from: "application.partage.ofb@gmail.com",
+                                                from: `application.partage.ofb@gmail.com`,
                                                 to: `${req.body.email}`,
-                                                subject: "Mot de passe pour l'application de partage OFB",
+                                                subject: `Mot de passe pour l'application de partage OFB`,
                                                 text: `Mot de passe :\n${password}`,
                                         };
 
