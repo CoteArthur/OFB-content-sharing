@@ -29,7 +29,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
 	const userID = useSelector((state: AppState) => state.app.userID);
 
     const [state, setState] = useState<ContactState>({
-        email: undefined,
+        email: '',
         password: undefined,
 
         error: false,
@@ -71,10 +71,9 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
 
     const logIn = (id: number) =>
     {
-        dispatch(action.setUserId(id));
-        axios.post('http://localhost:25565/api/selectUserInfo', {id: id},
-            {headers: { 'Content-Type': 'application/json' }})
-        .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, email: undefined})));
+        axios.post('http://localhost:25565/api/selectUserInfo', {id: id}, {headers: { 'Content-Type': 'application/json' }})
+        .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, email: ''})))
+        .then(() => dispatch(action.setUserId(id)));
     }
     
     const logOut = () =>
@@ -87,30 +86,37 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     {
         if(state.email){
             axios.post(`http://localhost:25565/api/createUser`, {email: state.email}, {headers: { 'Content-Type': 'application/json' }})
-            .then(r => r.data ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email déjà enregistré'})) : null)
+            .then(r => {
+                if (r.data) {
+                    setState(prevState => ({ ...prevState, email: ''}));
+                    //TODO add succes notification
+                } else {
+                    setState(prevState => ({ ...prevState, error: true, errorString: 'Email déjà enregistré'}));
+                }
+            })
             .then(e.preventDefault());
         }
     }
     return(
         <>
-        {userID === 0 ?
-            <form onSubmit={sendForm}>
-                <Grid container direction="column" justify="space-evenly" alignItems="center">
-                    <TextField name="email" id="email" type="email" error={state.error}
-                    label="Email" variant="outlined" required fullWidth
-                    onChange={onEmailChange} />
+            {userID === 0 ?
+                <form onSubmit={sendForm}>
+                    <Grid container direction="column" justify="space-evenly" alignItems="center">
+                        <TextField name="email" id="email" type="email" error={state.error}
+                        label="Email" variant="outlined" required fullWidth
+                        onChange={onEmailChange} />
 
-                    <TextField name="password" id="password" type="password" label="Mot de passe" error={state.error} helperText={state.errorString}
-                    variant="outlined" margin="normal" required fullWidth
-                    onChange={onPasswordChange} />
+                        <TextField name="password" id="password" type="password" label="Mot de passe" error={state.error} helperText={state.errorString}
+                        variant="outlined" margin="normal" required fullWidth
+                        onChange={onPasswordChange} />
 
-                    <Button fullWidth variant="contained"
-                    type="submit"
-                    color="primary" style={{marginTop: 8}} endIcon={<SendIcon/>}>
-                        Se connecter
-                    </Button>
-                </Grid>
-            </form>
+                        <Button fullWidth variant="contained"
+                        type="submit"
+                        color="primary" style={{marginTop: 8}} endIcon={<SendIcon/>}>
+                            Se connecter
+                        </Button>
+                    </Grid>
+                </form>
             : <>
                 <Typography variant="body1" color="textSecondary">
                     Connecté en tant que: {state.userEmail}
@@ -124,7 +130,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
                     <form onSubmit={createUser}>
                         <TextField name="email" id="email" type="email"
                         label="Email" variant="outlined" required fullWidth style={{marginTop: '32px'}}
-                        onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
+                        value={state.email} onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
 
                         <Button fullWidth variant="contained"
                         type="submit"
@@ -133,7 +139,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
                         </Button>
                     </form>
                 : null}
-            </> }
+            </>}
         </>
     )
 }
