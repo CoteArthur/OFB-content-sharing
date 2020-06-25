@@ -60,12 +60,12 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     
     const sendForm = async (e: any) =>
     {
+        e.preventDefault();
         if(state.email && state.password){
             axios.post('http://35.214.28.194:25565/api/login', state,
             {headers: { 'Content-Type': 'application/json' }})
             .then(r => r.data[0] === undefined ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
-                : logIn(r.data[0].id))
-            .then(e.preventDefault());
+                : logIn(r.data[0].id));
         }
     }
 
@@ -84,6 +84,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     
     const createUser = async (e: any) =>
     {
+        e.preventDefault();
         if(state.email){
             axios.post(`http://35.214.28.194:25565/api/createUser`, {email: state.email}, {headers: { 'Content-Type': 'application/json' }})
             .then(r => {
@@ -93,8 +94,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
                 } else {
                     setState(prevState => ({ ...prevState, error: true, errorString: 'Email déjà enregistré'}));
                 }
-            })
-            .then(e.preventDefault());
+            });
         }
     }
     return(

@@ -8,6 +8,9 @@ import { nouns } from '../nouns';
 import { createTransport } from 'nodemailer';
 
 const connection = mysql.createConnection(config.mysql);
+connection.on('error', function(err) {
+        console.log(err.code);
+});
 
 // const transport = createTransport({
 //         host: 'smtp.gmail.com',
