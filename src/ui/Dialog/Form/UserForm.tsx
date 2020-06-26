@@ -9,7 +9,8 @@ import { AppState } from '../../../';
 import * as action from '../../../store/actions';
 
 type UserFormProps = {
-    handleClose: () => void
+    closeDialog: () => void,
+    openSnackbar: (message: string) => void,
 }
 
 export interface ContactState
@@ -65,21 +66,26 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
             axios.post('http://localhost:25565/api/login', state,
             {headers: { 'Content-Type': 'application/json' }})
             .then(r => r.data[0] === undefined ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
-                : logIn(r.data[0].id));
+                : logIn(r.data[0].id)
+            );
         }
     }
 
     const logIn = (id: number) =>
     {
         axios.post('http://localhost:25565/api/selectUserInfo', {id: id}, {headers: { 'Content-Type': 'application/json' }})
-        .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, email: ''})))
-        .then(() => dispatch(action.setUserId(id)));
+        .then(r => {
+            dispatch(action.setUserId(id)); 
+            props.openSnackbar('Connecté');
+            setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, email: ''}));
+        });
     }
     
     const logOut = () =>
     {
         dispatch(action.setUserId(0));
-        props.handleClose();
+        props.openSnackbar('Déconnecté');
+        props.closeDialog();
     }
     
     const createUser = async (e: any) =>
@@ -90,7 +96,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
             .then(r => {
                 if (r.data) {
                     setState(prevState => ({ ...prevState, email: ''}));
-                    //TODO add succes notification
+                    props.openSnackbar('Email enregistré');
                 } else {
                     setState(prevState => ({ ...prevState, error: true, errorString: 'Email déjà enregistré'}));
                 }

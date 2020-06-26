@@ -7,6 +7,11 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../';
 
+type AddFormProps = {
+    closeDialog: () => void,
+    openSnackbar: (message: string) => void,
+}
+
 export interface ContactState
 {
     type?: string,
@@ -20,7 +25,7 @@ export interface ContactState
     userID?: number,
 }
 
-const AddForm: FunctionComponent = (): JSX.Element =>
+const AddForm: FunctionComponent<AddFormProps> = (props: AddFormProps): JSX.Element =>
 {
     const userID = useSelector((state: AppState) => state.app.userID);
 
@@ -93,8 +98,11 @@ const AddForm: FunctionComponent = (): JSX.Element =>
             await axios.post(`http://localhost:25565/api/insert`, {...state, userID},
                 {headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'}
             })
-            .then(r => console.log(r.data))
-            .catch(err => console.log(err));
+            .then(r => {
+                console.log(r.data);
+                props.openSnackbar('Ajout effectué');
+                props.closeDialog();
+            });
         }
     }
     

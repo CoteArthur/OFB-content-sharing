@@ -1,8 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import { SiteType } from './CustomTypes';
 import { TextField, IconButton, FormControl, InputLabel, Select, MenuItem, ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, makeStyles, createStyles } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import SiteList from './SiteList';
 
 const useStyles = makeStyles(() => createStyles({
@@ -65,7 +66,7 @@ const MenuForm: FunctionComponent<MenuFormProps> = (props: MenuFormProps): JSX.E
 					(props.search !== '' ? (
 						<IconButton size="small" style={{marginRight: 0}}
 						onClick={props.emptySearch}>
-							<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+							<CloseIcon fontSize="small" />
 						</IconButton>
 					) : null)
 			}}/>
@@ -78,7 +79,7 @@ const MenuForm: FunctionComponent<MenuFormProps> = (props: MenuFormProps): JSX.E
 					(props.auteur !== '' ? (
 						<IconButton size="small"
 						onClick={props.emptyAuteur}>
-							<FontAwesomeIcon icon={faTimesCircle} size="sm"/>
+							<CloseIcon fontSize="small" />
 						</IconButton>
 					) : null)
 			}}/>
