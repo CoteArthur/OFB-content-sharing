@@ -197,7 +197,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	};
 
 	const closeSnackbar = (event: React.SyntheticEvent | React.MouseEvent, reason?: string): void => {
-		if (reason !== 'clickaway') 
+		if (reason !== 'clickaway')
 			setState((prevState)=>({
 				...prevState,
 				snackbarMessage: undefined
@@ -282,7 +282,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 
 			<Snackbar autoHideDuration={3000} open={state.snackbarMessage !== undefined} onClose={closeSnackbar}>
 				<SnackbarContent
-					message={state.snackbarMessage} 
+					message={state.snackbarMessage}
 					action={
 						<IconButton size='small' onClick={closeSnackbar}>
 							<CloseIcon fontSize='small' style={{color: 'white'}}/>

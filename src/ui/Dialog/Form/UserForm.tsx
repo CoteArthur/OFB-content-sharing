@@ -75,7 +75,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     {
         axios.post('http://localhost:25565/api/selectUserInfo', {id: id}, {headers: { 'Content-Type': 'application/json' }})
         .then(r => {
-            dispatch(action.setUserId(id)); 
+            dispatch(action.setUserId(id));
             props.openSnackbar('Connecté');
             setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, email: ''}));
         });
