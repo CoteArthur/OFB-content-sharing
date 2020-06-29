@@ -8,23 +8,29 @@ import AddForm from "./Form/AddForm";
 
 type DialogProps = {
     open: boolean,
-    closeDialog: () => void,
+    closeDialog: (fetch?: boolean) => void,
+    openSnackbar?: (message: string) => void,
     row?: any,
 }
 
+
 export const DialogUser: FunctionComponent<DialogProps> = (props: DialogProps): JSX.Element =>
 {
+    const openSnackbar = (message: string): void => {
+        if (props.openSnackbar) props.openSnackbar(message);
+    }
+
     return(
-        <Dialog open={props.open} onClose={props.closeDialog} fullWidth>
+        <Dialog open={props.open} onClose={() => props.closeDialog()} fullWidth>
             <DialogTitle>
                 Connexion
                 <Fab size='small' style={{position: "absolute", right: 0, marginRight: "15px"}}
-                color="primary" onClick={props.closeDialog}>
+                color="primary" onClick={() => props.closeDialog()}>
                     <FontAwesomeIcon icon={faTimes}/>
                 </Fab>
             </DialogTitle>
             <DialogContent>
-                <UserForm handleClose={props.closeDialog}/>
+                <UserForm closeDialog={() => props.closeDialog()} openSnackbar={openSnackbar}/>
             </DialogContent>
         </Dialog>
     )
@@ -32,17 +38,21 @@ export const DialogUser: FunctionComponent<DialogProps> = (props: DialogProps): 
 
 export const DialogAjout: FunctionComponent<DialogProps> = (props: DialogProps): JSX.Element =>
 {
+    const openSnackbar = (message: string): void => {
+        if (props.openSnackbar) props.openSnackbar(message);
+    }
+
     return(
-        <Dialog open={props.open} onClose={props.closeDialog} fullWidth>
+        <Dialog open={props.open} onClose={() => props.closeDialog()} fullWidth>
             <DialogTitle>
                 Ajout
                 <Fab size='small' style={{position: "absolute", right: 0, marginRight: "15px"}}
-                color="primary" onClick={props.closeDialog}>
+                color="primary" onClick={() => props.closeDialog()}>
                     <FontAwesomeIcon icon={faTimes}/>
                 </Fab>
             </DialogTitle>
             <DialogContent>
-                <AddForm/>
+                <AddForm closeDialog={() => props.closeDialog(true)} openSnackbar={openSnackbar}/>
             </DialogContent>
         </Dialog>
     )
@@ -51,13 +61,13 @@ export const DialogAjout: FunctionComponent<DialogProps> = (props: DialogProps):
 export const DialogImage: FunctionComponent<DialogProps> = (props: DialogProps): JSX.Element =>
 {
     return(
-        <Dialog open={props.open} onClose={props.closeDialog} maxWidth='md' fullWidth>
+        <Dialog open={props.open} onClose={() => props.closeDialog()} maxWidth='md' fullWidth>
                 <div style={{backgroundImage: `url(http://35.214.28.194:25565/files/${props.row.file})`,
                 backgroundSize: "contain", backgroundPositionX: "center",
                 backgroundPositionY: "center", backgroundRepeat: "no-repeat",
                 backgroundColor: "black", height: "300px"}}>
                     <Fab size='small' style={{position: "absolute",right: 0, margin: "15px"}}
-                    color="primary" onClick={props.closeDialog}>
+                    color="primary" onClick={() => props.closeDialog()}>
                         <FontAwesomeIcon icon={faTimes}/>
                     </Fab>
                 </div>
@@ -79,11 +89,11 @@ export const DialogImage: FunctionComponent<DialogProps> = (props: DialogProps):
 export const DialogPdf: FunctionComponent<DialogProps> = (props: DialogProps): JSX.Element =>
 {
     return(
-        <Dialog open={props.open} onClose={props.closeDialog} maxWidth='md' fullWidth>
+        <Dialog open={props.open} onClose={() => props.closeDialog()} maxWidth='md' fullWidth>
                 <DialogTitle>
                     {props.row.titre}
                     <Fab size='small' style={{position: "absolute", right: 0, marginRight: "15px"}}
-                    color="primary" onClick={props.closeDialog}>
+                    color="primary" onClick={() => props.closeDialog()}>
                         <FontAwesomeIcon icon={faTimes}/>
                     </Fab>
                 </DialogTitle>

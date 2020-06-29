@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect } from "react"
-import { Grid, TextField, Button, Typography } from "@material-ui/core";
+import { Grid, TextField, Button, Typography, FormControlLabel, Checkbox } from "@material-ui/core";
 import SendIcon from '@material-ui/icons/Send';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import axios from 'axios';
@@ -9,18 +9,21 @@ import { AppState } from '../../../';
 import * as action from '../../../store/actions';
 
 type UserFormProps = {
-    handleClose: () => void
+    closeDialog: () => void,
+    openSnackbar: (message: string) => void,
 }
 
 export interface ContactState
 {
     email?: string,
     password?: string,
+    admin: boolean,
     
     error: boolean,
     errorString?: string,
 
     userEmail?: string,
+    isAdmin?: boolean
 }
 
 const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.Element =>
@@ -31,18 +34,20 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     const [state, setState] = useState<ContactState>({
         email: '',
         password: undefined,
+        admin: false,
 
         error: false,
         errorString: undefined,
 
         userEmail: undefined,
+        isAdmin: undefined,
     });
 
     useEffect(() => {
         if (userID !== 0){
             axios.post('http://35.214.28.194:25565/api/selectUserInfo', {id: userID},
             {headers: { 'Content-Type': 'application/json' }})
-            .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0].email})));
+            .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0].email, isAdmin: r.data[0].admin})));
         }
     }, [userID, setState]);
 
@@ -57,40 +62,51 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
         event.persist();
         setState(prevState => ({ ...prevState, password: event.target.value, error: false, errorString: undefined}));
     }
+
+    const onAdminChange = (event: any): void =>
+	{
+        event.persist();
+        setState(prevState => ({ ...prevState, admin: event.target.checked}));
+    }
     
     const sendForm = async (e: any) =>
     {
         e.preventDefault();
         if(state.email && state.password){
-            axios.post('http://35.214.28.194:25565/api/login', state,
-            {headers: { 'Content-Type': 'application/json' }})
-            .then(r => r.data[0] === undefined ? setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
-                : logIn(r.data[0].id));
+            axios.post('http://35.214.28.194:25565/api/login', state, {headers: { 'Content-Type': 'application/json' }})
+            .then(r => 
+                r.data[0] ? logIn(r.data[0].id)
+                : setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
+            );
         }
     }
 
     const logIn = (id: number) =>
     {
         axios.post('http://35.214.28.194:25565/api/selectUserInfo', {id: id}, {headers: { 'Content-Type': 'application/json' }})
-        .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, email: ''})))
-        .then(() => dispatch(action.setUserId(id)));
+        .then(r => {
+            dispatch(action.setUserId(id));
+            props.openSnackbar('Connecté');
+            setState(prevState => ({ ...prevState, userEmail: r.data[0]?.email, isAdmin: r.data[0].admin, email: ''}));
+        });
     }
     
     const logOut = () =>
     {
         dispatch(action.setUserId(0));
-        props.handleClose();
+        props.openSnackbar('Déconnecté');
+        props.closeDialog();
     }
     
     const createUser = async (e: any) =>
     {
         e.preventDefault();
         if(state.email){
-            axios.post(`http://35.214.28.194:25565/api/createUser`, {email: state.email}, {headers: { 'Content-Type': 'application/json' }})
+            axios.post(`http://35.214.28.194:25565/api/createUser`, {email: state.email, admin: state.admin}, {headers: { 'Content-Type': 'application/json' }})
             .then(r => {
                 if (r.data) {
-                    setState(prevState => ({ ...prevState, email: ''}));
-                    //TODO add succes notification
+                    setState(prevState => ({ ...prevState, email: '', admin: false}));
+                    props.openSnackbar('Email enregistré');
                 } else {
                     setState(prevState => ({ ...prevState, error: true, errorString: 'Email déjà enregistré'}));
                 }
@@ -126,15 +142,17 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
                     Se deconnecter
                 </Button>
 
-                {userID === 1 ?
+                {state.isAdmin ?
                     <form onSubmit={createUser}>
                         <TextField name="email" id="email" type="email"
                         label="Email" variant="outlined" required fullWidth style={{marginTop: '32px'}}
                         value={state.email} onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
 
-                        <Button fullWidth variant="contained"
-                        type="submit"
-                        color="primary" style={{marginTop: 8, marginBottom: 8}} endIcon={<SendIcon/>}>
+                        <FormControlLabel label="Administrateur"
+                        control={<Checkbox checked={state.admin} onChange={onAdminChange} color="primary" />}/>
+
+                        <Button fullWidth variant="contained" type="submit"
+                        color="primary" style={{marginBottom: 8}} endIcon={<SendIcon/>}>
                             Creer l'utilisateur
                         </Button>
                     </form>

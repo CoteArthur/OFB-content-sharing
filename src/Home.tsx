@@ -1,11 +1,12 @@
 import Menu from './ui/Menu/Menu'
-import { Grid, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles, Toolbar } from '@material-ui/core';
+import { Grid, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles, Toolbar, Snackbar, IconButton, SnackbarContent } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import NavBar from './ui/NavBar';
 import './scss/Home.scss';
 import CustomCard from './ui/CustomCard';
 import axios from 'axios';
 import {DialogUser, DialogAjout, DialogImage, DialogPdf} from './ui/Dialog/Dialogs';
+import CloseIcon from '@material-ui/icons/Close';
 
 const StyledTableRow = withStyles(() =>
 	createStyles({
@@ -24,6 +25,7 @@ export interface HomeState {
 	isTable: boolean;
 	selectedRow?: any;
 	dialogType?: string;
+	snackbarMessage?: string;
 }
 
 export type FiltersType = {
@@ -60,6 +62,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		isTable: false,
 		selectedRow: undefined,
 		dialogType: undefined,
+		snackbarMessage: undefined
 	});
 
 	useEffect(() => {
@@ -158,11 +161,10 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			filters: filters
 		}));
 		fetchContent(state.selectedTable, filters);
+		openSnackbar('Filtres envoyés');
 	}
 
-	const [open, setOpen] = React.useState(false);
-
-	const openDialog = (type: string, row?: any) => {
+	const openDialog = (type: string, row?: any): void => {
 		if (row) {
 			setState((prevState)=>({
 				...prevState,
@@ -175,16 +177,31 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 				dialogType: type,
 			}));
 		}
-		setOpen(true);
 	};
 
-	const closeDialog = () => {
+	const closeDialog = (fetch?: boolean): void => {
+		if(fetch) fetchContent(state.selectedTable);
+
 		setState((prevState)=>({
 			...prevState,
 			selectedRow: undefined,
 			dialogType: undefined,
 		}))
-		setOpen(false);
+	};
+
+	const openSnackbar = (message: string): void => {
+		setState((prevState)=>({
+			...prevState,
+			snackbarMessage: message
+		}));
+	};
+
+	const closeSnackbar = (event: React.SyntheticEvent | React.MouseEvent, reason?: string): void => {
+		if (reason !== 'clickaway')
+			setState((prevState)=>({
+				...prevState,
+				snackbarMessage: undefined
+			}));
 	};
 
 	return (
@@ -219,6 +236,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 							: null}
 						</TableRow>
 					</TableHead>
+
 					{state.isTable ? (
 						<TableBody>
 							{state.dataArray.map(row => (
@@ -250,17 +268,28 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			{(() => {
 				switch (state.dialogType) {
 					case 'user':
-						return <DialogUser open={open} closeDialog={closeDialog}/>;
+						return <DialogUser open={state.dialogType !== undefined} closeDialog={closeDialog} openSnackbar={openSnackbar}/>;
 					case 'ajout':
-						return <DialogAjout open={open} closeDialog={closeDialog}/>;
+						return <DialogAjout open={state.dialogType !== undefined} closeDialog={closeDialog} openSnackbar={openSnackbar}/>;
 					case 'image':
-						return <DialogImage open={open} closeDialog={closeDialog} row={state.selectedRow}/>;
+						return <DialogImage open={state.dialogType !== undefined} closeDialog={closeDialog} row={state.selectedRow}/>;
 					case 'pdf':
-						return <DialogPdf open={open} closeDialog={closeDialog} row={state.selectedRow}/>;;
+						return <DialogPdf open={state.dialogType !== undefined} closeDialog={closeDialog} row={state.selectedRow}/>;;
 					default:
 						return null;
 				}
 			})()}
+
+			<Snackbar autoHideDuration={3000} open={state.snackbarMessage !== undefined} onClose={closeSnackbar}>
+				<SnackbarContent
+					message={state.snackbarMessage}
+					action={
+						<IconButton size='small' onClick={closeSnackbar}>
+							<CloseIcon fontSize='small' style={{color: 'white'}}/>
+						</IconButton>
+					}
+				/>
+			</Snackbar>
 		</>
 	);
 }
