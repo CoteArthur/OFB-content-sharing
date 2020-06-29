@@ -7,10 +7,7 @@ import * as path from 'path';
 import { nouns } from '../nouns';
 import { createTransport } from 'nodemailer';
 
-const connection = mysql.createConnection(config.mysql);
-connection.on('error', function(err) {
-        console.log(err.code);
-});
+const connection = mysql.createPool(config.mysql);
 
 // const transport = createTransport({
 //         host: 'smtp.gmail.com',
@@ -44,7 +41,7 @@ export default class HomeController {
         }
 
         public selectUserInfo(req: Request, res: Response): void {
-                connection.query(`SELECT email FROM users WHERE id = '${req.body.id}'`,
+                connection.query(`SELECT email, admin FROM users WHERE id = '${req.body.id}'`,
                 (err, results) => {
                         if (err)
                                 res.json(err);
@@ -61,7 +58,7 @@ export default class HomeController {
                                 let password = nouns[Math.floor(Math.random() * Math.floor(nouns.length))]
                                         + Math.floor(Math.random() * Math.floor(100));
 
-                                connection.query(`INSERT INTO users (id, email, password) VALUES (NULL, '${req.body.email}', '${password}');`,
+                                connection.query(`INSERT INTO users (id, email, password, admin) VALUES (NULL, '${req.body.email}', '${password}', '${req.body.admin ? 1 : 0}');`,
                                 (errInsert, resultsInsert) => {
                                         if (errInsert) res.json(errInsert);
                                         console.log(resultsInsert);

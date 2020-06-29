@@ -1,5 +1,5 @@
 import Menu from './ui/Menu/Menu'
-import { Grid, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles, Toolbar, Snackbar, Button, IconButton, SnackbarContent } from '@material-ui/core';
+import { Grid, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles, Toolbar, Snackbar, IconButton, SnackbarContent } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import NavBar from './ui/NavBar';
 import './scss/Home.scss';
