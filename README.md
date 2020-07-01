@@ -10,13 +10,6 @@ _Pre-Requisites:_
 
 _Setup Commands:_
 
-    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-    sudo apt-get install -y nodejs
-
-    git clone https://github.com/CoteArthur/OFB.git
-    cd ofb
-
-    sudo apt install mariadb-server
     sudo mysql
       CREATE DATABASE ofb;
     sudo mysql -p ofb < ofb-db-template.sql
@@ -24,10 +17,13 @@ _Setup Commands:_
       CREATE USER 'server' IDENTIFIED BY 'server';
       GRANT ALL PRIVILEGES ON ofb TO 'server';
 
+    git clone https://github.com/CoteArthur/OFB.git
+    cd ofb
+    
     npm i
     npm run build
 
-    cd ./server
+    cd server
     npm i
     npm run build
     npm start
