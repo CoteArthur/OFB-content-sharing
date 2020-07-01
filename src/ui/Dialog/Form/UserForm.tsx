@@ -142,21 +142,22 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
                     Se deconnecter
                 </Button>
 
-                {state.isAdmin ?
-                    <form onSubmit={createUser}>
-                        <TextField name="email" id="email" type="email"
-                        label="Email" variant="outlined" required fullWidth style={{marginTop: '32px'}}
-                        value={state.email} onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
+                {state.isAdmin ? <>
+                        <Typography variant="h6" style={{marginTop: '32px', marginBottom: '8px'}}>Création de comptes</Typography>
+                        <form onSubmit={createUser}>
+                            <TextField name="email" id="email" type="email"
+                            label="Email" variant="outlined" required fullWidth
+                            value={state.email} onChange={onEmailChange} error={state.error} helperText={state.errorString}/>
 
-                        <FormControlLabel label="Administrateur"
-                        control={<Checkbox checked={state.admin} onChange={onAdminChange} color="primary" />}/>
+                            <FormControlLabel label="Administrateur"
+                            control={<Checkbox checked={state.admin} onChange={onAdminChange} color="primary" />}/>
 
-                        <Button fullWidth variant="contained" type="submit"
-                        color="primary" style={{marginBottom: 8}} endIcon={<SendIcon/>}>
-                            Creer l'utilisateur
-                        </Button>
-                    </form>
-                : null}
+                            <Button fullWidth variant="contained" type="submit"
+                            color="primary" style={{marginBottom: 8}} endIcon={<SendIcon/>}>
+                                Creer l'utilisateur
+                            </Button>
+                        </form>
+                </> : null}
             </>}
         </>
     )
