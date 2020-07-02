@@ -24,7 +24,7 @@ const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element
                         {formatDate(props.row.date)} - {props.row.site} - {props.row.email}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p" noWrap>
-                        {props.row.description}
+                        {props.row.description.split('\n')[0]}
                     </Typography>
                 </CardContent>
             </CardActionArea>
