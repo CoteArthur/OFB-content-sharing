@@ -74,7 +74,7 @@ export const DialogImage: FunctionComponent<DialogProps> = (props: DialogProps):
                 <DialogContent>
                     <Typography variant="h5" style={{marginBottom: 8}}>{props.row.titre}</Typography>
                     
-                    <DialogContentText>
+                    <DialogContentText style={{whiteSpace: 'pre-wrap'}}>
                         {props.row.description}
                     </DialogContentText>
                     

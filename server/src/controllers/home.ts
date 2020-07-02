@@ -156,7 +156,7 @@ export default class HomeController {
                 let strQuery: string;
                 switch (req.body.type) {
                         case 'actualite': {
-                                strQuery = `INSERT INTO actualite (id, titre, site, description, date, userID, file) VALUES (NULL, '${req.body.titre}', '${req.body.site}','${req.body.description}', current_timestamp(), '${req.body.userID}', '${fileName}.${fileType}')`;
+                                strQuery = `INSERT INTO actualite (id, titre, site, description, date, userID, file) VALUES (NULL, '${req.body.titre}', '${req.body.site}','${req.body.description.split("'").join("''")}', current_timestamp(), '${req.body.userID}', '${fileName}.${fileType}')`;
                                 break;
                         }
                         case 'crterrain':
