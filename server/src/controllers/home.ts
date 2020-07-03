@@ -156,17 +156,17 @@ export default class HomeController {
                 let strQuery: string;
                 switch (req.body.type) {
                         case 'actualite': {
-                                strQuery = `INSERT INTO actualite (id, titre, site, description, date, userID, file) VALUES (NULL, '${req.body.titre}', '${req.body.site}','${req.body.description.split("'").join("''")}', current_timestamp(), '${req.body.userID}', '${fileName}.${fileType}')`;
+                                strQuery = `INSERT INTO actualite (id, titre, site, description, date, userID, file) VALUES (NULL, '${req.body.titre.split("'").join("''")}', '${req.body.site}','${req.body.description.split("'").join("''")}', current_timestamp(), '${req.body.userID}', '${fileName}.${fileType}')`;
                                 break;
                         }
                         case 'crterrain':
                         case 'crpolice': {
-                                strQuery = `INSERT INTO ${req.body.type} (id, titre, site, keywords, file, date, userID) VALUES (NULL, '${req.body.titre}', '${req.body.site}', '${req.body.keywords}', '${fileName}.pdf', current_timestamp(), '${req.body.userID}')`;
+                                strQuery = `INSERT INTO ${req.body.type} (id, titre, site, keywords, file, date, userID) VALUES (NULL, '${req.body.titre.split("'").join("''")}', '${req.body.site}', '${req.body.keywords}', '${fileName}.pdf', current_timestamp(), '${req.body.userID}')`;
                                 break;
                         }
                         case 'connaissancesproduites':
                         case 'operationsgestion': {
-                                strQuery = `INSERT INTO ${req.body.type} (id, titre, site, theme, keywords, file, date, userID) VALUES (NULL, '${req.body.titre}', '${req.body.site}', '${req.body.theme}', '${req.body.keywords}', '${fileName}.pdf', current_timestamp(), '${req.body.userID}')`;
+                                strQuery = `INSERT INTO ${req.body.type} (id, titre, site, theme, keywords, file, date, userID) VALUES (NULL, '${req.body.titre.split("'").join("''")}', '${req.body.site}', '${req.body.theme}', '${req.body.keywords.split("'").join("''")}', '${fileName}.pdf', current_timestamp(), '${req.body.userID}')`;
                                 break;
                         }
                         default: {
