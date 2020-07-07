@@ -93,7 +93,16 @@ const AddForm: FunctionComponent<AddFormProps> = (props: AddFormProps): JSX.Elem
         e.preventDefault();
         if(state.titre && state.site && state.fileName
             && (state.type === 'actualite' ? state.description : true)
-            && ((state.type === 'connaissancesproduites' || state.type === 'operationsgestion') ? state.theme : true))
+            && ((() => {
+                    switch (state.type) {
+                        case 'presentationsites':
+                        case 'connaissancesproduites':
+                        case 'operationsgestion':
+                            return true;
+                        default:
+                            return false;
+                    }
+                })() ? state.theme : true ))
         {
             await axios.post(`http://localhost:25565/api/insert`, {...state, userID},
                 {headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'}
@@ -115,6 +124,7 @@ const AddForm: FunctionComponent<AddFormProps> = (props: AddFormProps): JSX.Elem
                     <Select name="type" id="type" labelId="labelSelectType" label="Type *"
                     value={state.type} onChange={onTypeChange}>
                         <MenuItem value="actualite">Actualité</MenuItem>
+                        <MenuItem value="presentationsites">Présentation des sites</MenuItem>
                         <MenuItem value="crterrain">Comptes-rendus terrain</MenuItem>
                         <MenuItem value="crpolice">Comptes-rendus Police</MenuItem>
                         <MenuItem value="connaissancesproduites">Connaissances produites</MenuItem>
@@ -170,36 +180,54 @@ const AddForm: FunctionComponent<AddFormProps> = (props: AddFormProps): JSX.Elem
                     </>
                 ) : (
                     <>
-                        {state.type === "connaissancesproduites"?
-                            <FormControl variant="outlined" fullWidth margin="normal" required>
-                                <InputLabel id="labelSelectTheme">Thème</InputLabel>
-                                <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
-                                value={state.theme} onChange={onThemeChange}>
-                                    <MenuItem value="Activités humaines">Activités humaines</MenuItem>
-                                    <MenuItem value="Climat">Climat</MenuItem>
-                                    <MenuItem value="Fonctionnement démographique">Fonctionnement démographique</MenuItem>
-                                    <MenuItem value="Régimes alimentaire">Régimes alimentaire</MenuItem>
-                                    <MenuItem value="Suivi sanitaire">Suivi sanitaire</MenuItem>
-                                    <MenuItem value="Utilisation spatiale">Utilisation spatiale</MenuItem>
-                                </Select>
-                                <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
-                            </FormControl>
-                        : null}
-
-                        {state.type === "operationsgestion" ?
-                            <FormControl variant="outlined" fullWidth margin="normal" required>
-                                <InputLabel id="labelSelectTheme">Thème</InputLabel>
-                                <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
-                                value={state.theme} onChange={onThemeChange}>
-                                    <MenuItem value="Gestion agricole, pastorale">Gestion agricole, pastorale</MenuItem>
-                                    <MenuItem value="Gestion forestière">Gestion forestière</MenuItem>
-                                    <MenuItem value="Suivis Biodiversité">Suivis Biodiversité</MenuItem>
-                                    <MenuItem value="Travaux, Interventions">Travaux, Interventions</MenuItem>
-                                    <MenuItem value="Valorisations, Formations">Valorisations, Formations</MenuItem>
-                                </Select>
-                                <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
-                            </FormControl>
-                        : null}
+                        {(() => {
+                            switch (state.type) {
+                                case 'presentationsites':
+                                    return (
+                                        <FormControl variant="outlined" fullWidth margin="normal" required>
+                                            <InputLabel id="labelSelectTheme">Thème</InputLabel>
+                                            <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
+                                            value={state.theme} onChange={onThemeChange}>
+                                                <MenuItem value="Theme 1">Theme 1</MenuItem>
+                                            </Select>
+                                            <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
+                                        </FormControl>
+                                    );
+                                case 'connaissancesproduites':
+                                    return (
+                                        <FormControl variant="outlined" fullWidth margin="normal" required>
+                                            <InputLabel id="labelSelectTheme">Thème</InputLabel>
+                                            <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
+                                            value={state.theme} onChange={onThemeChange}>
+                                                <MenuItem value="Activités humaines">Activités humaines</MenuItem>
+                                                <MenuItem value="Climat">Climat</MenuItem>
+                                                <MenuItem value="Fonctionnement démographique">Fonctionnement démographique</MenuItem>
+                                                <MenuItem value="Régimes alimentaire">Régimes alimentaire</MenuItem>
+                                                <MenuItem value="Suivi sanitaire">Suivi sanitaire</MenuItem>
+                                                <MenuItem value="Utilisation spatiale">Utilisation spatiale</MenuItem>
+                                            </Select>
+                                            <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
+                                        </FormControl>
+                                    );
+                                case 'operationsgestion':
+                                    return (
+                                        <FormControl variant="outlined" fullWidth margin="normal" required>
+                                            <InputLabel id="labelSelectTheme">Thème</InputLabel>
+                                            <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
+                                            value={state.theme} onChange={onThemeChange}>
+                                                <MenuItem value="Gestion agricole, pastorale">Gestion agricole, pastorale</MenuItem>
+                                                <MenuItem value="Gestion forestière">Gestion forestière</MenuItem>
+                                                <MenuItem value="Suivis Biodiversité">Suivis Biodiversité</MenuItem>
+                                                <MenuItem value="Travaux, Interventions">Travaux, Interventions</MenuItem>
+                                                <MenuItem value="Valorisations, Formations">Valorisations, Formations</MenuItem>
+                                            </Select>
+                                            <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
+                                        </FormControl>
+                                    );
+                                default:
+                                    return null;
+                            }
+                        })()}
 
                         {state.fileName !== undefined ?
                             <>
@@ -219,9 +247,13 @@ const AddForm: FunctionComponent<AddFormProps> = (props: AddFormProps): JSX.Elem
                                 Taille maximale : 10MO
                         </Typography>
 
-                        <TextField name="keywords" id="keywords" variant="outlined"
-                        margin="normal" fullWidth label="Mots clés"
-                        onChange={onKeywordsChange} />
+                        {state.type !== 'presentationsites' ?
+                            <>
+                                <TextField name="keywords" id="keywords" variant="outlined"
+                                margin="normal" fullWidth label="Mots clés"
+                                onChange={onKeywordsChange} />
+                            </>
+                        : null}
                     </>
                 )}
                 <Button fullWidth variant="contained"
