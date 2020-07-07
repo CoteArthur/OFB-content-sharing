@@ -9,14 +9,6 @@ import { createTransport } from 'nodemailer';
 
 const connection = mysql.createPool(config.mysql);
 
-// const transport = createTransport({
-//         host: 'smtp.gmail.com',
-//         port: 465,
-//         auth: {
-//                 user: 'application.partage.ofb@gmail.com',
-//                 pass: 'testofb38',
-//         },
-// });
 const transport = createTransport({
         host: 'smtp.mailtrap.io',
         port: 2525,
@@ -113,7 +105,14 @@ export default class HomeController {
                                                                 strQuery += ` AND users.email LIKE '%${arrayAuteur[1]}%'`;
                                                         break;
                                                 case 1:
-                                                        strQuery += ` titre LIKE '%${req.body.filters.search}%'`;
+                                                        strQuery += ` (titre LIKE '%${req.body.filters.search.split("'").join("''")}%'`;
+                                                        if (req.body.table !== 'actualite') {
+                                                                let keywords: string[] = req.body.filters.search.split(' ');
+                                                                for (let j = 0; j < keywords.length; j++) {
+                                                                        strQuery += ` OR keywords like '%${keywords[j].split("'").join("''")}%'`
+                                                                }
+                                                        }
+                                                        strQuery += `)`;
                                                         break;
                                                 case 2:
                                                         strQuery += ` site IN (${req.body.filters.sites})`;
@@ -157,6 +156,10 @@ export default class HomeController {
                 switch (req.body.type) {
                         case 'actualite': {
                                 strQuery = `INSERT INTO actualite (id, titre, site, description, date, userID, file) VALUES (NULL, '${req.body.titre.split("'").join("''")}', '${req.body.site}','${req.body.description.split("'").join("''")}', current_timestamp(), '${req.body.userID}', '${fileName}.${fileType}')`;
+                                break;
+                        }
+                        case 'presentationsites': {
+                                strQuery = `INSERT INTO presentationsites (id, titre, site, theme, file, date, userID) VALUES (NULL, '${req.body.titre.split("'").join("''")}', '${req.body.site}', '${req.body.theme}', '${fileName}.pdf', current_timestamp(), '${req.body.userID}')`;
                                 break;
                         }
                         case 'crterrain':
