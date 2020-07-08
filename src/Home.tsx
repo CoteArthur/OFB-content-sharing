@@ -93,6 +93,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			setState((prevState: any)=>({
 				...prevState,
 				filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined, themes: undefined},
+				selectedSite: ''
 			}));
 		}
 
@@ -251,11 +252,15 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 								Auteur {state.filters.orderBy === 'users.email' ? (state.filters.desc ? '▼' : '▲') : null}
 							</TableCell>
 
-							<TableCell align="center" onClick={()=>orderBy('site')}>
-								Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
-							</TableCell>
+							{state.selectedTable !== 'presentationsites' ?
+								<TableCell align="center" onClick={()=>orderBy('site')}>
+									Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
+								</TableCell>
+							: null}
 
-							{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ?
+							{state.selectedTable === 'connaissancesproduites'
+							|| state.selectedTable === 'operationsgestion'
+							|| state.selectedTable === 'presentationsites' ?
 								<TableCell align="center" onClick={()=>orderBy('theme')}>
 									Theme {state.filters.orderBy === 'theme' ? (state.filters.desc ? '▼' : '▲') : null}
 								</TableCell>
@@ -270,8 +275,12 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 									<TableCell align="center">{row.titre}</TableCell>
 									<TableCell align="center">{formatDate(row.date)}</TableCell>
 									<TableCell align="center">{row.email}</TableCell>
-									<TableCell align="center">{row.site}</TableCell>
-									{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ?
+									{state.selectedTable !== 'presentationsites' ?
+										<TableCell align="center">{row.site}</TableCell>
+									: null}
+									{state.selectedTable === 'connaissancesproduites'
+									||state.selectedTable === 'operationsgestion'
+									|| state.selectedTable === 'presentationsites' ?
 										<TableCell align="center">{row.theme}</TableCell>
 									: null}
 								</StyledTableRow>
