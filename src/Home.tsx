@@ -1,9 +1,9 @@
 import Menu from './ui/Menu/Menu'
-import { Grid, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles, Toolbar, Snackbar, IconButton, SnackbarContent } from '@material-ui/core';
+import { Grid, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles, Toolbar, Snackbar, IconButton, SnackbarContent, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import NavBar from './ui/NavBar';
 import './scss/Home.scss';
-import CustomCard from './ui/CustomCard';
+import CardActualite from './ui/CardActualite';
 import axios from 'axios';
 import {DialogUser, DialogAjout, DialogImage, DialogPdf} from './ui/Dialog/Dialogs';
 import CloseIcon from '@material-ui/icons/Close';
@@ -21,8 +21,10 @@ const StyledTableRow = withStyles(() =>
 export interface HomeState {
 	selectedTable: string;
 	filters: FiltersType;
+	selectedSite: string;
 	dataArray: Array<any>;
 	isTable: boolean;
+
 	selectedRow?: any;
 	dialogType?: string;
 	snackbarMessage?: string;
@@ -58,6 +60,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	const [state, setState] = useState<HomeState> ({
 		selectedTable: 'undefined',
 		filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined, themes: undefined},
+		selectedSite: '',
 		dataArray: [],
 		isTable: false,
 		selectedRow: undefined,
@@ -90,10 +93,11 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			setState((prevState: any)=>({
 				...prevState,
 				filters: {orderBy: 'date', desc: true, search: undefined, sites: undefined, year: undefined, auteur: undefined, themes: undefined},
+				selectedSite: ''
 			}));
 		}
 
-		if(table === 'presentationsites'){
+		if(table === 'presentationsites' && !filters?.sites){
 			setState((prevState)=>({
 				...prevState,
 				selectedTable: 'presentationsites',
@@ -164,6 +168,12 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		openSnackbar('Filtres envoyés');
 	}
 
+	const onSelectedSiteChange = (event: any): void => {
+		event.persist();
+		setState(prevState => ({ ...prevState, selectedSite: event.target.value}));
+		menuFilters('', `'${event.target.value}'`, '', '', '');
+	}
+
 	const openDialog = (type: string, row?: any): void => {
 		if (row) {
 			setState((prevState)=>({
@@ -209,7 +219,24 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			<NavBar openDialog={openDialog}/>
 			<Toolbar/>
 			<Menu fetchContent={fetchContent} menuFilters={menuFilters}/>
-			<main style={{marginLeft: '290px'}}>
+			<main style={{marginLeft: '290px', marginRight: '19px'}}>
+				{state.selectedTable === 'presentationsites' ? (
+					<FormControl variant="outlined" fullWidth margin="normal">
+						<InputLabel id="labelSelectSite">Site</InputLabel>
+						<Select name="site" id="site" labelId="labelSelectSite" label="Site"
+						value={state.selectedSite} onChange={onSelectedSiteChange}>
+							<MenuItem value="Bauges">Bauges</MenuItem>
+							<MenuItem value="Belledonne">Belledonne</MenuItem>
+							<MenuItem value="Caroux">Caroux</MenuItem>
+							<MenuItem value="Chambord">Chambord</MenuItem>
+							<MenuItem value="Chateauvilain">Chateauvilain</MenuItem>
+							<MenuItem value="Grand Birieux">Grand Birieux</MenuItem>
+							<MenuItem value="La Petite Pierre">La Petite Pierre</MenuItem>
+							<MenuItem value="Orlu">Orlu</MenuItem>
+							<MenuItem value="Trois Fontaines">Trois Fontaines</MenuItem>
+						</Select>
+					</FormControl>
+				) : null}
 				<Table stickyHeader aria-label="simple table" style={{cursor: 'pointer'}}>
 					<TableHead>
 						<TableRow>
@@ -225,11 +252,15 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 								Auteur {state.filters.orderBy === 'users.email' ? (state.filters.desc ? '▼' : '▲') : null}
 							</TableCell>
 
-							<TableCell align="center" onClick={()=>orderBy('site')}>
-								Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
-							</TableCell>
+							{state.selectedTable !== 'presentationsites' ?
+								<TableCell align="center" onClick={()=>orderBy('site')}>
+									Site {state.filters.orderBy === 'site' ? (state.filters.desc ? '▼' : '▲') : null}
+								</TableCell>
+							: null}
 
-							{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ?
+							{state.selectedTable === 'connaissancesproduites'
+							|| state.selectedTable === 'operationsgestion'
+							|| state.selectedTable === 'presentationsites' ?
 								<TableCell align="center" onClick={()=>orderBy('theme')}>
 									Theme {state.filters.orderBy === 'theme' ? (state.filters.desc ? '▼' : '▲') : null}
 								</TableCell>
@@ -244,8 +275,12 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 									<TableCell align="center">{row.titre}</TableCell>
 									<TableCell align="center">{formatDate(row.date)}</TableCell>
 									<TableCell align="center">{row.email}</TableCell>
-									<TableCell align="center">{row.site}</TableCell>
-									{state.selectedTable === 'connaissancesproduites' || state.selectedTable === 'operationsgestion' ?
+									{state.selectedTable !== 'presentationsites' ?
+										<TableCell align="center">{row.site}</TableCell>
+									: null}
+									{state.selectedTable === 'connaissancesproduites'
+									||state.selectedTable === 'operationsgestion'
+									|| state.selectedTable === 'presentationsites' ?
 										<TableCell align="center">{row.theme}</TableCell>
 									: null}
 								</StyledTableRow>
@@ -258,7 +293,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 					<Grid container spacing={1} style={{paddingTop: 8}}>
 						{state.dataArray.map(row => (
 							<Grid item xs={3} key={row.id} style={{width: '250px'}}>
-								<CustomCard row={row} openDialog={openDialog}/>
+								<CardActualite row={row} openDialog={openDialog}/>
 							</Grid>
 						))}
 					</Grid>
@@ -274,7 +309,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 					case 'image':
 						return <DialogImage open={state.dialogType !== undefined} closeDialog={closeDialog} row={state.selectedRow}/>;
 					case 'pdf':
-						return <DialogPdf open={state.dialogType !== undefined} closeDialog={closeDialog} row={state.selectedRow}/>;;
+						return <DialogPdf open={state.dialogType !== undefined} closeDialog={closeDialog} row={state.selectedRow}/>;
 					default:
 						return null;
 				}

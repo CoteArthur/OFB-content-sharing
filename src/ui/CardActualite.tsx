@@ -1,13 +1,13 @@
-import React, { FunctionComponent} from "react"
+import React, { FunctionComponent } from "react"
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@material-ui/core";
-import {formatDate} from "../Home";
+import { formatDate } from "../Home";
 
-type CardProps = {
+type CardActualiteProps = {
     row: any,
     openDialog: (type: string, row?: any) => void
 }
 
-const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element =>
+const CardActualite: FunctionComponent<CardActualiteProps> = (props: CardActualiteProps): JSX.Element =>
 {
     return(
         <Card onClick={()=>{props.openDialog('image', props.row)}}>
@@ -32,4 +32,4 @@ const CustomCard: FunctionComponent<CardProps> = (props: CardProps): JSX.Element
     )
 }
 
-export default CustomCard;
+export default CardActualite;
