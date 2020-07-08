@@ -17,14 +17,6 @@ const transport = createTransport({
                 pass: 'testofb38',
         },
 });
-// const transport = createTransport({
-//         host: 'smtp.mailtrap.io',
-//         port: 2525,
-//         auth: {
-//                 user: '89dc2ce0d2ce06',
-//                 pass: 'e3ff3c98586f64',
-//         },
-// });
 
 export default class HomeController {
         public index(req: Request, res: Response, next: Function): void {
