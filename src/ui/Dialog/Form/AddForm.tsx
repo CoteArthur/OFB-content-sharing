@@ -188,7 +188,9 @@ const AddForm: FunctionComponent<AddFormProps> = (props: AddFormProps): JSX.Elem
                                             <InputLabel id="labelSelectTheme">Thème</InputLabel>
                                             <Select name="theme" id="theme" labelId="labelSelectTheme" label="Thème *"
                                             value={state.theme} onChange={onThemeChange}>
-                                                <MenuItem value="Theme 1">Theme 1</MenuItem>
+                                                <MenuItem value="Arrêté (création, réglementation)">Arrêté (création, réglementation)</MenuItem>
+                                                <MenuItem value="Document de gestion">Document de gestion</MenuItem>
+                                                <MenuItem value="Liens utiles">Liens utiles</MenuItem>
                                             </Select>
                                             <input required style={{opacity: 0, pointerEvents: "none", height: 0}} defaultValue={state.theme}/>
                                         </FormControl>
