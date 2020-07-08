@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jun 29, 2020 at 05:41 PM
+-- Generation Time: Jul 08, 2020 at 08:57 AM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `actualite` (
   `userID` int(11) NOT NULL,
   `file` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=179 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=186 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `connaissancesproduites` (
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
   `userID` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -113,6 +113,24 @@ CREATE TABLE IF NOT EXISTS `operationsgestion` (
   `userID` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `presentationsites`
+--
+
+DROP TABLE IF EXISTS `presentationsites`;
+CREATE TABLE IF NOT EXISTS `presentationsites` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `titre` varchar(50) NOT NULL,
+  `site` varchar(50) NOT NULL,
+  `theme` varchar(255) NOT NULL,
+  `file` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `userID` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
