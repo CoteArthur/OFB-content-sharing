@@ -262,7 +262,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 							|| state.selectedTable === 'operationsgestion'
 							|| state.selectedTable === 'presentationsites' ?
 								<TableCell align="center" onClick={()=>orderBy('theme')}>
-									Theme {state.filters.orderBy === 'theme' ? (state.filters.desc ? '▼' : '▲') : null}
+									Thème {state.filters.orderBy === 'theme' ? (state.filters.desc ? '▼' : '▲') : null}
 								</TableCell>
 							: null}
 						</TableRow>
