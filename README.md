@@ -1,6 +1,4 @@
-# OFB
-
-[![CodeFactor](https://www.codefactor.io/repository/github/cotearthur/ofb/badge/master?s=a050a33060a41263274fe175fabb0d3af3b97fe7)](https://www.codefactor.io/repository/github/cotearthur/ofb/overview/master)
+# OFB [![CodeFactor](https://www.codefactor.io/repository/github/cotearthur/ofb/badge/master?s=a050a33060a41263274fe175fabb0d3af3b97fe7)](https://www.codefactor.io/repository/github/cotearthur/ofb/overview/master)
 
 ## Deploy
 _Pre-Requisites:_
