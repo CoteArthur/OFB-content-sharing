@@ -6,6 +6,7 @@ import * as shortid from 'shortid';
 import * as path from 'path';
 import { nouns } from '../nouns';
 import { createTransport } from 'nodemailer';
+import { CREDS_USER, CREDS_PASSWORD } from '../config/gmail-credentials';
 
 const connection = mysql.createPool(config.mysql);
 
@@ -13,8 +14,8 @@ const transport = createTransport({
         host: 'smtp.gmail.com',
         port: 465,
         auth: {
-                user: 'application.partage.ofb@gmail.com',
-                pass: 'testofb38',
+                user: CREDS_USER,
+                pass: CREDS_PASSWORD
         },
 });
 

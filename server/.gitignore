@@ -21,3 +21,5 @@ bin
 *.pem
 
 files/*
+
+src/config/gmail-credentials.ts
