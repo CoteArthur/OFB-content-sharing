@@ -1,4 +1,4 @@
-# OFB-content-sharing [![CodeFactor](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing/badge?s=c4b62f1996e51f19b3acddfa33865084ff6b238b)](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing)
+# [OFB-content-sharing](https://cotearthur.github.io/OFB-content-sharing/) [![CodeFactor](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing/badge?s=c4b62f1996e51f19b3acddfa33865084ff6b238b)](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing)
 
 ## Deploy
 _Pre-Requisites:_
@@ -22,6 +22,8 @@ export const CREDS_USER: string = "email adress";
 export const CREDS_PASSWORD: string = "gmail password";
 ```
 You need to turn on [less secure apps](https://myaccount.google.com/lesssecureapps) in order for smtp to work.
+
+### Building
 
 _Local:_
 
