@@ -62,7 +62,7 @@ export const DialogImage: FunctionComponent<DialogProps> = (props: DialogProps):
 {
     return(
         <Dialog open={props.open} onClose={() => props.closeDialog()} maxWidth='md' fullWidth>
-                <div style={{backgroundImage: `url(http://35.214.28.194:25565/files/${props.row.file})`,
+                <div style={{backgroundImage: `url(http://35.205.49.52:25565/files/${props.row.file})`,
                 backgroundSize: "contain", backgroundPositionX: "center",
                 backgroundPositionY: "center", backgroundRepeat: "no-repeat",
                 backgroundColor: "black", height: "300px"}}>
@@ -99,7 +99,7 @@ export const DialogPdf: FunctionComponent<DialogProps> = (props: DialogProps): J
                 </DialogTitle>
 
                 <object type="application/pdf" height='10000px'
-                data={`http://35.214.28.194:25565/files/${props.row.file}`}>
+                data={`http://35.205.49.52:25565/files/${props.row.file}`}>
                     Erreur lors du chargement du fichier
                 </object>
         </Dialog>

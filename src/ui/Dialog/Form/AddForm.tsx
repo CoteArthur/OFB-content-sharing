@@ -104,7 +104,7 @@ const AddForm: FunctionComponent<AddFormProps> = (props: AddFormProps): JSX.Elem
                     }
                 })() ? state.theme : true ))
         {
-            await axios.post(`http://35.214.28.194:25565/api/insert`, {...state, userID},
+            await axios.post(`http://35.205.49.52:25565/api/insert`, {...state, userID},
                 {headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'}
             })
             .then(r => {

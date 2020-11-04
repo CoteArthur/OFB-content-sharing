@@ -16,7 +16,7 @@ const CardActualite: FunctionComponent<CardActualiteProps> = (props: CardActuali
                     component="img"
                     alt=""
                     height="140"
-                    image={`http://35.214.28.194:25565/files/${props.row.file}`}
+                    image={`http://35.205.49.52:25565/files/${props.row.file}`}
                 />
                 <CardContent>
                     <Typography variant="h5" noWrap>{props.row.titre}</Typography>
