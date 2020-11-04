@@ -14,6 +14,14 @@ _Database setup:_
     sudo mysql
       CREATE USER 'server' IDENTIFIED BY 'server';
       GRANT ALL PRIVILEGES ON ofb TO 'server';    
+      
+_`gmail-credentials.ts` is missing at `server/src/config`, here's a template:_
+
+```javascript
+export const CREDS_USER: string = "email adress";
+export const CREDS_PASSWORD: string = "gmail password";
+```
+You need to turn on [less secure apps](https://myaccount.google.com/lesssecureapps) in order for smtp to work.
 
 _Local:_
 
