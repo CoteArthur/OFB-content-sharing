@@ -9,11 +9,11 @@ _Pre-Requisites:_
 _Database setup:_
 
     sudo mysql
-      CREATE DATABASE ofb;
+        CREATE DATABASE ofb;
     sudo mysql -p ofb < ofb-db-template.sql
     sudo mysql
-      CREATE USER 'server' IDENTIFIED BY 'server';
-      GRANT ALL PRIVILEGES ON ofb TO 'server';    
+        CREATE USER 'server'@'localhost' IDENTIFIED BY 'server';
+        GRANT ALL PRIVILEGES ON ofb.* TO 'server'@'localhost';
       
 _`gmail-credentials.ts` is missing at `server/src/config`, here's a template:_
 
