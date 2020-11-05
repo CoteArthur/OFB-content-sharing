@@ -1,4 +1,4 @@
-import Menu from './ui/Menu/Menu'
+import Menu from './ui/Menu/Menu';
 import { Grid, TableHead, TableRow, TableCell, TableBody, Table, withStyles, createStyles, Toolbar, Snackbar, IconButton, SnackbarContent, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import NavBar from './ui/NavBar';
@@ -7,6 +7,7 @@ import CardActualite from './ui/CardActualite';
 import axios from 'axios';
 import {DialogUser, DialogAjout, DialogImage, DialogPdf} from './ui/Dialog/Dialogs';
 import CloseIcon from '@material-ui/icons/Close';
+import { SERVER_IP } from './config/server-ip';
 
 const StyledTableRow = withStyles(() =>
 	createStyles({
@@ -69,23 +70,23 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	});
 
 	useEffect(() => {
-		axios.post(`http://35.205.49.52:25565/api/select`, {table: 'actualite'},
+		axios.post(`${SERVER_IP}/api/select`, {table: 'actualite'},
 		{headers: { 'Content-Type': 'application/json' }} )
-			.then(r =>
-				r.data[0] ? (
-					setState((prevState)=>({
-						...prevState,
-						selectedTable: 'actualite',
-						dataArray: r.data,
-					}))
-				) : (
-					setState((prevState)=>({
-						...prevState,
-						selectedTable: 'actualite',
-						dataArray: [],
-					}))
-				)
-			)
+		.then(r => {
+			if (!r.data[0]) throw r;
+			setState((prevState)=>({
+				...prevState,
+				selectedTable: 'actualite',
+				dataArray: r.data,
+			}))
+		}).catch(err => {
+			console.log(err);
+			setState((prevState)=>({
+				...prevState,
+				selectedTable: 'actualite',
+				dataArray: [],
+			}))
+		});
 	}, [setState]);
 
 	const fetchContent = async (table: string, filters?: FiltersType) => {
@@ -105,25 +106,25 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			}));
 		}else{
 			let boolTable: boolean = table !== 'actualite';
-			axios.post(`http://35.205.49.52:25565/api/select`, {table: table, filters},
+			axios.post(`${SERVER_IP}/api/select`, {table: table, filters},
 			{headers: { 'Content-Type': 'application/json' }} )
-			.then(r =>
-				r.data[0] ? (
+			.then(r => {
+					if (!r.data[0]) throw r;
 					setState((prevState)=>({
 						...prevState,
 						selectedTable: table,
 						dataArray: r.data,
 						isTable: boolTable,
 					}))
-				) : (
-					setState((prevState)=>({
-						...prevState,
-						selectedTable: table,
-						dataArray: [],
-						isTable: boolTable,
-					}))
-				)
-			);
+			}).catch(err => {
+				console.log(err);
+				setState((prevState)=>({
+					...prevState,
+					selectedTable: table,
+					dataArray: [],
+					isTable: boolTable,
+				}))
+			});
 		}
 	}
 
