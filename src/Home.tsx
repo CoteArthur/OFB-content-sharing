@@ -73,7 +73,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 		axios.post(`${SERVER_IP}/api/select`, {table: 'actualite'},
 		{headers: { 'Content-Type': 'application/json' }} )
 		.then(r => {
-			if (!r.data[0]) throw r;
+			if (!r.data[0]) throw r.data;	//TODO if data is array(0) send 'empty db' notification
 			setState((prevState)=>({
 				...prevState,
 				selectedTable: 'actualite',
@@ -109,7 +109,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			axios.post(`${SERVER_IP}/api/select`, {table: table, filters},
 			{headers: { 'Content-Type': 'application/json' }} )
 			.then(r => {
-					if (!r.data[0]) throw r;
+					if (!r.data[0]) throw r.data;
 					setState((prevState)=>({
 						...prevState,
 						selectedTable: table,
