@@ -1,5 +1,7 @@
 # [OFB-content-sharing](https://cotearthur.github.io/OFB-content-sharing/) [![CodeFactor](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing/badge?s=c4b62f1996e51f19b3acddfa33865084ff6b238b)](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing)
 
+### [Server repository](https://github.com/CoteArthur/OFB-content-sharing-server)
+
 ## Deploy
 _Pre-Requisites:_
 1. [NodeJS (version 12+)](https://nodejs.org/en/)
@@ -15,6 +17,8 @@ _Database setup:_
         CREATE USER 'server'@'localhost' IDENTIFIED BY 'server';
         GRANT ALL PRIVILEGES ON ofb.* TO 'server'@'localhost';
       
+_Nodemailer setup:_
+
 _`gmail-credentials.ts` is missing at `server/src/config`, here's a template:_
 
 ```javascript
