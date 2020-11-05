@@ -10,7 +10,7 @@ _Database setup:_
 
     sudo mysql
         CREATE DATABASE ofb;
-    sudo mysql -p ofb < ofb-db-template.sql
+    sudo mysql -p ofb < db-template.sql
     sudo mysql
         CREATE USER 'server'@'localhost' IDENTIFIED BY 'server';
         GRANT ALL PRIVILEGES ON ofb.* TO 'server'@'localhost';
