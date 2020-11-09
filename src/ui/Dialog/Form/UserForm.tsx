@@ -3,6 +3,7 @@ import { Grid, TextField, Button, Typography, FormControlLabel, Checkbox } from 
 import SendIcon from '@material-ui/icons/Send';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import axios from 'axios';
+import { SERVER_IP } from '../../../Home'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../../../';
@@ -45,7 +46,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
 
     useEffect(() => {
         if (userID !== 0){
-            axios.post('http://35.205.49.52:25565/api/selectUserInfo', {id: userID},
+            axios.post(`${SERVER_IP}/api/selectUserInfo`, {id: userID},
             {headers: { 'Content-Type': 'application/json' }})
             .then(r => setState(prevState => ({ ...prevState, userEmail: r.data[0].email, isAdmin: r.data[0].admin})));
         }
@@ -73,7 +74,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     {
         e.preventDefault();
         if(state.email && state.password){
-            axios.post('http://35.205.49.52:25565/api/login', state, {headers: { 'Content-Type': 'application/json' }})
+            axios.post(`${SERVER_IP}/api/login`, state, {headers: { 'Content-Type': 'application/json' }})
             .then(r => 
                 r.data[0] ? logIn(r.data[0].id)
                 : setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
@@ -83,7 +84,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
 
     const logIn = (id: number) =>
     {
-        axios.post('http://35.205.49.52:25565/api/selectUserInfo', {id: id}, {headers: { 'Content-Type': 'application/json' }})
+        axios.post(`${SERVER_IP}/api/selectUserInfo`, {id: id}, {headers: { 'Content-Type': 'application/json' }})
         .then(r => {
             dispatch(action.setUserId(id));
             props.openSnackbar('Connecté');
@@ -102,7 +103,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
     {
         e.preventDefault();
         if(state.email){
-            axios.post(`http://35.205.49.52:25565/api/createUser`, {email: state.email, admin: state.admin}, {headers: { 'Content-Type': 'application/json' }})
+            axios.post(`${SERVER_IP}/api/createUser`, {email: state.email, admin: state.admin}, {headers: { 'Content-Type': 'application/json' }})
             .then(r => {
                 if (r.data) {
                     setState(prevState => ({ ...prevState, email: '', admin: false}));

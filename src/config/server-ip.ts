@@ -1,1 +1,0 @@
-export const SERVER_IP: string = "http://35.205.49.52:25565";

@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react"
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@material-ui/core";
-import { formatDate } from "../Home";
+import { formatDate, SERVER_IP } from "../Home";
 
 type CardActualiteProps = {
     row: any,
@@ -16,7 +16,7 @@ const CardActualite: FunctionComponent<CardActualiteProps> = (props: CardActuali
                     component="img"
                     alt=""
                     height="140"
-                    image={`http://35.205.49.52:25565/files/${props.row.file}`}
+                    image={`${SERVER_IP}/files/${props.row.file}`}
                 />
                 <CardContent>
                     <Typography variant="h5" noWrap>{props.row.titre}</Typography>

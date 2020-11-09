@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react"
 import { Dialog, Fab, DialogTitle, DialogContent, Typography, DialogContentText } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { formatDate } from "../../Home";
+import { formatDate, SERVER_IP } from "../../Home";
 import UserForm from "./Form/UserForm";
 import AddForm from "./Form/AddForm";
 
@@ -62,7 +62,7 @@ export const DialogImage: FunctionComponent<DialogProps> = (props: DialogProps):
 {
     return(
         <Dialog open={props.open} onClose={() => props.closeDialog()} maxWidth='md' fullWidth>
-                <div style={{backgroundImage: `url(http://35.205.49.52:25565/files/${props.row.file})`,
+                <div style={{backgroundImage: `url(${SERVER_IP}/files/${props.row.file})`,
                 backgroundSize: "contain", backgroundPositionX: "center",
                 backgroundPositionY: "center", backgroundRepeat: "no-repeat",
                 backgroundColor: "black", height: "300px"}}>
@@ -99,7 +99,7 @@ export const DialogPdf: FunctionComponent<DialogProps> = (props: DialogProps): J
                 </DialogTitle>
 
                 <object type="application/pdf" height='10000px'
-                data={`http://35.205.49.52:25565/files/${props.row.file}`}>
+                data={`${SERVER_IP}/files/${props.row.file}`}>
                     Erreur lors du chargement du fichier
                 </object>
         </Dialog>

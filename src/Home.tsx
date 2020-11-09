@@ -7,7 +7,6 @@ import CardActualite from './ui/CardActualite';
 import axios from 'axios';
 import {DialogUser, DialogAjout, DialogImage, DialogPdf} from './ui/Dialog/Dialogs';
 import CloseIcon from '@material-ui/icons/Close';
-import { SERVER_IP } from './config/server-ip';
 
 const StyledTableRow = withStyles(() =>
 	createStyles({
@@ -55,6 +54,8 @@ export const formatDate = (timestamp: any): String => {
 
 	return strDate;
 }
+
+export const SERVER_IP: string = "http://35.205.49.52:25565";
 
 const Home: React.FunctionComponent = (): JSX.Element =>
 {
