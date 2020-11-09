@@ -1,6 +1,6 @@
 # [OFB-content-sharing](https://cotearthur.github.io/OFB-content-sharing/) [![CodeFactor](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing/badge?s=c4b62f1996e51f19b3acddfa33865084ff6b238b)](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing)
 
-### [Server repository](https://github.com/CoteArthur/OFB-content-sharing-server)
+## [Server repository](https://github.com/CoteArthur/OFB-content-sharing-server) [![CodeFactor](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing-server/badge)](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing-server)
 
 ## Deploy
 _Pre-Requisites:_
