@@ -3,7 +3,6 @@ import { Grid, Select, MenuItem, TextField, Button, FormControl, InputLabel, Typ
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SendIcon from '@material-ui/icons/Send';
 import axios from 'axios';
-import { SERVER_IP } from '../../../Home'
 
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../';
@@ -105,7 +104,7 @@ const AddForm: FunctionComponent<AddFormProps> = (props: AddFormProps): JSX.Elem
                     }
                 })() ? state.theme : true ))
         {
-            await axios.post(`${SERVER_IP}/api/insert`, {...state, userID},
+            await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/api/insert`, {...state, userID},
                 {headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'}
             })
             .then(r => {

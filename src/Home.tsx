@@ -55,8 +55,6 @@ export const formatDate = (timestamp: any): String => {
 	return strDate;
 }
 
-export const SERVER_IP: string = "http://35.205.49.52:25565";
-
 const Home: React.FunctionComponent = (): JSX.Element =>
 {
 	const [state, setState] = useState<HomeState> ({
@@ -71,7 +69,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 	});
 
 	useEffect(() => {
-		axios.post(`${SERVER_IP}/api/select`, {table: 'actualite'},
+		axios.post(`${process.env.REACT_APP_BACKEND_HOST}/api/select`, {table: 'actualite'},
 		{headers: { 'Content-Type': 'application/json' }} )
 		.then(r => {
 			if (!r.data[0]) throw r.data;	//TODO if data is array(0) send 'empty db' notification
@@ -107,7 +105,7 @@ const Home: React.FunctionComponent = (): JSX.Element =>
 			}));
 		}else{
 			let boolTable: boolean = table !== 'actualite';
-			axios.post(`${SERVER_IP}/api/select`, {table: table, filters},
+			axios.post(`${process.env.REACT_APP_BACKEND_HOST}/api/select`, {table: table, filters},
 			{headers: { 'Content-Type': 'application/json' }} )
 			.then(r => {
 					if (!r.data[0]) throw r.data;
