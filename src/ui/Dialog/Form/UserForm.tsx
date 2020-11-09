@@ -74,7 +74,7 @@ const UserForm: FunctionComponent<UserFormProps> = (props: UserFormProps): JSX.E
         e.preventDefault();
         if(state.email && state.password){
             axios.post(`${process.env.REACT_APP_BACKEND_HOST}/api/login`, state, {headers: { 'Content-Type': 'application/json' }})
-            .then(r => 
+            .then(r =>
                 r.data[0] ? logIn(r.data[0].id)
                 : setState(prevState => ({ ...prevState, error: true, errorString: 'Email ou mot de passe incorrect'}))
             );
