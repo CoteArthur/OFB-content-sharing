@@ -2,6 +2,8 @@
 
 ## [Server repository](https://github.com/CoteArthur/OFB-content-sharing-server) [![CodeFactor](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing-server/badge)](https://www.codefactor.io/repository/github/cotearthur/ofb-content-sharing-server)
 
+Web application meant to smoothen up content sharing within the OFB.
+
 ## Deploy
 _Pre-Requisites:_
 1. [NodeJS (version 12+)](https://nodejs.org/en/)
