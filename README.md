@@ -4,6 +4,10 @@
 
 Web application meant to smoothen up content sharing within the OFB.
 
+![](https://cotearthur.github.io/ofb/home.jpg)
+![](https://cotearthur.github.io/ofb/screens.png)
+See the [internship report](https://cotearthur.github.io/ofb/internship-report.pdf) for more informations. Contact me if you do not speak french and would still like more infos.
+
 ## Deploy
 _Pre-Requisites:_
 1. [NodeJS (version 12+)](https://nodejs.org/en/)
